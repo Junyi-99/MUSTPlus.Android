@@ -1,0 +1,87 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <!-- 设置不显示ActionBar（因为用了Toolbar） -->
+    <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- 课程表页面 Toolbar Popup 菜单 -->
+    <style name="ToolbarPopupTheme" parent="Theme.AppCompat.Light">
+        <item name="android:colorBackground">#212121</item>
+        <item name="android:colorForeground">#f2f2f2</item>
+    </style>
+
+    <!-- 课程表页面 Toolbar 样式 -->
+    <style name="ToolbarTextAppearance">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textColor">@android:color/white</item>
+        <!--<item name="android:shadowDx">1</item>-->
+        <!--<item name="android:shadowDy">1</item>-->
+        <!--<item name="android:shadowRadius">2</item>-->
+        <!--<item name="android:shadowColor">?colorAccent</item>-->
+    </style>
+
+    <style name="ToolbarTextAppearance.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAlignment">center</item>
+
+    </style>
+
+    <style name="ToolbarTextAppearance.Subtitle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="MyToolbar">
+        <item name="android:theme">@style/Theme.AppCompat.Light</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <!-- Timetable 表头部分 -->
+    <style name="TimetableHeader">
+        <item name="android:background">@color/grey_3</item>
+        <item name="android:layout_gravity">fill_horizontal</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TimetableHeader.Time"> <!--左边的表头-->
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">30dp</item>
+        <item name="android:height">50dp</item>
+        <item name="android:layout_rowWeight">1</item>
+    </style>
+
+    <style name="TimetableHeader.Date"> <!--上面的表头-->
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">fill_horizontal</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:layout_columnWeight">1</item>
+    </style>
+
+    <style name="TimetableHeader.Date.Today"> <!--上面的表头-->
+        <item name="android:background">@color/grey_10</item>
+    </style>
+
+
+
+    <style name="Button.Primary" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+
+</resources>

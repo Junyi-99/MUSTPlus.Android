@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">MUST+</string>
+    <string name="title_tab_timetable">Timetable</string>
+    <string name="title_tab_news">News</string>
+    <string name="title_tab_moments">Moments</string>
+    <string name="title_tab_mine">Me</string>
+    <string name="toolbarTimetableExample">Intake 1902 Week 8</string>
+    <string name="imageButtonSelectWeek">选择其他周</string>
+    <string name="imageButtonMore">更多选项</string>
+    <string name="TimetableHeaderMonday">周一\n10.23</string>
+    <string name="TimetableHeaderTuesday">周二\n10.23</string>
+    <string name="TimetableHeaderWednesday">周三\n10.23</string>
+    <string name="TimetableHeaderThursday">周四\n10.23</string>
+    <string name="TimetableHeaderFriday">周五\n10.23</string>
+    <string name="TimetableHeaderSaturday">周六\n10.23</string>
+    <string name="TimetableHeaderSunday">周日\n10.23</string>
+    <string name="Time8">8</string>
+    <string name="Time9">9</string>
+    <string name="Time10">10</string>
+    <string name="Time11">11</string>
+    <string name="Time12">12</string>
+    <string name="Time13">13</string>
+    <string name="Time14">14</string>
+    <string name="Time15">15</string>
+    <string name="Time16">16</string>
+    <string name="Time17">17</string>
+    <string name="Time18">18</string>
+    <string name="Time19">19</string>
+    <string name="Time20">20</string>
+    <string name="Time21">21</string>
+    <string name="Time22">22</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.AppCompatButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/timetable_time_cell_width"
+    android:layout_height="wrap_content"
+    android:elevation="0dp"
+    android:gravity="start"
+    android:maxWidth="@dimen/timetable_time_cell_width"
+    android:paddingStart="10dp"
+
+    android:paddingTop="10dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="10dp"
+    android:text="數據庫系統\n@C408（实验室）"
+
+
+    android:textSize="@dimen/timetable_time_cell_font_size"
+    android:theme="@style/Button.Primary" />

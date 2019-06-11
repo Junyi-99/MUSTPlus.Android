@@ -1,0 +1,18 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- BottomNavigationView 字体大小 -->
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">12dp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12dp</dimen>
+
+    <dimen name="timetable_header_layout_width">488dp
+    </dimen> <!-- timetable_header_width * 7 + timetable_time_label_width -->
+    <dimen name="timetable_header_width">66dp</dimen>
+    <dimen name="timetable_header_height">41dp</dimen>
+    <dimen name="timetable_time_label_width">29dp</dimen>
+    <dimen name="timetable_time_label_height">68dp</dimen>
+    <dimen name="timetable_time_cell_width">71dp</dimen> <!-- 71 = 65 + 6 -->
+    <dimen name="timetable_time_cell_font_size">12sp</dimen>
+</resources>

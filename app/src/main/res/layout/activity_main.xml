@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fcfcfc"
+    tools:context=".activities.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/navigation"
+        android:orientation="vertical">
+
+        <com.example.myapplication.activities.NonSwipeableViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp">
+        </com.example.myapplication.activities.NonSwipeableViewPager>
+
+        <!-- <android.support.design.widget.BottomNavigationView
+             android:id="@+id/nav_view"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+
+             android:layout_alignParentBottom="true"
+             android:background="@android:color/white"
+
+             android:foregroundGravity="bottom"
+
+             app:elevation="16dp"
+             app:itemBackground="@color/colorWhite"
+             app:itemIconSize="20dp"
+             app:itemIconTint="@drawable/nav_item_color_state"
+             app:itemTextColor="@drawable/nav_item_color_state"
+             app:labelVisibilityMode="labeled"
+
+             app:menu="@menu/bottom_nav_menu" />-->
+    </LinearLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@android:color/white"
+        app:itemIconTint="@drawable/color_state_primary"
+        app:itemTextColor="@drawable/color_state_primary"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom_navigation_basic" />
+
+</RelativeLayout>
