@@ -1,0 +1,273 @@
+package com.example.myapplication.activities;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.balysv.materialripple.MaterialRippleLayout;
+import com.example.myapplication.Image;
+import com.example.myapplication.R;
+import com.example.myapplication.model.News;
+import com.example.myapplication.utils.Tools;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FragmentNewsAll extends Fragment {
+    private View this_view;
+    private View parent_view;
+    private ViewPager view_pager;
+    private LinearLayout layout_dots;
+    private AdapterImageSlider adapterImageSlider;
+    private RecyclerView recyclerView;
+    private AdapterListSectioned mAdapter;
+
+    private Runnable runnable = null;
+    private Handler handler = new Handler();
+
+    private TextView slider_image_title;
+    private TextView slider_image_brief;
+
+
+    private static int[] array_image_place = {
+            R.drawable.image_1,
+            R.drawable.image_2,
+            R.drawable.image_3,
+    };
+
+    private static String[] array_title_place = {
+            "澳科大於墨爾本舉辦《回歸盛世》影像展覽",
+            "2019年澳門僱員信心及滿意度指數",
+            "傑出華人數學家張益唐教授於澳科大报告",
+
+    };
+
+    private static String[] array_brief_place = {
+            "澳門影像舘",
+            "可持續發展研究所",
+            "N211",
+    };
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this_view = inflater.inflate(R.layout.fragment_news_all, container, false);
+
+        initComponent();
+        Log.d("Fragment News All", "onCreateView");
+        // Inflate the layout for this fragment
+        return this_view;
+    }
+
+    private void initComponent() {
+        /*
+         * News List
+         * */
+        recyclerView = (RecyclerView) this_view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this_view.getContext()));
+        recyclerView.setHasFixedSize(true);
+        List<News> newsItems = new ArrayList<News>();
+
+        TypedArray drw_arr = this_view.getContext().getResources().obtainTypedArray(R.array.people_images);
+
+        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("教務處", "通告：領取2018年12月大學英語四六級考試成績報告單", "2019-06-19", false, "downContent('12293');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("通識教育部", "通識教育部招聘教學助理", "2019-06-18", false, "downContent('12292');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+
+        //set data and list adapter
+        mAdapter = new AdapterListSectioned(this_view.getContext(), newsItems);
+        recyclerView.setAdapter(mAdapter);
+
+        // on item list clicked
+        mAdapter.setOnItemClickListener(new AdapterListSectioned.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, News obj, int position) {
+                Snackbar.make(parent_view, "Item " + obj.title + " clicked", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        /*
+         * Set Slider Image
+         *
+         * */
+        slider_image_title = ((TextView) this_view.findViewById(R.id.title)); // findView之后放到变量里，防止下次再find一次，优化性能
+        slider_image_brief = ((TextView) this_view.findViewById(R.id.brief));
+        layout_dots = (LinearLayout) this_view.findViewById(R.id.layout_dots);
+        view_pager = (ViewPager) this_view.findViewById(R.id.pager);
+
+        adapterImageSlider = new AdapterImageSlider(this.getActivity(), new ArrayList<Image>());
+
+        final List<Image> items = new ArrayList<>();
+        for (int i = 0; i < array_image_place.length; i++) {
+            Image obj = new Image();
+            obj.image = array_image_place[i];
+            obj.imageDrw = getResources().getDrawable(obj.image);
+            obj.name = array_title_place[i];
+            obj.brief = array_brief_place[i];
+            items.add(obj);
+        }
+
+        adapterImageSlider.setItems(items);
+        view_pager.setAdapter(adapterImageSlider);
+
+        // displaying selected image first
+        view_pager.setCurrentItem(0);
+        addBottomDots(layout_dots, adapterImageSlider.getCount(), 0);
+
+
+
+        slider_image_title.setText(items.get(0).name);
+        slider_image_brief.setText(items.get(0).brief);
+
+        view_pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int pos, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int pos) {
+                slider_image_title.setText(items.get(pos).name);
+                slider_image_brief.setText(items.get(pos).brief);
+                addBottomDots(layout_dots, adapterImageSlider.getCount(), pos);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+        startAutoSlider(adapterImageSlider.getCount());
+    }
+
+    // 给 Slider Image 添加下面的导航圆点
+    private void addBottomDots(LinearLayout layout_dots, int size, int current) {
+        ImageView[] dots = new ImageView[size];
+
+        layout_dots.removeAllViews();
+        for (int i = 0; i < dots.length; i++) {
+            dots[i] = new ImageView(this.getContext());
+            int width_height = 15;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(width_height, width_height));
+            params.setMargins(10, 10, 10, 10);
+            dots[i].setLayoutParams(params);
+            dots[i].setImageResource(R.drawable.shape_circle_outline);
+            layout_dots.addView(dots[i]);
+        }
+
+        if (dots.length > current) {
+            dots[current].setImageResource(R.drawable.shape_circle);
+        }
+    }
+
+    private void startAutoSlider(final int count) {
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                int pos = view_pager.getCurrentItem();
+                pos = pos + 1;
+                if (pos >= count) pos = 0;
+                view_pager.setCurrentItem(pos);
+                handler.postDelayed(runnable, 3000);
+            }
+        };
+        handler.postDelayed(runnable, 3000);
+    }
+
+
+    private static class AdapterImageSlider extends PagerAdapter {
+
+        private Activity act;
+        private List<Image> items;
+
+        private AdapterImageSlider.OnItemClickListener onItemClickListener;
+
+        private interface OnItemClickListener {
+            void onItemClick(View view, Image obj);
+        }
+
+        public void setOnItemClickListener(AdapterImageSlider.OnItemClickListener onItemClickListener) {
+            this.onItemClickListener = onItemClickListener;
+        }
+
+        // constructor
+        private AdapterImageSlider(Activity activity, List<Image> items) {
+            this.act = activity;
+            this.items = items;
+        }
+
+        @Override
+        public int getCount() {
+            return this.items.size();
+        }
+
+        public Image getItem(int pos) {
+            return items.get(pos);
+        }
+
+        public void setItems(List<Image> items) {
+            this.items = items;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == ((RelativeLayout) object);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            final Image o = items.get(position);
+            LayoutInflater inflater = (LayoutInflater) act.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View v = inflater.inflate(R.layout.item_slider_image, container, false);
+
+            ImageView image = (ImageView) v.findViewById(R.id.news_icon);
+            MaterialRippleLayout lyt_parent = (MaterialRippleLayout) v.findViewById(R.id.lyt_parent);
+            Tools.displayImageOriginal(act, image, o.image);
+            lyt_parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClick(v, o);
+                    }
+                }
+            });
+
+            ((ViewPager) container).addView(v);
+
+            return v;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            ((ViewPager) container).removeView((RelativeLayout) object);
+
+        }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        if (runnable != null) handler.removeCallbacks(runnable);
+        super.onDestroy();
+    }
+}
