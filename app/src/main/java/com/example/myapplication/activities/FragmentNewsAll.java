@@ -3,12 +3,14 @@ package com.example.myapplication.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,21 +31,21 @@ import com.example.myapplication.utils.Tools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentNewsAll extends Fragment {
+public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private View this_view;
-    private View parent_view;
     private ViewPager view_pager;
     private LinearLayout layout_dots;
     private AdapterImageSlider adapterImageSlider;
     private RecyclerView recyclerView;
     private AdapterListSectioned mAdapter;
-
+    private SwipeRefreshLayout mSwipeLayout;
     private Runnable runnable = null;
     private Handler handler = new Handler();
-
+    List<News> newsItems;
+    TypedArray drw_arr;
     private TextView slider_image_title;
     private TextView slider_image_brief;
-
+    private boolean isRefresh = false;//是否刷新中
 
     private static int[] array_image_place = {
             R.drawable.image_1,
@@ -67,6 +69,18 @@ public class FragmentNewsAll extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this_view = inflater.inflate(R.layout.fragment_news_all, container, false);
+        mSwipeLayout = (SwipeRefreshLayout) this_view.findViewById(R.id.swipeLayout);
+
+        //设置进度条的颜色主题，最多能设置四种 加载颜色是循环播放的，只要没有完成刷新就会一直循环，
+        mSwipeLayout.setColorSchemeColors(Color.rgb(25,118,210));
+        // 设置手指在屏幕下拉多少距离会触发下拉刷新
+        mSwipeLayout.setDistanceToTriggerSync(300);
+        // 设定下拉圆圈的背景
+        mSwipeLayout.setProgressBackgroundColorSchemeColor(Color.WHITE);
+        // 设置圆圈的大小
+        mSwipeLayout.setSize(SwipeRefreshLayout.LARGE);
+        //设置下拉刷新的监听
+        mSwipeLayout.setOnRefreshListener(this);
 
         initComponent();
         Log.d("Fragment News All", "onCreateView");
@@ -81,18 +95,15 @@ public class FragmentNewsAll extends Fragment {
         recyclerView = (RecyclerView) this_view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this_view.getContext()));
         recyclerView.setHasFixedSize(true);
-        List<News> newsItems = new ArrayList<News>();
+        newsItems = new ArrayList<News>();
 
-        TypedArray drw_arr = this_view.getContext().getResources().obtainTypedArray(R.array.people_images);
-
+        drw_arr = this_view.getContext().getResources().obtainTypedArray(R.array.people_images);
         newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
         newsItems.add(new News("教務處", "通告：領取2018年12月大學英語四六級考試成績報告單", "2019-06-19", false, "downContent('12293');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("通識教育部", "通識教育部招聘教學助理", "2019-06-18", false, "downContent('12292');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("通識教育部", "通識教育部招聘教學助理", "2019-06-18", true, "downContent('12292');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("教務處", "通告：2018/2019學年第二學期期末補考時間表", "2019-06-17", true, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("總務處", "學校商戶於暑假的營業時間", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        newsItems.add(new News("酒店與旅遊管理學院", "2019年畢業典禮事宜", "2019-06-04", true, "downContent('12294');", drw_arr.getResourceId(0, -1)));
 
         //set data and list adapter
         mAdapter = new AdapterListSectioned(this_view.getContext(), newsItems);
@@ -102,7 +113,7 @@ public class FragmentNewsAll extends Fragment {
         mAdapter.setOnItemClickListener(new AdapterListSectioned.OnItemClickListener() {
             @Override
             public void onItemClick(View view, News obj, int position) {
-                Snackbar.make(parent_view, "Item " + obj.title + " clicked", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(this_view, "Item " + obj.title + " clicked", Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -133,7 +144,6 @@ public class FragmentNewsAll extends Fragment {
         // displaying selected image first
         view_pager.setCurrentItem(0);
         addBottomDots(layout_dots, adapterImageSlider.getCount(), 0);
-
 
 
         slider_image_title.setText(items.get(0).name);
@@ -170,15 +180,19 @@ public class FragmentNewsAll extends Fragment {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(width_height, width_height));
             params.setMargins(10, 10, 10, 10);
             dots[i].setLayoutParams(params);
-            dots[i].setImageResource(R.drawable.shape_circle_outline);
+
+            if (i == current)
+                dots[current].setImageResource(R.drawable.shape_circle);
+            else
+                dots[i].setImageResource(R.drawable.shape_circle_outline);
+
             layout_dots.addView(dots[i]);
         }
 
-        if (dots.length > current) {
-            dots[current].setImageResource(R.drawable.shape_circle);
-        }
     }
 
+    // 自动滚动图片 view_pager 设置 currentItem 之后会触发 onPageSelected，
+    // 所以下面的文字也会切换
     private void startAutoSlider(final int count) {
         runnable = new Runnable() {
             @Override
@@ -269,5 +283,29 @@ public class FragmentNewsAll extends Fragment {
     public void onDestroy() {
         if (runnable != null) handler.removeCallbacks(runnable);
         super.onDestroy();
+    }
+
+
+    /*
+     * 监听器SwipeRefreshLayout.OnRefreshListener中的方法，当下拉刷新后触发
+     */
+    public void onRefresh() {
+        //检查是否处于刷新状态
+        if (!isRefresh) {
+            isRefresh = true;
+            //模拟加载网络数据，这里设置4秒，正好能看到4色进度条
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+
+                    //显示或隐藏刷新进度条
+                    mSwipeLayout.setRefreshing(false);
+                    //修改adapter的数据
+                    //data.add("这是新添加的数据");
+                    newsItems.add(new News("电竞学院", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+                    mAdapter.notifyDataSetChanged();
+                    isRefresh = false;
+                }
+            }, 2000);
+        }
     }
 }
