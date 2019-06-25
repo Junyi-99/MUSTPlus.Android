@@ -1,12 +1,8 @@
-package com.example.myapplication.utils;
+package com.example.myapplication.model;
 
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class Timetable extends Response {
 

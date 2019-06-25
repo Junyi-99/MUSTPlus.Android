@@ -1,4 +1,4 @@
-package com.example.myapplication.activities;
+package com.example.myapplication.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,8 +18,8 @@ import android.widget.RelativeLayout;
 import com.alibaba.fastjson.JSON;
 
 import com.example.myapplication.R;
-import com.example.myapplication.utils.Timetable;
-import com.example.myapplication.utils.TimetableCell;
+import com.example.myapplication.model.Timetable;
+import com.example.myapplication.model.TimetableCell;
 
 import java.util.ArrayList;
 import java.util.List;

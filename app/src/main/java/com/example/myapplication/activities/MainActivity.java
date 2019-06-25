@@ -10,6 +10,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.adapters.AdapterSectionsStatePager;
+import com.example.myapplication.fragments.FragmentMine;
+import com.example.myapplication.fragments.FragmentMoments;
+import com.example.myapplication.fragments.FragmentNews;
+import com.example.myapplication.fragments.FragmentTimetable;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
@@ -80,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
 */
     private void setupViewPager(ViewPager viewPager) {
-        SectionsStatePagerAdapter adapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
+        AdapterSectionsStatePager adapter = new AdapterSectionsStatePager(getSupportFragmentManager());
         adapter.addFragment(new FragmentTimetable(), "FragmentTimetable");
         adapter.addFragment(new FragmentNews(), "FragmentNews");
         adapter.addFragment(new FragmentMoments(), "FragmentMoments");

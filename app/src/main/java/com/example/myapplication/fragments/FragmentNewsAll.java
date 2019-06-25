@@ -1,4 +1,4 @@
-package com.example.myapplication.activities;
+package com.example.myapplication.fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,8 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.example.myapplication.Image;
+import com.example.myapplication.model.Image;
 import com.example.myapplication.R;
+import com.example.myapplication.adapters.AdapterListSectioned;
 import com.example.myapplication.model.News;
 import com.example.myapplication.utils.Tools;
 
