@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class TimetableCell {
+public class ModelTimetableCell {
     private int day;
     private Date time_begin;
     private Date time_end;
@@ -27,7 +27,7 @@ public class TimetableCell {
     public double duration() {
         return (time_end.getTime() - time_begin.getTime()) * MS_TO_HOURS;
     }
-    TimetableCell(){
+    ModelTimetableCell(){
         timeFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
     }

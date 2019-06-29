@@ -48,7 +48,7 @@
         <item name="android:elevation">4dp</item>
     </style>
 
-    <!-- Timetable 表头部分 -->
+    <!-- ModelTimetable 表头部分 -->
     <style name="TimetableHeader">
         <item name="android:background">@color/grey_3</item>
         <item name="android:layout_gravity">fill_horizontal</item>

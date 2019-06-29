@@ -23,14 +23,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.example.myapplication.model.Image;
+import com.example.myapplication.model.ModelImage;
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterListSectioned;
-import com.example.myapplication.model.News;
+import com.example.myapplication.model.ModelNews;
 import com.example.myapplication.utils.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private View this_view;
@@ -42,7 +43,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
     private SwipeRefreshLayout mSwipeLayout;
     private Runnable runnable = null;
     private Handler handler = new Handler();
-    List<News> newsItems;
+    List<ModelNews> modelNewsItems;
     TypedArray drw_arr;
     private TextView slider_image_title;
     private TextView slider_image_brief;
@@ -69,57 +70,59 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         this_view = inflater.inflate(R.layout.fragment_news_all, container, false);
+
         mSwipeLayout = (SwipeRefreshLayout) this_view.findViewById(R.id.swipeLayout);
 
         //设置进度条的颜色主题，最多能设置四种 加载颜色是循环播放的，只要没有完成刷新就会一直循环，
-        mSwipeLayout.setColorSchemeColors(Color.rgb(25,118,210));
+        mSwipeLayout.setColorSchemeColors(Color.rgb(25, 118, 210));
         // 设置手指在屏幕下拉多少距离会触发下拉刷新
         mSwipeLayout.setDistanceToTriggerSync(300);
         // 设定下拉圆圈的背景
         mSwipeLayout.setProgressBackgroundColorSchemeColor(Color.WHITE);
         // 设置圆圈的大小
-        mSwipeLayout.setSize(SwipeRefreshLayout.LARGE);
+        mSwipeLayout.setSize(SwipeRefreshLayout.DEFAULT);
         //设置下拉刷新的监听
         mSwipeLayout.setOnRefreshListener(this);
 
         initComponent();
-        Log.d("Fragment News All", "onCreateView");
+        Log.d("Fragment ModelNews All", "onCreateView");
         // Inflate the layout for this fragment
         return this_view;
     }
 
     private void initComponent() {
         /*
-         * News List
+         * ModelNews List
          * */
         recyclerView = (RecyclerView) this_view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this_view.getContext()));
         recyclerView.setHasFixedSize(true);
-        newsItems = new ArrayList<News>();
+        modelNewsItems = new ArrayList<ModelNews>();
 
         drw_arr = this_view.getContext().getResources().obtainTypedArray(R.array.people_images);
-        newsItems.add(new News("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("教務處", "通告：領取2018年12月大學英語四六級考試成績報告單", "2019-06-19", false, "downContent('12293');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("通識教育部", "通識教育部招聘教學助理", "2019-06-18", true, "downContent('12292');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("教務處", "通告：2018/2019學年第二學期期末補考時間表", "2019-06-17", true, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("總務處", "學校商戶於暑假的營業時間", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-        newsItems.add(new News("酒店與旅遊管理學院", "2019年畢業典禮事宜", "2019-06-04", true, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        modelNewsItems.add(new ModelNews("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        modelNewsItems.add(new ModelNews("教務處", "通告：領取2018年12月大學英語四六級考試成績報告單", "2019-06-19", false, "downContent('12293');", drw_arr.getResourceId(0, -1)));
+        modelNewsItems.add(new ModelNews("通識教育部", "通識教育部招聘教學助理", "2019-06-18", true, "downContent('12292');", drw_arr.getResourceId(0, -1)));
+        modelNewsItems.add(new ModelNews("教務處", "通告：2018/2019學年第二學期期末補考時間表", "2019-06-17", true, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        modelNewsItems.add(new ModelNews("總務處", "學校商戶於暑假的營業時間", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        modelNewsItems.add(new ModelNews("酒店與旅遊管理學院", "2019年畢業典禮事宜", "2019-06-04", true, "downContent('12294');", drw_arr.getResourceId(0, -1)));
 
         //set data and list adapter
-        mAdapter = new AdapterListSectioned(this_view.getContext(), newsItems);
+        mAdapter = new AdapterListSectioned(this_view.getContext(), modelNewsItems);
         recyclerView.setAdapter(mAdapter);
 
         // on item list clicked
         mAdapter.setOnItemClickListener(new AdapterListSectioned.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, News obj, int position) {
+            public void onItemClick(View view, ModelNews obj, int position) {
                 Snackbar.make(this_view, "Item " + obj.title + " clicked", Snackbar.LENGTH_SHORT).show();
             }
         });
 
         /*
-         * Set Slider Image
+         * Set Slider ModelImage
          *
          * */
         slider_image_title = ((TextView) this_view.findViewById(R.id.title)); // findView之后放到变量里，防止下次再find一次，优化性能
@@ -127,12 +130,13 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         layout_dots = (LinearLayout) this_view.findViewById(R.id.layout_dots);
         view_pager = (ViewPager) this_view.findViewById(R.id.pager);
 
-        adapterImageSlider = new AdapterImageSlider(this.getActivity(), new ArrayList<Image>());
+        adapterImageSlider = new AdapterImageSlider(this.getActivity(), new ArrayList<ModelImage>());
 
-        final List<Image> items = new ArrayList<>();
+        final List<ModelImage> items = new ArrayList<>();
         for (int i = 0; i < array_image_place.length; i++) {
-            Image obj = new Image();
+            ModelImage obj = new ModelImage();
             obj.image = array_image_place[i];
+
             obj.imageDrw = getResources().getDrawable(obj.image);
             obj.name = array_title_place[i];
             obj.brief = array_brief_place[i];
@@ -170,7 +174,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         startAutoSlider(adapterImageSlider.getCount());
     }
 
-    // 给 Slider Image 添加下面的导航圆点
+    // 给 Slider ModelImage 添加下面的导航圆点
     private void addBottomDots(LinearLayout layout_dots, int size, int current) {
         ImageView[] dots = new ImageView[size];
 
@@ -212,12 +216,12 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
     private static class AdapterImageSlider extends PagerAdapter {
 
         private Activity act;
-        private List<Image> items;
+        private List<ModelImage> items;
 
         private AdapterImageSlider.OnItemClickListener onItemClickListener;
 
         private interface OnItemClickListener {
-            void onItemClick(View view, Image obj);
+            void onItemClick(View view, ModelImage obj);
         }
 
         public void setOnItemClickListener(AdapterImageSlider.OnItemClickListener onItemClickListener) {
@@ -225,7 +229,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         }
 
         // constructor
-        private AdapterImageSlider(Activity activity, List<Image> items) {
+        private AdapterImageSlider(Activity activity, List<ModelImage> items) {
             this.act = activity;
             this.items = items;
         }
@@ -235,11 +239,11 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
             return this.items.size();
         }
 
-        public Image getItem(int pos) {
+        public ModelImage getItem(int pos) {
             return items.get(pos);
         }
 
-        public void setItems(List<Image> items) {
+        public void setItems(List<ModelImage> items) {
             this.items = items;
             notifyDataSetChanged();
         }
@@ -251,7 +255,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            final Image o = items.get(position);
+            final ModelImage o = items.get(position);
             LayoutInflater inflater = (LayoutInflater) act.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View v = inflater.inflate(R.layout.item_slider_image, container, false);
 
@@ -294,15 +298,16 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         //检查是否处于刷新状态
         if (!isRefresh) {
             isRefresh = true;
-            //模拟加载网络数据，这里设置4秒，正好能看到4色进度条
+            //模拟加载网络数据，这里设置2秒，正好能看到2色进度条
             new Handler().postDelayed(new Runnable() {
                 public void run() {
 
                     //显示或隐藏刷新进度条
                     mSwipeLayout.setRefreshing(false);
+                    //mSwipeLayout.setRefreshing(true);
                     //修改adapter的数据
                     //data.add("这是新添加的数据");
-                    newsItems.add(new News("电竞学院", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+                    modelNewsItems.add(new ModelNews("电竞学院", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
                     mAdapter.notifyDataSetChanged();
                     isRefresh = false;
                 }

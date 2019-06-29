@@ -16,7 +16,7 @@ import com.example.myapplication.fragments.FragmentMoments;
 import com.example.myapplication.fragments.FragmentNews;
 import com.example.myapplication.fragments.FragmentTimetable;
 
-public class MainActivity extends AppCompatActivity {
+public class ActivityMain extends AppCompatActivity {
     private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

@@ -59,7 +59,7 @@ public class FragmentNews extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Fragment News", "onCreate");
+        Log.d("Fragment ModelNews", "onCreate");
 
     }
 
@@ -67,49 +67,49 @@ public class FragmentNews extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("Fragment News", "onActivityCreated");
+        Log.d("Fragment ModelNews", "onActivityCreated");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("Fragment News", "onStart");
+        Log.d("Fragment ModelNews", "onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("Fragment News", "onResume");
+        Log.d("Fragment ModelNews", "onResume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("Fragment News", "onPause");
+        Log.d("Fragment ModelNews", "onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("Fragment News", "onStop");
+        Log.d("Fragment ModelNews", "onStop");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("Fragment News", "onDestroyView");
+        Log.d("Fragment ModelNews", "onDestroyView");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("Fragment News", "onDestroy");
+        Log.d("Fragment ModelNews", "onDestroy");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d("Fragment News", "onDetach");
+        Log.d("Fragment ModelNews", "onDetach");
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

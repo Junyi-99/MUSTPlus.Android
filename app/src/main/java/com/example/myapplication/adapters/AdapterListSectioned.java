@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.model.News;
+import com.example.myapplication.model.ModelNews;
 import com.example.myapplication.utils.Tools;
 
 
@@ -20,19 +20,19 @@ public class AdapterListSectioned extends RecyclerView.Adapter<RecyclerView.View
     private final int ARTICLE = 1;
     private final int FILE = 0;
 
-    private List<News> items;
+    private List<ModelNews> items;
     private Context ctx;
     private OnItemClickListener mOnItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(View view, News obj, int position);
+        void onItemClick(View view, ModelNews obj, int position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mOnItemClickListener = mItemClickListener;
     }
 
-    public AdapterListSectioned(Context context, List<News> items) {
+    public AdapterListSectioned(Context context, List<ModelNews> items) {
         this.items = items;
         ctx = context;
     }
@@ -69,7 +69,7 @@ public class AdapterListSectioned extends RecyclerView.Adapter<RecyclerView.View
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        News p = items.get(position);
+        ModelNews p = items.get(position);
         OriginalViewHolder view = (OriginalViewHolder) holder;
         view.name.setText(p.title);
         view.news_fac_dep.setText(p.faculty_department);
@@ -96,7 +96,7 @@ public class AdapterListSectioned extends RecyclerView.Adapter<RecyclerView.View
         return this.items.get(position).type ? ARTICLE : FILE;
     }
 
-    public void insertItem(int index, News people) {
+    public void insertItem(int index, ModelNews people) {
         items.add(index, people);
         notifyItemInserted(index);
     }

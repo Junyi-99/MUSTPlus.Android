@@ -1,6 +1,6 @@
 package com.example.myapplication.model;
 
-public class Response {
+public class ModelResponse {
     private int code;
     private String msg;
 

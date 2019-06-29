@@ -2,7 +2,7 @@ package com.example.myapplication.model;
 
 import android.graphics.drawable.Drawable;
 
-public class Image {
+public class ModelImage {
 
     public int image;
     public Drawable imageDrw;

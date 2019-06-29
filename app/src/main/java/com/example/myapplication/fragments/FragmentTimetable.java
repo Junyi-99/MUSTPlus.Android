@@ -3,6 +3,7 @@ package com.example.myapplication.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +19,9 @@ import android.widget.RelativeLayout;
 import com.alibaba.fastjson.JSON;
 
 import com.example.myapplication.R;
-import com.example.myapplication.model.Timetable;
-import com.example.myapplication.model.TimetableCell;
+import com.example.myapplication.activities.ActivityCourseDetails;
+import com.example.myapplication.model.ModelTimetable;
+import com.example.myapplication.model.ModelTimetableCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,18 +42,19 @@ public class FragmentTimetable extends Fragment {
     }
 
     private void calculateLayout(String timetableRaw, ViewGroup container, LayoutInflater inflater, RelativeLayout relativeLayout) {
-        Timetable timetable = JSON.parseObject(timetableRaw, Timetable.class);
-        if (timetable == null)
+        ModelTimetable modelTimetable = JSON.parseObject(timetableRaw, ModelTimetable.class);
+        if (modelTimetable == null)
             return;
 
         int delay = 0;
 
-        for (TimetableCell cell : timetable.getTimetable()) {
+        for (ModelTimetableCell cell : modelTimetable.getTimetable()) {
             final Button b = (Button) inflater.inflate(R.layout.timetable_course_cell, container, false);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    animate();
+                    Intent intent = new Intent(getActivity(), ActivityCourseDetails.class);
+                    startActivity(intent);
                 }
             });
 
@@ -131,54 +134,54 @@ public class FragmentTimetable extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Fragment Timetable", "onCreate");
+        Log.d("Fragment ModelTimetable", "onCreate");
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("Fragment Timetable", "onActivityCreated");
+        Log.d("Fragment ModelTimetable", "onActivityCreated");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("Fragment Timetable", "onStart");
+        Log.d("Fragment ModelTimetable", "onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("Fragment Timetable", "onResume");
+        Log.d("Fragment ModelTimetable", "onResume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("Fragment Timetable", "onPause");
+        Log.d("Fragment ModelTimetable", "onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("Fragment Timetable", "onStop");
+        Log.d("Fragment ModelTimetable", "onStop");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("Fragment Timetable", "onDestroyView");
+        Log.d("Fragment ModelTimetable", "onDestroyView");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("Fragment Timetable", "onDestroy");
+        Log.d("Fragment ModelTimetable", "onDestroy");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d("Fragment Timetable", "onDetach");
+        Log.d("Fragment ModelTimetable", "onDetach");
     }
 }

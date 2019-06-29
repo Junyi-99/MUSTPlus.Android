@@ -1,6 +1,6 @@
 package com.example.myapplication.model;
 
-public class News {
+public class ModelNews {
     public String faculty_department = "";
     public String title = "";
     public String date = "";
@@ -8,7 +8,7 @@ public class News {
     public String url = "";
     public int image;
 
-    public News(String faculty_department, String title, String date, boolean type, String url) {
+    public ModelNews(String faculty_department, String title, String date, boolean type, String url) {
         this.faculty_department = faculty_department;
         this.title = title;
         this.date = date;
@@ -17,7 +17,7 @@ public class News {
 
     }
 
-    public News(String faculty_department, String title, String date, boolean type, String url, int image) {
+    public ModelNews(String faculty_department, String title, String date, boolean type, String url, int image) {
         this.faculty_department = faculty_department;
         this.title = title;
         this.date = date;
