@@ -37,4 +37,9 @@
     <dimen name="spacing_xxlarge">50dp</dimen>
     <dimen name="spacing_xxxlarge">55dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="corner_radius_default">4dp</dimen>
+    <dimen name="corner_radius_middle">8dp</dimen>
+    <dimen name="corner_radius_large">16dp</dimen>
+    <dimen name="corner_radius_xlarge">24dp</dimen>
+    <dimen name="corner_radius_xxlarge">32dp</dimen>
 </resources>

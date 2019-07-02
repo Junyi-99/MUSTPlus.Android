@@ -12,6 +12,6 @@ public class ActivityCourseDetails extends AppCompatActivity {
         // the view hierarchy
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_course_details);
+        setContentView(R.layout.activity_course_details_temp);
     }
 }
