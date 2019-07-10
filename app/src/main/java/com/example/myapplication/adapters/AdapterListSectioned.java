@@ -47,8 +47,8 @@ public class AdapterListSectioned extends RecyclerView.Adapter<RecyclerView.View
         public OriginalViewHolder(View v) {
             super(v);
             image = (ImageView) v.findViewById(R.id.news_icon);
-            name = (TextView) v.findViewById(R.id.news_title); // item people chat
-            news_fac_dep = (TextView) v.findViewById(R.id.news_fac_dep);
+            name = (TextView) v.findViewById(R.id.teacher_name_zh); // item people chat
+            news_fac_dep = (TextView) v.findViewById(R.id.teacher_name_en);
             news_time = (TextView) v.findViewById(R.id.news_time);
             lyt_parent = (View) v.findViewById(R.id.lyt_parent);
         }

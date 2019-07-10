@@ -42,7 +42,7 @@
                 android:paddingBottom="@dimen/spacing_20dp">
 
                 <TextView
-                    android:id="@+id/news_title"
+                    android:id="@+id/teacher_name_zh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="通告：領取2018年12月大學英語四六級考試成績報告單"
@@ -67,7 +67,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/news_fac_dep"
+                        android:id="@+id/teacher_name_en"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -89,7 +89,7 @@
                         android:text="文件"
                         android:textColor="#00a2e8"
                         android:textSize="10sp"
-                        app:layout_constraintStart_toEndOf="@id/news_fac_dep"
+                        app:layout_constraintStart_toEndOf="@id/teacher_name_en"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
 

@@ -31,69 +31,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraint_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/spacing_16dp"
-                android:paddingTop="@dimen/spacing_16dp"
-                android:paddingEnd="@dimen/spacing_16dp"
-                android:paddingRight="@dimen/spacing_16dp"
-                android:paddingBottom="@dimen/spacing_20dp">
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/news_title"
+                    android:id="@+id/teacher_name_zh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:text="张三"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/grey_90"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/constraint_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/teacher_name_en"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Zhang San"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@id/teacher_name_zh"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/news_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="@dimen/spacing_middle"
-                        android:text="2019/6/24"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/news_fac_dep"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Zhang San"
-                        android:textSize="12sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/news_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/spacing_middle"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/shape_news_icon_article"
-                        android:padding="2dp"
-                        android:paddingStart="4dp"
-                        android:paddingEnd="4dp"
-                        android:text="通知"
-                        android:textColor="#22b14c"
-                        android:textSize="10sp"
-                        app:layout_constraintStart_toEndOf="@id/news_fac_dep"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </android.support.constraint.ConstraintLayout>
-
-            </LinearLayout>
+            </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>
 
