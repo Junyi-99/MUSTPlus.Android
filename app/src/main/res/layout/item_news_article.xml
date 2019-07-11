@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/news_icon"
+            android:id="@+id/teacher_avatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="@dimen/spacing_16dp"

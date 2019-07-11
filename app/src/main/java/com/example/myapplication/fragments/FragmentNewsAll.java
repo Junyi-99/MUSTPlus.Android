@@ -259,7 +259,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
             LayoutInflater inflater = (LayoutInflater) act.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View v = inflater.inflate(R.layout.item_slider_image, container, false);
 
-            ImageView image = (ImageView) v.findViewById(R.id.news_icon);
+            ImageView image = (ImageView) v.findViewById(R.id.teacher_avatar);
             MaterialRippleLayout lyt_parent = (MaterialRippleLayout) v.findViewById(R.id.lyt_parent);
             Tools.displayImageOriginal(act, image, o.image);
             lyt_parent.setOnClickListener(new View.OnClickListener() {

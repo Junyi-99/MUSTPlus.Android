@@ -10,66 +10,61 @@ import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.model.ModelNews;
+import com.example.myapplication.model.ModelTeacher;
 import com.example.myapplication.utils.Tools;
 
 
 import java.util.List;
 
-public class AdapterListSectioned extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterTeacherList extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int ARTICLE = 1;
-    private final int FILE = 0;
-
-    private List<ModelNews> items;
+    private List<ModelTeacher> items;
     private Context ctx;
     private OnItemClickListener mOnItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(View view, ModelNews obj, int position);
+        void onItemClick(View view, ModelTeacher obj, int position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mOnItemClickListener = mItemClickListener;
     }
 
-    public AdapterListSectioned(Context context, List<ModelNews> items) {
+    public AdapterTeacherList(Context context, List<ModelTeacher> items) {
         this.items = items;
         ctx = context;
     }
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
-        public ImageView image;
-        public TextView name;
-        public View lyt_parent;
-        public TextView news_fac_dep;
-        public TextView news_time;
+        public ImageView teacher_avatar;
+        public TextView teacher_name_zh;
+        public TextView teacher_name_en;
+
 
         public OriginalViewHolder(View v) {
             super(v);
-            image = (ImageView) v.findViewById(R.id.teacher_avatar);
-            name = (TextView) v.findViewById(R.id.teacher_name_zh); // item people chat
-            news_fac_dep = (TextView) v.findViewById(R.id.teacher_name_en);
-            news_time = (TextView) v.findViewById(R.id.news_time);
-            lyt_parent = (View) v.findViewById(R.id.lyt_parent);
+            teacher_avatar= (ImageView) v.findViewById(R.id.teacher_avatar);
+            teacher_name_zh= (TextView) v.findViewById(R.id.teacher_name_zh); // item people chat
+            teacher_name_en = (TextView) v.findViewById(R.id.teacher_name_en);
         }
     }
 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == FILE) {
+
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_news_file, parent, false);
             return new OriginalViewHolder(v);
-        } else {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_news_article, parent, false);
-            return new OriginalViewHolder(v);
-        }
+
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        ModelNews p = items.get(position);
+        ModelTeacher t = items.get(position);
+
+
+
         OriginalViewHolder view = (OriginalViewHolder) holder;
         view.name.setText(p.title);
         view.news_fac_dep.setText(p.faculty_department);
@@ -89,11 +84,6 @@ public class AdapterListSectioned extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemCount() {
         return items.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return this.items.get(position).type ? ARTICLE : FILE;
     }
 
     public void insertItem(int index, ModelNews people) {
