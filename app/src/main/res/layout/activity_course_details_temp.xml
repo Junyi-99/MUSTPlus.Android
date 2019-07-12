@@ -4,13 +4,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/main.toolbar"
         style="@style/MyToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/gradient"
-        android:elevation="4dp"
+        android:elevation="1dp"
         android:minHeight="?attr/actionBarSize"
         app:popupTheme="@style/ToolbarPopupTheme">
 
@@ -186,14 +187,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:text="任课教师"
-                android:textSize="12sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:scrollbars="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:scrollbars="vertical" />
 
         </LinearLayout>
     </ScrollView>
