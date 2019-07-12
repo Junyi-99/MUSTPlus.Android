@@ -193,11 +193,32 @@
                 android:textStyle="bold" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/recyclerViewTeachers"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical" >
+
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/textViewComments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:text="课程评价"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewComments"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:scrollbars="vertical">
+
+            </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
     </ScrollView>

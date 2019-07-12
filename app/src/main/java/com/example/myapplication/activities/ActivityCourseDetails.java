@@ -2,16 +2,13 @@ package com.example.myapplication.activities;
 
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.example.myapplication.R;
-import com.example.myapplication.adapters.AdapterListSectioned;
 import com.example.myapplication.adapters.AdapterTeacherList;
-import com.example.myapplication.model.ModelNews;
 import com.example.myapplication.model.ModelTeacher;
 
 import java.util.ArrayList;
@@ -32,7 +29,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
     }
 
     private void initComponent() {
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewTeachers);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
