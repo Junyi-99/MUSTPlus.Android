@@ -1,4 +1,4 @@
-package com.example.myapplication.model;
+package com.example.myapplication.models;
 
 public class ModelTeacher {
     private int avatar_img;
@@ -10,9 +10,9 @@ public class ModelTeacher {
     private String name_en;
     private String faculty;
     private String avatar_url;
-    private ModelCourses courses;
+    private ModelCourse courses;
 
-    public ModelTeacher(String name_zh, String name_en, String faculty, String avatar_url, int avatar_img, String position, String email, String office_room, String office_hour, ModelCourses courses) {
+    public ModelTeacher(String name_zh, String name_en, String faculty, String avatar_url, int avatar_img, String position, String email, String office_room, String office_hour, ModelCourse courses) {
         this.name_zh = name_zh;
         this.name_en = name_en;
         this.faculty = faculty;
@@ -89,11 +89,11 @@ public class ModelTeacher {
         this.office_hour = office_hour;
     }
 
-    public ModelCourses getCourses() {
+    public ModelCourse getCourses() {
         return courses;
     }
 
-    public void setCourses(ModelCourses courses) {
+    public void setCourses(ModelCourse courses) {
         this.courses = courses;
     }
 

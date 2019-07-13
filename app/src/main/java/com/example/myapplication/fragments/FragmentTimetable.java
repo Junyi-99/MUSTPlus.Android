@@ -20,8 +20,8 @@ import com.alibaba.fastjson.JSON;
 
 import com.example.myapplication.R;
 import com.example.myapplication.activities.ActivityCourseDetails;
-import com.example.myapplication.model.ModelTimetable;
-import com.example.myapplication.model.ModelTimetableCell;
+import com.example.myapplication.models.ModelTimetable;
+import com.example.myapplication.models.ModelTimetableCell;
 
 import java.util.ArrayList;
 import java.util.List;

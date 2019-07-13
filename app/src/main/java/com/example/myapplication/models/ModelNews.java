@@ -1,4 +1,4 @@
-package com.example.myapplication.model;
+package com.example.myapplication.models;
 
 public class ModelNews {
     public String faculty_department = "";

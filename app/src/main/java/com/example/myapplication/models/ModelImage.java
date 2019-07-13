@@ -1,4 +1,4 @@
-package com.example.myapplication.model;
+package com.example.myapplication.models;
 
 import android.graphics.drawable.Drawable;
 

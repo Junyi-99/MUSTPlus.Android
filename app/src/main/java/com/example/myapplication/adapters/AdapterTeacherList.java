@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.example.myapplication.R;
 
-import com.example.myapplication.model.ModelTeacher;
+import com.example.myapplication.models.ModelTeacher;
 import com.example.myapplication.utils.Tools;
 
 

@@ -1,4 +1,4 @@
-package com.example.myapplication.model;
+package com.example.myapplication.models;
 
 public class ModelResponse {
     private int code;

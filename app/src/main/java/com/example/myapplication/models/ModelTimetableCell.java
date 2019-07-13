@@ -1,9 +1,8 @@
-package com.example.myapplication.model;
+package com.example.myapplication.models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import java.time.Duration;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;

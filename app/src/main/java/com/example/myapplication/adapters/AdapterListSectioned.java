@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.model.ModelNews;
+import com.example.myapplication.models.ModelNews;
 import com.example.myapplication.utils.Tools;
 
 

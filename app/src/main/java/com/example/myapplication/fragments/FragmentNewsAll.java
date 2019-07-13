@@ -23,10 +23,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.example.myapplication.model.ModelImage;
+import com.example.myapplication.models.ModelImage;
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterListSectioned;
-import com.example.myapplication.model.ModelNews;
+import com.example.myapplication.models.ModelNews;
 import com.example.myapplication.utils.Tools;
 
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         /*
          * ModelNews List
          * */
-        recyclerView = (RecyclerView) this_view.findViewById(R.id.recyclerViewTeachers);
+        recyclerView = (RecyclerView) this_view.findViewById(R.id.recyclerViewTeacherList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this_view.getContext()));
         recyclerView.setHasFixedSize(true);
         modelNewsItems = new ArrayList<ModelNews>();

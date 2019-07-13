@@ -118,7 +118,7 @@
                     android:layout_height="@dimen/spacing_large" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerViewTeachers"
+                    android:id="@+id/recyclerViewTeacherList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbars="vertical"

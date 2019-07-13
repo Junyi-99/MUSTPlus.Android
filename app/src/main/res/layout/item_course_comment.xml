@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/RippleStyleBlack"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/relative_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/spacing_16dp"
+        android:layout_marginTop="@dimen/spacing_8dp"
+        android:layout_marginEnd="@dimen/spacing_16dp"
+        android:layout_marginBottom="@dimen/spacing_8dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/comment_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotomedium"
+                android:text="轻松而愉悦的课！"
+                android:textColor="#DE000000"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/comment_user"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/comment_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/robotomedium"
+                android:text="Junyi"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/comment_content" />
+
+            <TextView
+                android:id="@+id/comment_publish_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_8dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/robotomedium"
+                android:text="2019/7/12 23:32"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/comment_user"
+                app:layout_constraintTop_toBottomOf="@id/comment_content" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageButton
+                    android:id="@+id/thumbs_up"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="fitXY"
+                    android:tint="#9EFFFFFF"
+                    app:srcCompat="@drawable/ic_thumb_up" />
+
+                <TextView
+                    android:id="@+id/comment_thumbs_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/robotomedium"
+                    android:text="4"
+                    android:textSize="12sp" />
+
+                <ImageButton
+                    android:id="@+id/thumbs_down"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="fitXY"
+                    android:tint="#9EFFFFFF"
+                    app:srcCompat="@drawable/ic_thumb_down" />
+
+                <TextView
+                    android:id="@+id/comment_thumbs_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotomedium"
+                    android:text="@string/Time10"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </RelativeLayout>
+
+</com.balysv.materialripple.MaterialRippleLayout>
