@@ -64,7 +64,7 @@
             </LinearLayout>
 
             <ImageButton
-                android:id="@+id/imageButtonMore"
+                android:id="@+id/image_button_back"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
 

@@ -10,10 +10,13 @@
         android:id="@+id/relative_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/layout_bg"
+        android:elevation="1dp"
+        android:padding="16dp"
         android:layout_marginStart="@dimen/spacing_16dp"
-        android:layout_marginTop="@dimen/spacing_8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="@dimen/spacing_16dp"
-        android:layout_marginBottom="@dimen/spacing_8dp">
+        android:layout_marginBottom="4dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

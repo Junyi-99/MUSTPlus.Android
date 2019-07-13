@@ -2,13 +2,17 @@ package com.example.myapplication.activities;
 
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ScrollView;
 
+import com.example.myapplication.EmptyRecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterCourseComment;
 import com.example.myapplication.adapters.AdapterTeacherList;
@@ -25,6 +29,8 @@ public class ActivityCourseDetails extends AppCompatActivity {
     private AdapterTeacherList adapterTeacherList;
     private RecyclerView recyclerViewCourseComment;
     private AdapterCourseComment adapterCourseComment;
+    private ArrayList<ModelTeacher> modelTeacherArrayList;
+    private ArrayList<ModelCourseComment> modelCourseCommentArrayList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,16 +40,42 @@ public class ActivityCourseDetails extends AppCompatActivity {
         setContentView(R.layout.activity_course_details_temp);
 
         initComponent();
+        initButtons();
     }
 
-    private void initComment() {
+    private void initButtons() {
+        // 返回按钮
+        ImageButton button = (ImageButton) findViewById(R.id.image_button_back);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityCourseDetails.super.onBackPressed();
+            }
+        });
 
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                modelCourseCommentArrayList.add(new ModelCourseComment(
+                        2,
+                        "1709853D-I011-0021",
+                        0,
+                        0,
+                        4.89,
+                        "sllo老师讲课太有意思啦！",
+                        "2019-06-07 18:14:47"
+                ));
+                adapterCourseComment.notifyDataSetChanged();
+            }
+        });
     }
 
     private void initComponent() {
 
-        View scrollView = (NestedScrollView) findViewById(R.id.nested_scroll_view);
-        OverScrollDecoratorHelper.setUpStaticOverScroll(scrollView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+        //ScrollView scrollView = (ScrollView) findViewById(R.id.scroll_view);
+        //OverScrollDecoratorHelper.setUpStaticOverScroll(scrollView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+        //OverScrollDecoratorHelper.setUpOverScroll(scrollView);
 
 
         recyclerViewTeacherList = (RecyclerView) findViewById(R.id.recyclerViewTeacherList);
@@ -53,19 +85,14 @@ public class ActivityCourseDetails extends AppCompatActivity {
         recyclerViewCourseComment.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCourseComment.setHasFixedSize(true);
 
-        ArrayList<ModelTeacher> modelTeacherArrayList = new ArrayList<ModelTeacher>();
-        ArrayList<ModelCourseComment> modelCourseCommentArrayList = new ArrayList<ModelCourseComment>();
+        recyclerViewTeacherList.setNestedScrollingEnabled(false);
+        recyclerViewCourseComment.setNestedScrollingEnabled(false);
+
+        modelTeacherArrayList = new ArrayList<ModelTeacher>();
+        modelCourseCommentArrayList = new ArrayList<ModelCourseComment>();
 
         TypedArray drw_arr = this.getResources().obtainTypedArray(R.array.people_images);
-        ModelCourseComment modelCourseComment = new ModelCourseComment(
-                2,
-                "1709853D-I011-0021",
-                0,
-                0,
-                4.89,
-                "sllo老师讲课太有意思啦！",
-                "2019-06-07 18:14:47"
-        );
+
         ModelTeacher modelTeacher1 = new ModelTeacher(
                 "罗绍龙",
                 "Lo Sio Long",
@@ -82,16 +109,6 @@ public class ActivityCourseDetails extends AppCompatActivity {
         modelTeacherArrayList.add(modelTeacher1);
         modelTeacherArrayList.add(modelTeacher1);
         modelTeacherArrayList.add(modelTeacher1);
-
-        modelCourseCommentArrayList.add(modelCourseComment);
-        modelCourseCommentArrayList.add(modelCourseComment);
-        modelCourseCommentArrayList.add(modelCourseComment);
-        modelCourseCommentArrayList.add(modelCourseComment);
-        modelCourseCommentArrayList.add(modelCourseComment);
-        modelCourseCommentArrayList.add(modelCourseComment);
-        modelCourseCommentArrayList.add(modelCourseComment);
-        modelCourseCommentArrayList.add(modelCourseComment);
-        modelCourseCommentArrayList.add(modelCourseComment);
 
 
         //set data and list adapter

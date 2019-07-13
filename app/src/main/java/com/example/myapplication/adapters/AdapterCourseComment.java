@@ -15,6 +15,11 @@ import com.example.myapplication.models.ModelCourseComment;
 import java.util.List;
 
 public class AdapterCourseComment extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    // 两种显示模式
+    // None: 显示空评论之提示layout
+    // NotNone: 正常评论内容layout
+    private final int None = 0;
+    private final int NotNone = 1;
 
     private List<ModelCourseComment> items;
     private Context ctx;
@@ -26,9 +31,18 @@ public class AdapterCourseComment extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment, parent, false);
-        //v.setOnClickListener(this);
-        return new OriginalViewHolder(v);
+        View v;
+        switch (viewType) {
+            case None:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment_none, parent, false);
+                return new OriginalViewHolder(v);
+            case NotNone:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment, parent, false);
+                return new OriginalViewHolder(v);
+            default:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment_none, parent, false);
+                return new OriginalViewHolder(v);
+        }
     }
 
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
@@ -37,10 +51,11 @@ public class AdapterCourseComment extends RecyclerView.Adapter<RecyclerView.View
 
     public AdapterCourseComment(Context context, List<ModelCourseComment> items) {
         this.items = items;
-        ctx = context;
+        this.ctx = context;
     }
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
+
         public TextView comment_content;
         public TextView comment_user;
         public TextView comment_publish_time;
@@ -67,43 +82,54 @@ public class AdapterCourseComment extends RecyclerView.Adapter<RecyclerView.View
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        ModelCourseComment m = items.get(position);
-        OriginalViewHolder v = (OriginalViewHolder) holder;
+        if (!items.isEmpty()) {
 
-        v.comment_content.setText(m.getContent());
-        v.comment_user.setText(m.getStudent_id());
-        v.comment_publish_time.setText(m.getPublish_time());
-        v.comment_thumbs_up.setText(String.valueOf(m.getThumbs_up()));
-        v.thumbs_up.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(v, items.get(position), position);
+            ModelCourseComment m = items.get(position);
+            OriginalViewHolder v = (OriginalViewHolder) holder;
+
+            v.comment_content.setText(m.getContent());
+            v.comment_user.setText(m.getStudent_id());
+            v.comment_publish_time.setText(m.getPublish_time());
+            v.comment_thumbs_up.setText(String.valueOf(m.getThumbs_up()));
+            v.thumbs_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(v, items.get(position), position);
+                    }
                 }
-            }
-        });
-        v.comment_thumbs_down.setText(String.valueOf(m.getThumbs_down()));
-        v.thumbs_down.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(v, items.get(position), position);
+            });
+            v.comment_thumbs_down.setText(String.valueOf(m.getThumbs_down()));
+            v.thumbs_down.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(v, items.get(position), position);
+                    }
                 }
-            }
-        });
-        v.relative_parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(v, items.get(position), position);
+            });
+            v.relative_parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(v, items.get(position), position);
+                    }
                 }
-            }
-        });
+            });
+        }
+
     }
 
     @Override
     public int getItemCount() {
+        if (items.isEmpty())
+            return 1;
         return items.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return items.isEmpty() ? None : NotNone;
     }
 
     public void insertItem(int index, ModelCourseComment people) {

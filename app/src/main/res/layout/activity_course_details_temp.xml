@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relative_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/main.toolbar"
@@ -54,7 +54,7 @@
             </LinearLayout>
 
             <ImageButton
-                android:id="@+id/imageButtonMore"
+                android:id="@+id/image_button_back"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="8dp"
@@ -73,10 +73,7 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/linear_layout"
-        android:layout_alignParentTop="true"
-        android:fadingEdgeLength="80dp"
+        android:layout_height="match_parent"
         android:overScrollMode="always"
         android:requiresFadingEdge="vertical">
 
@@ -197,8 +194,9 @@
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/spacing_16dp"
                 android:layout_marginBottom="@dimen/spacing_16dp"
+                android:fontFamily="@font/robotomedium"
                 android:text="任课教师"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <android.support.v7.widget.RecyclerView
@@ -217,8 +215,9 @@
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/spacing_16dp"
                 android:layout_marginBottom="@dimen/spacing_16dp"
+                android:fontFamily="@font/robotomedium"
                 android:text="课程评价"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <android.support.v7.widget.RecyclerView
@@ -237,9 +236,14 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/nested_scroll_view"
         android:layout_alignBottom="@+id/nested_scroll_view"
-        android:layout_margin="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/colorAccent"
         android:clickable="true"
+        android:focusable="auto"
+        android:focusableInTouchMode="true"
         app:srcCompat="@drawable/ic_compose" />
 
 
