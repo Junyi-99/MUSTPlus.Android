@@ -96,7 +96,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         /*
          * ModelNews List
          * */
-        recyclerView = (RecyclerView) this_view.findViewById(R.id.recyclerViewTeacherList);
+        recyclerView = (RecyclerView) this_view.findViewById(R.id.recyclerViewNewsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this_view.getContext()));
         recyclerView.setHasFixedSize(true);
         modelNewsItems = new ArrayList<ModelNews>();

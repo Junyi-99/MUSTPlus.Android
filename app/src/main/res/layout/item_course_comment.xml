@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/RippleStyleBlack"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -10,13 +10,10 @@
         android:id="@+id/relative_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/layout_bg"
-        android:elevation="1dp"
-        android:padding="16dp"
-        android:layout_marginStart="@dimen/spacing_16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/spacing_16dp"
-        android:layout_marginBottom="4dp">
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/layout_bg_course_detail_comment_list"
+        android:elevation="1dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

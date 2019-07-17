@@ -17,23 +17,32 @@ import com.example.myapplication.utils.Tools;
 import java.util.List;
 
 public class AdapterTeacherList extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    // 两种显示模式
+    // None: 显示没有老师之提示layout
+    // NotNone: 有多少老师显示多少layout
+    private final int None = 0;
+    private final int NotNone = 1;
 
     private List<ModelTeacher> items;
     private Context ctx;
     private OnItemClickListener mOnItemClickListener;
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, ModelTeacher obj, int position);
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v;
+        switch (viewType) {
+            case None:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_teacher_none, parent, false);
+                return new OriginalViewHolder(v);
+            case NotNone:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_teacher, parent, false);
+                return new OriginalViewHolder(v);
+            default:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_teacher_none, parent, false);
+                return new OriginalViewHolder(v);
+        }
     }
 
-    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
-        this.mOnItemClickListener = mItemClickListener;
-    }
-
-    public AdapterTeacherList(Context context, List<ModelTeacher> items) {
-        this.items = items;
-        ctx = context;
-    }
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
         public ImageView teacher_avatar;
@@ -51,42 +60,58 @@ public class AdapterTeacherList extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_teacher, parent, false);
-        return new OriginalViewHolder(v);
-    }
-
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        ModelTeacher t = items.get(position);
+        if (!items.isEmpty()) {
+            ModelTeacher t = items.get(position);
 
 
-        OriginalViewHolder view = (OriginalViewHolder) holder;
+            OriginalViewHolder view = (OriginalViewHolder) holder;
 
-        view.teacher_name_zh.setText(t.getName_zh());
-        view.teacher_name_en.setText(t.getName_en());
-        Tools.displayImageRound(ctx, view.teacher_avatar, t.getAvatar_img());
+            view.teacher_name_zh.setText(t.getName_zh());
+            view.teacher_name_en.setText(t.getName_en());
+            Tools.displayImageRound(ctx, view.teacher_avatar, t.getAvatar_img());
 
-        view.lyt_parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(view, items.get(position), position);
+            view.lyt_parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(view, items.get(position), position);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
+        if (items.isEmpty())
+            return 1;
         return items.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return items.isEmpty() ? None : NotNone;
     }
 
     public void insertItem(int index, ModelTeacher people) {
         items.add(index, people);
         notifyItemInserted(index);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, ModelTeacher obj, int position);
+    }
+
+    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mOnItemClickListener = mItemClickListener;
+    }
+
+    public AdapterTeacherList(Context context, List<ModelTeacher> items) {
+        this.items = items;
+        ctx = context;
     }
 
 }

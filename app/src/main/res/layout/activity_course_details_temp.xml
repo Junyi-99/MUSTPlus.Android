@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relative_layout"
     android:layout_width="match_parent"
@@ -206,7 +207,26 @@
                 android:scrollbars="vertical">
 
             </android.support.v7.widget.RecyclerView>
+           <!-- <TextView
+                android:id="@+id/textViewFtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/spacing_16dp"
+                android:layout_marginBottom="@dimen/spacing_16dp"
+                android:fontFamily="@font/robotomedium"
+                android:text="FTP"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewFtpList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical">
+
+            </android.support.v7.widget.RecyclerView>-->
             <TextView
                 android:id="@+id/textViewComments"
                 android:layout_width="match_parent"
@@ -230,21 +250,43 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/floating_actions_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/nested_scroll_view"
-        android:layout_alignBottom="@+id/nested_scroll_view"
+        android:layout_alignEnd="@id/nested_scroll_view"
+        android:layout_alignBottom="@id/nested_scroll_view"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/colorAccent"
+
         android:clickable="true"
-        android:focusable="auto"
-        android:focusableInTouchMode="true"
-        app:srcCompat="@drawable/ic_compose" />
+        android:focusable="true"
+        app:fab_expandDirection="up"
+        app:fab_labelStyle="@style/menu_labels_style"
+        fab:fab_addButtonColorNormal="@color/colorWhite"
+        fab:fab_addButtonColorPressed="@color/blue_300"
+        fab:fab_addButtonPlusIconColor="@color/grey_400"
+        fab:fab_addButtonSize="normal">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorWhite"
+            fab:fab_colorPressed="@color/blue_50"
+            fab:fab_title="Action A" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorWhite"
+            fab:fab_colorPressed="@color/blue_50"
+            fab:fab_title="Action with a very l" />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 
 </RelativeLayout>

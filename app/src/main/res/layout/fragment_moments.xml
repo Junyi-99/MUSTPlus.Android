@@ -4,21 +4,10 @@
     android:layout_height="match_parent">
 
 
-    <Button
-        android:id="@+id/button9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="398dp"
-        android:layout_height="299dp"
-        android:layout_below="@+id/button9"
-
-        android:text="这里是朋友圈"
-        android:textColor="#2196F3"
-        android:textSize="100sp" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewMomentList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
 </RelativeLayout>

@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/robotomedium"
-            android:text="什么！竟然没有老师教这节课？"
+            android:text="目前没有该课程的FTP可供使用，您可以在右下角添加一个"
             android:textColor="#61000000"
             android:textSize="12sp" />
 
