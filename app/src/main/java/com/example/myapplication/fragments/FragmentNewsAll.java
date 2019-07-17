@@ -23,7 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
-import com.example.myapplication.models.ModelImage;
+import com.example.myapplication.models.ModelNewsImage;
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterListSectioned;
 import com.example.myapplication.models.ModelNews;
@@ -122,7 +122,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         });
 
         /*
-         * Set Slider ModelImage
+         * Set Slider ModelNewsImage
          *
          * */
         slider_image_title = ((TextView) this_view.findViewById(R.id.title)); // findView之后放到变量里，防止下次再find一次，优化性能
@@ -130,11 +130,11 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         layout_dots = (LinearLayout) this_view.findViewById(R.id.layout_dots);
         view_pager = (ViewPager) this_view.findViewById(R.id.pager);
 
-        adapterImageSlider = new AdapterImageSlider(this.getActivity(), new ArrayList<ModelImage>());
+        adapterImageSlider = new AdapterImageSlider(this.getActivity(), new ArrayList<ModelNewsImage>());
 
-        final List<ModelImage> items = new ArrayList<>();
+        final List<ModelNewsImage> items = new ArrayList<>();
         for (int i = 0; i < array_image_place.length; i++) {
-            ModelImage obj = new ModelImage();
+            ModelNewsImage obj = new ModelNewsImage();
             obj.image = array_image_place[i];
 
             obj.imageDrw = getResources().getDrawable(obj.image);
@@ -174,7 +174,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         startAutoSlider(adapterImageSlider.getCount());
     }
 
-    // 给 Slider ModelImage 添加下面的导航圆点
+    // 给 Slider ModelNewsImage 添加下面的导航圆点
     private void addBottomDots(LinearLayout layout_dots, int size, int current) {
         ImageView[] dots = new ImageView[size];
 
@@ -216,12 +216,12 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
     private static class AdapterImageSlider extends PagerAdapter {
 
         private Activity act;
-        private List<ModelImage> items;
+        private List<ModelNewsImage> items;
 
         private AdapterImageSlider.OnItemClickListener onItemClickListener;
 
         private interface OnItemClickListener {
-            void onItemClick(View view, ModelImage obj);
+            void onItemClick(View view, ModelNewsImage obj);
         }
 
         public void setOnItemClickListener(AdapterImageSlider.OnItemClickListener onItemClickListener) {
@@ -229,7 +229,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         }
 
         // constructor
-        private AdapterImageSlider(Activity activity, List<ModelImage> items) {
+        private AdapterImageSlider(Activity activity, List<ModelNewsImage> items) {
             this.act = activity;
             this.items = items;
         }
@@ -239,11 +239,11 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
             return this.items.size();
         }
 
-        public ModelImage getItem(int pos) {
+        public ModelNewsImage getItem(int pos) {
             return items.get(pos);
         }
 
-        public void setItems(List<ModelImage> items) {
+        public void setItems(List<ModelNewsImage> items) {
             this.items = items;
             notifyDataSetChanged();
         }
@@ -255,7 +255,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            final ModelImage o = items.get(position);
+            final ModelNewsImage o = items.get(position);
             LayoutInflater inflater = (LayoutInflater) act.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View v = inflater.inflate(R.layout.item_slider_image, container, false);
 

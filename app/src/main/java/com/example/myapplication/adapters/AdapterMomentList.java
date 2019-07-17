@@ -2,7 +2,10 @@ package com.example.myapplication.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +16,10 @@ import android.widget.TextView;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelMoment;
 import com.example.myapplication.models.ModelMoment;
+import com.example.myapplication.models.ModelMomentPicture;
+import com.example.myapplication.utils.Tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -32,13 +38,13 @@ public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHol
         View v;
         switch (viewType) {
             case None:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment_none, parent, false);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_moment_none, parent, false);
                 return new AdapterMomentList.OriginalViewHolder(v);
             case NotNone:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment, parent, false);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_moment, parent, false);
                 return new AdapterMomentList.OriginalViewHolder(v);
             default:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment_none, parent, false);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_moment_none, parent, false);
                 return new AdapterMomentList.OriginalViewHolder(v);
         }
     }
@@ -69,6 +75,7 @@ public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (!items.isEmpty()) {
 
+
             ModelMoment m = items.get(position);
             AdapterMomentList.OriginalViewHolder v = (AdapterMomentList.OriginalViewHolder) holder;
 
@@ -76,8 +83,33 @@ public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHol
             v.text_view_nickname.setText(m.getNickname());
             v.text_view_content.setText(m.getContent());
             v.text_view_publish_time.setText(m.getPublish_time());
+            Tools.displayImageRound(ctx, v.image_view_avatar, m.getAvatar_img());
+            ArrayList<ModelMomentPicture> modelMomentPictureArrayList = new ArrayList<ModelMomentPicture>();
 
 
+            ModelMomentPicture modelMomentPicture = new ModelMomentPicture(
+                    ctx,
+                    "http://www.baidu.com",
+                    "hash"
+            );
+            // TODO: 动态添加数据
+            modelMomentPictureArrayList.add(modelMomentPicture);
+            modelMomentPictureArrayList.add(modelMomentPicture);
+            modelMomentPictureArrayList.add(modelMomentPicture);
+            modelMomentPictureArrayList.add(modelMomentPicture);
+            modelMomentPictureArrayList.add(modelMomentPicture);
+            modelMomentPictureArrayList.add(modelMomentPicture);
+            modelMomentPictureArrayList.add(modelMomentPicture);
+            modelMomentPictureArrayList.add(modelMomentPicture);
+
+            AdapterMomentPicsList adapterMomentPicsList = new AdapterMomentPicsList(
+                    ctx,
+                    modelMomentPictureArrayList
+            );
+            v.recycler_view_pics.setLayoutManager(new GridLayoutManager(ctx, 3));
+            v.recycler_view_pics.setHasFixedSize(true);
+            v.recycler_view_pics.setNestedScrollingEnabled(false);
+            v.recycler_view_pics.setAdapter(adapterMomentPicsList);
         }
 
     }

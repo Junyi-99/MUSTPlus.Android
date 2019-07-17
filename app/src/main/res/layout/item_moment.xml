@@ -11,12 +11,12 @@
     <RelativeLayout
         android:id="@+id/relative_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/image_view_avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             tools:srcCompat="@tools:sample/avatars[14]" />
 
         <TextView
@@ -24,7 +24,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/image_view_avatar"
-            android:text="跑得比乌龟快的兔子" />
+            android:fontFamily="@font/robotomedium"
+            android:text="跑得比乌龟快的兔子"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_view_publish_time"
@@ -32,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_view_nickname"
             android:layout_alignStart="@+id/text_view_nickname"
+            android:fontFamily="@font/robotomedium"
             android:text="今天 21:14" />
 
         <TextView
@@ -40,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/image_view_avatar"
             android:layout_alignStart="@+id/image_view_avatar"
+            android:fontFamily="@font/robotomedium"
             android:text="我想想啊，我剩下的时间不多了，这可咋整？Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
 
         <android.support.v7.widget.RecyclerView
