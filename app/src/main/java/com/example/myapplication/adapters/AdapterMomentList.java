@@ -94,13 +94,8 @@ public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHol
             );
             // TODO: 动态添加数据
             modelMomentPictureArrayList.add(modelMomentPicture);
-            modelMomentPictureArrayList.add(modelMomentPicture);
-            modelMomentPictureArrayList.add(modelMomentPicture);
-            modelMomentPictureArrayList.add(modelMomentPicture);
-            modelMomentPictureArrayList.add(modelMomentPicture);
-            modelMomentPictureArrayList.add(modelMomentPicture);
-            modelMomentPictureArrayList.add(modelMomentPicture);
-            modelMomentPictureArrayList.add(modelMomentPicture);
+            //modelMomentPictureArrayList.add(modelMomentPicture);
+
 
             AdapterMomentPicsList adapterMomentPicsList = new AdapterMomentPicsList(
                     ctx,

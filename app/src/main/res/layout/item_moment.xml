@@ -1,57 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/material_ripple_layout"
-    style="@style/RippleStyleBlack"
+    android:id="@+id/relative_layout"
+    android:background="?attr/selectableItemBackground"
+
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="4dp">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:id="@+id/relative_layout"
+    <ImageView
+        android:id="@+id/image_view_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@drawable/photo_female_1" />
+
+    <TextView
+        android:id="@+id/text_view_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/image_view_avatar"
+        android:fontFamily="@font/robotomedium"
+        android:text="跑得比乌龟快的兔子"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_view_publish_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_nickname"
+        android:layout_alignStart="@+id/text_view_nickname"
+        android:fontFamily="@font/robotomedium"
+        android:text="今天 21:14" />
+
+    <TextView
+        android:id="@+id/text_view_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_view_avatar"
+        android:layout_alignStart="@+id/image_view_avatar"
+        android:fontFamily="@font/robotomedium"
+        android:text="我想想啊，我剩下的时间不多了，这可咋整？Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_pics"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/text_view_content" />
 
-        <ImageView
-            android:id="@+id/image_view_avatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            tools:srcCompat="@tools:sample/avatars[14]" />
+</RelativeLayout>
 
-        <TextView
-            android:id="@+id/text_view_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/image_view_avatar"
-            android:fontFamily="@font/robotomedium"
-            android:text="跑得比乌龟快的兔子"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/text_view_publish_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_view_nickname"
-            android:layout_alignStart="@+id/text_view_nickname"
-            android:fontFamily="@font/robotomedium"
-            android:text="今天 21:14" />
-
-        <TextView
-            android:id="@+id/text_view_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/image_view_avatar"
-            android:layout_alignStart="@+id/image_view_avatar"
-            android:fontFamily="@font/robotomedium"
-            android:text="我想想啊，我剩下的时间不多了，这可咋整？Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_pics"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/text_view_content" />
-
-    </RelativeLayout>
-
-</com.balysv.materialripple.MaterialRippleLayout>

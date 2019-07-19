@@ -2,6 +2,13 @@ package com.example.myapplication.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Shader;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,8 +66,28 @@ public class AdapterMomentPicsList extends RecyclerView.Adapter<RecyclerView.Vie
             ModelMomentPicture m = items.get(position);
             AdapterMomentPicsList.OriginalViewHolder v = (AdapterMomentPicsList.OriginalViewHolder) holder;
             Bitmap bitmap = m.getImg_bitmap();
-            Log.d("BITMAP", bitmap.toString());
-            v.image_view_moment_pic.setImageBitmap(bitmap);
+
+
+
+
+            float cornerRadius = 50.0f;
+            // Initialize a new RoundedBitmapDrawable object to make ImageView rounded corners
+            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(
+                    ctx.getResources(),
+                    bitmap
+            );
+
+            // Set the RoundedBitmapDrawable corners radius
+            roundedBitmapDrawable.setCornerRadius(cornerRadius);
+
+                /*
+                    setAntiAlias(boolean aa)
+                        Enables or disables anti-aliasing for this drawable.
+                */
+            roundedBitmapDrawable.setAntiAlias(true);
+
+            // Set the ImageView image as drawable object
+            v.image_view_moment_pic.setImageDrawable(roundedBitmapDrawable);
         }
     }
 

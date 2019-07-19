@@ -250,10 +250,10 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
+    <!--<com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/floating_actions_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="16dp"
+        android:layout_height="221dp"
         android:layout_alignEnd="@id/nested_scroll_view"
         android:layout_alignBottom="@id/nested_scroll_view"
         android:layout_marginStart="16dp"
@@ -286,7 +286,7 @@
             fab:fab_colorNormal="@color/colorWhite"
             fab:fab_colorPressed="@color/blue_50"
             fab:fab_title="Action with a very l" />
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>-->
 
 
 </RelativeLayout>

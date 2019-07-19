@@ -10,7 +10,8 @@
         android:id="@+id/image_view_moment_pic"
         android:layout_width="128dp"
         android:layout_height="128dp"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars[9]" />
+        tools:srcCompat="@drawable/image_8" />
 </android.support.constraint.ConstraintLayout>

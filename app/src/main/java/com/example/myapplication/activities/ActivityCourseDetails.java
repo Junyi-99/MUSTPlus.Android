@@ -53,7 +53,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
             }
         });
 
-        FloatingActionsMenu floatingActionButton = (FloatingActionsMenu) findViewById(R.id.floating_actions_menu);
+        /*FloatingActionsMenu floatingActionButton = (FloatingActionsMenu) findViewById(R.id.floating_actions_menu);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +68,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
                 ));
                 adapterCourseCommentList.notifyDataSetChanged();
             }
-        });
+        });*/
     }
 
     private void initComponent() {
