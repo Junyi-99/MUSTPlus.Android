@@ -14,7 +14,6 @@
     android:background="@drawable/layout_bg_course_detail_teacher_list"
 
     android:clickable="true"
-
     android:elevation="4dp"
     android:gravity="center"
     android:orientation="horizontal">
