@@ -113,8 +113,8 @@ public class ActivityCourseDetails extends AppCompatActivity {
         );
         modelTeacherArrayList.add(modelTeacher1);
         modelTeacherArrayList.add(modelTeacher1);
-        modelTeacherArrayList.add(modelTeacher1);
-        modelTeacherArrayList.add(modelTeacher1);
+        //modelTeacherArrayList.add(modelTeacher1);
+        //modelTeacherArrayList.add(modelTeacher1);
 
         for (double i = 0.0; i <= 5.0; i += 0.5) {
             modelCourseCommentArrayList.add(new ModelCourseComment(

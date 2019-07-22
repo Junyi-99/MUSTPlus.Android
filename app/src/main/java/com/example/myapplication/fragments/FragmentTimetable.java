@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -41,7 +42,11 @@ public class FragmentTimetable extends Fragment {
         animatorSet.start();
     }
 
+    private ArrayList<Button> buttonArrayList = new ArrayList<Button>();
+
     private void calculateLayout(String timetableRaw, ViewGroup container, LayoutInflater inflater, RelativeLayout relativeLayout) {
+        buttonArrayList.clear();
+
         ModelTimetable modelTimetable = JSON.parseObject(timetableRaw, ModelTimetable.class);
         if (modelTimetable == null)
             return;
@@ -81,17 +86,27 @@ public class FragmentTimetable extends Fragment {
             b.setText(title);
             b.setAlpha(0.f);
 
+            buttonArrayList.add(b);
 
-
-            relativeLayout.addView(b);
         }
 
+        for (Button b : buttonArrayList) {
+            relativeLayout.addView(b);
+        }
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_timetable, container, false);
+
+        if (savedInstanceState != null) {
+            // Restore last state
+
+        } else {
+
+        }
+
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbarTimetable);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
@@ -107,22 +122,6 @@ public class FragmentTimetable extends Fragment {
                 String timetableRaw = "{\"code\": 0, \"msg\": \"\", \"timetable\": [{\"day\": \"04\", \"time_begin\": \"13:05\", \"time_end\": \"14:50\", \"course_code\": \"GSLS111\", \"course_name_zh\": \"\\u5927\\u5b78\\u82f1\\u8a9e (\\u807d\\u8aaa I)\", \"course_class\": \"D13\", \"classroom\": \"B504\", \"teacher\": \"\\u5289\\u6587\\u82f1\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 1}, {\"day\": \"06\", \"time_begin\": \"13:05\", \"time_end\": \"14:50\", \"course_code\": \"GSLS111\", \"course_name_zh\": \"\\u5927\\u5b78\\u82f1\\u8a9e (\\u807d\\u8aaa I)\", \"course_class\": \"D13\", \"classroom\": \"C506\", \"teacher\": \"\\u5289\\u6587\\u82f1\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 1}, {\"day\": \"03\", \"time_begin\": \"13:05\", \"time_end\": \"14:50\", \"course_code\": \"GSER111\", \"course_name_zh\": \"\\u5927\\u5b78\\u82f1\\u8a9e (\\u7cbe\\u8b80 I)\", \"course_class\": \"D05\", \"classroom\": \"C507\", \"teacher\": \"\\u7a0b\\u6587\\u9e97\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 2}, {\"day\": \"02\", \"time_begin\": \"13:05\", \"time_end\": \"14:50\", \"course_code\": \"GSER111\", \"course_name_zh\": \"\\u5927\\u5b78\\u82f1\\u8a9e (\\u7cbe\\u8b80 I)\", \"course_class\": \"D05\", \"classroom\": \"C509\", \"teacher\": \"\\u7a0b\\u6587\\u9e97\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 2}, {\"day\": \"05\", \"time_begin\": \"13:05\", \"time_end\": \"14:50\", \"course_code\": \"GSER111\", \"course_name_zh\": \"\\u5927\\u5b78\\u82f1\\u8a9e (\\u7cbe\\u8b80 I)\", \"course_class\": \"D05\", \"classroom\": \"C509\", \"teacher\": \"\\u7a0b\\u6587\\u9e97\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 2}, {\"day\": \"02\", \"time_begin\": \"10:00\", \"time_end\": \"12:40\", \"course_code\": \"MA101\", \"course_name_zh\": \"\\u5fae\\u7a4d\\u5206 I\", \"course_class\": \"D1\", \"classroom\": \"C308\", \"teacher\": \"\\u767d\\u9e97\\u5e73\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 3}, {\"day\": \"05\", \"time_begin\": \"09:00\", \"time_end\": \"10:45\", \"course_code\": \"MA101\", \"course_name_zh\": \"\\u5fae\\u7a4d\\u5206 I\", \"course_class\": \"D1\", \"classroom\": \"C308\", \"teacher\": \"\\u767d\\u9e97\\u5e73\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 3}, {\"day\": \"01\", \"time_begin\": \"11:00\", \"time_end\": \"12:45\", \"course_code\": \"CN103\", \"course_name_zh\": \"\\u8a08\\u7b97\\u6a5f\\u7a0b\\u5e8f\\u8a2d\\u8a08 I\", \"course_class\": \"D1\", \"classroom\": \"C308\", \"teacher\": \"\\u7f85\\u5c11\\u9f8d\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 4}, {\"day\": \"02\", \"time_begin\": \"17:00\", \"time_end\": \"18:45\", \"course_code\": \"CN103\", \"course_name_zh\": \"\\u8a08\\u7b97\\u6a5f\\u7a0b\\u5e8f\\u8a2d\\u8a08 I\", \"course_class\": \"D1\", \"classroom\": \"C408\\uff08\\u5be6\\u9a57\\u5ba4\\uff09\", \"teacher\": \"\\u7f85\\u5c11\\u9f8d\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 4}, {\"day\": \"01\", \"time_begin\": \"15:00\", \"time_end\": \"16:45\", \"course_code\": \"GWC001\", \"course_name_zh\": \"\\u897f\\u65b9\\u6587\\u5316\\u901a\\u8ad6\", \"course_class\": \"D03\", \"classroom\": \"N214\", \"teacher\": \"\\u9867\\u885b\\u6c11,\\u8a31\\u5e73,\\u8d99\\u6797\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 5}, {\"day\": \"03\", \"time_begin\": \"16:30\", \"time_end\": \"19:00\", \"course_code\": \"GMS001\", \"course_name_zh\": \"\\u79d1\\u6280\\u5927\\u5e2b\\u8b1b\\u5ea7\", \"course_class\": \"D01\", \"classroom\": \"N101\", \"teacher\": \"\\u5f90\\u61ff,\\u5f90\\u66c9\\u8ecd\", \"date_begin\": \"9-4\", \"date_end\": \"12-16\", \"course_id\": 6}]}";
                 //timetableRaw = "";
                 calculateLayout(timetableRaw, container, vi, relativeLayout);
-               /* Button bb = (Button) vi.inflate(R.layout.timetable_course_cell, container, false);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                params.width = (int) getResources().getDimension(R.dimen.timetable_header_width); // 补齐由于margin而缺少的宽高
-                params.height = (int) (getResources().getDimension(R.dimen.timetable_time_cell_height) + convertDpToPx(10));
-                int marginLeft = (int) getResources().getDimension(R.dimen.timetable_header_width) * 3;
-                int marginTop = (int) (getResources().getDimension(R.dimen.timetable_time_cell_height) * 2) - convertDpToPx(5);
-                //3,2 714 297
-                params.setMargins(marginLeft, marginTop, 0, 0);
-                bb.setLayoutParams(params);
-                bb.setText("asklfj");
-                relativeLayout.addView(bb);*/
-
-
             }
         });
 
@@ -130,6 +129,8 @@ public class FragmentTimetable extends Fragment {
         animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
         return view;
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -156,6 +157,12 @@ public class FragmentTimetable extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d("Fragment ModelTimetable", "onSaveInstanceState 存一些状态");
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         Log.d("Fragment ModelTimetable", "onPause");
@@ -170,7 +177,7 @@ public class FragmentTimetable extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("Fragment ModelTimetable", "onDestroyView");
+        Log.d("Fragment ModelTimetable", "onDestroyView 保存状态");
     }
 
     @Override

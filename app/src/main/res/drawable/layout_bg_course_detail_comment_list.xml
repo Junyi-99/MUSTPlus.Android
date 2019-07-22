@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/colorWhitePressed">
     <item>
         <shape android:shape="rectangle">
             <solid android:color="#52FFFFFF" />
@@ -8,16 +9,11 @@
     <item android:bottom="1dp">
         <shape android:shape="rectangle">
             <solid android:color="#FFFFFF" />
-            <padding android:left="16dp" android:top="12dp" android:right="16dp" android:bottom="12dp" />
-
-
+            <padding
+                android:bottom="12dp"
+                android:left="16dp"
+                android:right="16dp"
+                android:top="12dp" />
         </shape>
     </item>
-</layer-list>
-<!--
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FFFFFF"/>
-    &lt;!&ndash;<stroke android:width="3dp" android:color="#B1BCBE" />&ndash;&gt;
-    <corners android:radius="0dp"/>
-
-</shape>-->
+</ripple>

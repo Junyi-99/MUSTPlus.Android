@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorWhite">#f2f2f2</color>
+    <color name="colorWhitePressed">#bdbdbd</color>
     <color name="colorMBlueLight">#839EF9</color>
     <color name="colorMBlue">#4978FF</color>
     <color name="colorMBlueDark">#676E82</color>
