@@ -1,18 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="?attr/selectableItemBackground" />
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#BDBDBD">
+    <item android:drawable="@drawable/round_corner" />
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="4dp" />
             <solid android:color="#52FFFFFF" />
         </shape>
-
     </item>
     <item android:bottom="1dp">
         <shape android:shape="rectangle">
             <corners android:radius="4dp" />
             <solid android:color="#FFFFFF" />
-
             <padding
                 android:bottom="8dp"
                 android:left="16dp"
@@ -20,15 +19,4 @@
                 android:top="8dp" />
         </shape>
     </item>
-
-    <item android:drawable="?attr/selectableItemBackground" />
-</layer-list>
-
-
-    <!--
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FFFFFF"/>
-    &lt;!&ndash;<stroke android:width="3dp" android:color="#B1BCBE" />&ndash;&gt;
-    <corners android:radius="0dp"/>
-
-</shape>-->
+</ripple>

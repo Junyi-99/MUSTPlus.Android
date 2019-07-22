@@ -10,11 +10,10 @@
     android:layout_marginTop="4dp"
     android:layout_marginEnd="16dp"
     android:layout_marginBottom="4dp"
-    android:foreground="@drawable/layout_bg_course_detail_teacher_list"
     android:background="@drawable/layout_bg_course_detail_teacher_list"
-
     android:clickable="true"
     android:elevation="4dp"
+    android:focusable="true"
     android:gravity="center"
     android:orientation="horizontal">
 
@@ -41,34 +40,34 @@
 
             <TextView
                 android:id="@+id/teacher_name_zh"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="张三"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey_90"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/teacher_name_en"
-                app:layout_constraintStart_toEndOf="@id/teacher_name_zh"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Zhang San"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/teacher_name_zh"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_icon_right"
                 android:layout_width="12dp"
                 android:layout_height="wrap_content"
-                android:tint="@color/blue_grey_500" />
+                android:tint="@color/blue_grey_500"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_icon_right" />
 
         </android.support.constraint.ConstraintLayout>
 
