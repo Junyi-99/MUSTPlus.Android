@@ -1,101 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lyt_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:gravity="center"
+    android:minHeight="?attr/actionBarSize"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/teacher_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="@dimen/spacing_16dp"
+        android:src="@drawable/photo_female_1" />
+
+    <View
+        android:layout_width="@dimen/spacing_medium"
+        android:layout_height="0dp" />
 
     <LinearLayout
-        android:id="@+id/lyt_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:gravity="center"
-        android:minHeight="?attr/actionBarSize"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/teacher_avatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="@dimen/spacing_16dp"
-            android:src="@drawable/photo_female_1" />
-
-        <View
-            android:layout_width="@dimen/spacing_medium"
-            android:layout_height="0dp" />
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/spacing_16dp"
+            android:paddingTop="@dimen/spacing_16dp"
+            android:paddingEnd="@dimen/spacing_16dp"
+            android:paddingRight="@dimen/spacing_16dp"
+            android:paddingBottom="@dimen/spacing_20dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/teacher_name_zh"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/spacing_16dp"
-                android:paddingTop="@dimen/spacing_16dp"
-                android:paddingEnd="@dimen/spacing_16dp"
-                android:paddingRight="@dimen/spacing_16dp"
-                android:paddingBottom="@dimen/spacing_20dp">
+                android:text="通告：領取2018年12月大學英語四六級考試成績報告單"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/grey_90"
+                android:textSize="16dp" />
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraint_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/teacher_name_zh"
+                    android:id="@+id/news_time"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="通告：領取2018年12月大學英語四六級考試成績報告單"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/grey_90"
-                    android:textSize="16dp" />
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/spacing_middle"
+                    android:text="2019/6/24"
+                    android:textSize="12sp" />
 
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/constraint_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/teacher_name_en"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="酒店與旅遊管理學院"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/news_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="@dimen/spacing_middle"
-                        android:text="2019/6/24"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/teacher_name_en"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="酒店與旅遊管理學院"
-                        android:textSize="12sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/news_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/spacing_middle"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/shape_news_icon_file"
-                        android:padding="2dp"
-                        android:paddingStart="4dp"
-                        android:paddingEnd="4dp"
-                        android:text="文件"
-                        android:textColor="#00a2e8"
-                        android:textSize="10sp"
-                        app:layout_constraintStart_toEndOf="@id/teacher_name_en"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </android.support.constraint.ConstraintLayout>
-
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/news_type"
+                    app:layout_constraintStart_toEndOf="@id/teacher_name_en"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/spacing_middle"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/shape_news_icon_file"
+                    android:padding="2dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:text="文件"
+                    android:textColor="#00a2e8"
+                    android:textSize="10sp" />
+            </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
-</com.balysv.materialripple.MaterialRippleLayout>
+</LinearLayout>

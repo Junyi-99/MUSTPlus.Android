@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lyt_parent"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:fitsSystemWindows="false">
+    android:fitsSystemWindows="false"
+    android:background="?attr/selectableItemBackground"
+    >
 
-    <com.balysv.materialripple.MaterialRippleLayout
-        android:id="@+id/lyt_parent"
-
+    <ImageView
+        android:id="@+id/teacher_avatar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/teacher_avatar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/grey_80"
-            android:scaleType="centerCrop" />
-
-    </com.balysv.materialripple.MaterialRippleLayout>
+        android:layout_height="match_parent"
+        android:background="@color/grey_80"
+        android:scaleType="centerCrop" />
 
 </RelativeLayout>

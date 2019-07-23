@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.balysv.materialripple.MaterialRippleLayout;
 import com.example.myapplication.models.ModelNewsImage;
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterListSectioned;
@@ -260,7 +259,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
             View v = inflater.inflate(R.layout.item_slider_image, container, false);
 
             ImageView image = (ImageView) v.findViewById(R.id.teacher_avatar);
-            MaterialRippleLayout lyt_parent = (MaterialRippleLayout) v.findViewById(R.id.lyt_parent);
+            RelativeLayout lyt_parent = (RelativeLayout) v.findViewById(R.id.lyt_parent);
             Tools.displayImageOriginal(act, image, o.image);
             lyt_parent.setOnClickListener(new View.OnClickListener() {
                 @Override
