@@ -1,6 +1,7 @@
 package com.example.myapplication.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
@@ -76,6 +77,9 @@ public class ActivityMain extends AppCompatActivity {
 
         // 设置Pages
         setupViewPager(viewPager);
+
+        Intent intent = new Intent(this, ActivityLogin.class);
+        startActivity(intent);
     }
 
     private void setupViewPager(ViewPager viewPager) {
