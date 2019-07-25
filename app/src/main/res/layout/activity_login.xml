@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_middle"
             android:visibility="visible"
-            app:cardCornerRadius="6dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="5dp">
 
             <LinearLayout
@@ -51,87 +51,90 @@
                     android:textColor="@color/green_500"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/notosanshans_regular"
-                    android:text="学生号（XXXXXXXX-XXXX-XXXX）"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                    android:textColor="@color/grey_40" />
-
-                <android.support.design.widget.TextInputEditText
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_input_layout_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginRight="-4dp"
-                    android:inputType="text"
-                    android:maxLength="50"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                    android:textColor="@color/blue_600"
-                    android:textStyle="bold"
-                    android:theme="@style/EditText.Grey" />
+                    android:hint="学生号 XXXXXXXX-XXXX-XXXX">
 
+                    <EditText
+                        android:id="@+id/edit_text_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_baseline_person"
+                        android:drawablePadding="@dimen/spacing_8dp"
+                        android:drawableTint="@color/grey_500"
+                        android:inputType="text"
+                        android:maxLength="18"
+                        android:maxLines="1"
+                        android:singleLine="true" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/notosanshans_regular"
-                    android:text="密码（COES登录密码）"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                    android:textColor="@color/grey_40" />
+                </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputEditText
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/spacing_mlarge" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_input_layout_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="-4dp"
-                    android:layout_marginRight="-4dp"
-                    android:inputType="textPassword"
-                    android:maxLength="50"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                    android:textColor="@color/blue_600"
-                    android:textStyle="bold"
-                    android:theme="@style/EditText.Grey" />
+                    android:hint="密码 (COES登录密码)">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/notosanshans_regular"
-                    android:text="验证码"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                    android:textColor="@color/grey_40" />
+                    <EditText
+                        android:id="@+id/edit_text_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_baseline_lock"
+                        android:drawablePadding="@dimen/spacing_8dp"
+                        android:drawableTint="@color/grey_500"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/spacing_mlarge" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
 
-                    <android.support.design.widget.TextInputEditText
-                        android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/text_input_layout_captcha"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="-4dp"
-                        android:layout_marginRight="-4dp"
-                        android:inputType="text"
-                        android:maxLength="50"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                        android:textColor="@color/blue_600"
-                        android:textStyle="bold"
-                        android:theme="@style/EditText.Grey" />
+                        android:layout_weight="3"
+                        android:hint="验证码">
+
+                        <EditText
+                            android:id="@+id/edit_text_captcha"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_baseline_verified_user"
+                            android:drawablePadding="@dimen/spacing_8dp"
+                            android:drawableTint="@color/grey_500"
+                            android:inputType="number"
+                            android:maxLength="4"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
 
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="20dp"
+                        android:layout_gravity="center"
 
                         android:scaleType="centerCrop" />
                 </LinearLayout>
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/spacing_mlarge" />
 
                 <Button
                     android:layout_width="match_parent"
@@ -157,19 +160,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="无需注册,使用COES账号即可登录MUST+"
+                        android:fontFamily="@font/notosanshans_regular"
                         android:textColor="@color/blue_grey_300"
                         android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/sign_up"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:text="忘记密码？"
-                        android:textColor="@color/colorPrimaryLight"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
                 </LinearLayout>
 
             </LinearLayout>
