@@ -11,23 +11,25 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelAuthHash;
+import com.example.myapplication.utils.MPAPI;
 import com.example.myapplication.utils.Tools;
 
 import java.io.IOException;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 public class ActivityLogin extends AppCompatActivity {
     ImageButton image_button_refresh;
     ImageView image_view_captcha;
+    EditText edit_text_username;
+    EditText edit_text_password;
+    EditText edit_text_captcha;
     Button button_login;
     ModelAuthHash modelAuthHash;
     boolean animating = false;
@@ -55,8 +57,10 @@ public class ActivityLogin extends AppCompatActivity {
 
         image_view_captcha = (ImageView) findViewById(R.id.image_view_captcha);
         image_button_refresh = (ImageButton) findViewById(R.id.image_button_refresh);
+        edit_text_username = (EditText) findViewById(R.id.edit_text_username);
+        edit_text_password = (EditText) findViewById(R.id.edit_text_password);
+        edit_text_captcha = (EditText) findViewById(R.id.edit_text_captcha);
         button_login = (Button) findViewById(R.id.button_login);
-
 
         image_button_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +83,8 @@ public class ActivityLogin extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (Tools.isNetworkConnected(v.getContext())) {
-
+                    //TODO: Validate the Input
+                    login();
                 } else {
                     Log.d("CHECK NETWORK", "FALSE");
                 }
@@ -89,22 +94,48 @@ public class ActivityLogin extends AppCompatActivity {
         });
     }
 
+    private void login() {
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (modelAuthHash != null) {
+                                String result = MPAPI.auth_login(modelAuthHash.getKey(),
+                                        edit_text_username.getText().toString(),
+                                        edit_text_password.getText().toString(),
+                                        modelAuthHash.getToken(),
+                                        modelAuthHash.getCookies(),
+                                        edit_text_captcha.getText().toString());
+                                if (result == null) {
+                                    showError("result is null!");
+                                } else {
+                                    showError(result);
+                                }
+                            } else {
+                                showError("请先刷新验证码");
+                            }
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            showError(e.getMessage());
+                        }
+                    }
+                }
+        ).start();
+    }
+
     private void refreshCaptcha() {
         new Thread(
                 new Runnable() {
                     @Override
                     public void run() {
-                        OkHttpClient client = new OkHttpClient();
-                        String url = getString(R.string.api_base_url) + getString(R.string.api_hash);
-
-                        Request request = new Request.Builder().url(url).build();
                         try {
-                            Response response = client.newCall(request).execute();//发送请求
-                            String result = response.body().string();
+                            String result = MPAPI.auth_hash();
                             updateCaptcha(result);
                         } catch (IOException e) {
                             e.printStackTrace();
-                            showError(e.getMessage());
+                            showError("刷新验证码失败:" + e.getMessage());
                         }
                     }
                 }
@@ -120,7 +151,8 @@ public class ActivityLogin extends AppCompatActivity {
                 modelAuthHash = JSON.parseObject(result, ModelAuthHash.class);
                 if (modelAuthHash == null) {
                     Log.d("JSON ERROR", "JSON ERROR");
-                    return; // TODO: ALERT MESSAGE BOX
+                    Toast.makeText(getApplicationContext(), "解析验证码失败", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 byte[] decodedString = Base64.decode(modelAuthHash.getCaptcha(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -132,11 +164,15 @@ public class ActivityLogin extends AppCompatActivity {
 
 
     private void showError(final String result) {
-        //stopAnimation();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d("ERROR", result);
+                if (result != null)
+                    Log.d("ERROR", result);
+                else
+                    Log.d("Error", "");
+                Toast.makeText(getApplicationContext(), "错误：" + result, Toast.LENGTH_LONG).show();
+                stopAnimation();
             }
         });
     }

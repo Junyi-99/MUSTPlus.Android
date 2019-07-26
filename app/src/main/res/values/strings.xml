@@ -1,6 +1,5 @@
 <resources>
-    <string name="api_base_url">http://mp.junyi.pw:8000/</string>
-    <string name="api_hash">auth/hash</string>
+
 
     <string name="app_name">MUST+</string>
     <string name="title_tab_timetable">Timetable</string>
