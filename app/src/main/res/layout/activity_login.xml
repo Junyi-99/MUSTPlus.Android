@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:padding="@dimen/spacing_mlarge">
+        android:padding="24dp">
 
         <ImageView
             android:layout_width="90dp"
@@ -31,7 +31,7 @@
             android:layout_margin="@dimen/spacing_middle"
             android:visibility="visible"
             app:cardCornerRadius="24dp"
-            app:cardElevation="5dp">
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,48 +51,25 @@
                     android:textColor="@color/green_500"
                     android:textStyle="bold" />
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/text_input_layout_username"
+                <EditText
+                    android:id="@+id/edit_text_username"
+                    style="@style/LoginEditText.Username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="学生号 XXXXXXXX-XXXX-XXXX">
-
-                    <EditText
-                        android:id="@+id/edit_text_username"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_baseline_person"
-                        android:drawablePadding="@dimen/spacing_8dp"
-                        android:drawableTint="@color/grey_500"
-                        android:inputType="text"
-                        android:maxLength="18"
-                        android:maxLines="1"
-                        android:singleLine="true" />
-
-                </android.support.design.widget.TextInputLayout>
+                    android:hint="学生号 XXXXXXXX-XXXX-XXXX"
+                    android:text="1709853D-I011-0021" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="@dimen/spacing_mlarge" />
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/text_input_layout_password"
+                <EditText
+                    android:id="@+id/edit_text_password"
+                    style="@style/LoginEditText.Password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="密码 (COES登录密码)">
-
-                    <EditText
-                        android:id="@+id/edit_text_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_baseline_lock"
-                        android:drawablePadding="@dimen/spacing_8dp"
-                        android:drawableTint="@color/grey_500"
-                        android:inputType="textPassword"
-                        android:maxLines="1"
-                        android:singleLine="true" />
-
-                </android.support.design.widget.TextInputLayout>
+                    android:hint="密码 (COES登录密码)"
+                    android:text="1234567890" />
 
                 <View
                     android:layout_width="0dp"
@@ -104,32 +81,31 @@
 
                     android:orientation="horizontal">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_layout_captcha"
+                    <EditText
+                        android:id="@+id/edit_text_captcha"
+                        style="@style/LoginEditText.Captcha"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:hint="验证码">
-
-                        <EditText
-                            android:id="@+id/edit_text_captcha"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_baseline_verified_user"
-                            android:drawablePadding="@dimen/spacing_8dp"
-                            android:drawableTint="@color/grey_500"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1"
-                            android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                        android:layout_weight="1"
+                        android:hint="验证码"
+                        android:text="QWER" />
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="20dp"
+                        android:id="@+id/image_view_captcha"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
+                        android:padding="8dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/image_captcha" />
 
-                        android:scaleType="centerCrop" />
+                    <ImageButton
+                        android:id="@+id/image_button_refresh"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        app:srcCompat="@drawable/ic_baseline_refresh" />
                 </LinearLayout>
 
                 <View
@@ -137,6 +113,7 @@
                     android:layout_height="@dimen/spacing_mlarge" />
 
                 <Button
+                    android:id="@+id/button_login"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginLeft="-4dp"
@@ -159,8 +136,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="无需注册,使用COES账号即可登录MUST+"
                         android:fontFamily="@font/notosanshans_regular"
+                        android:text="无需注册,使用COES账号即可登录MUST+"
                         android:textColor="@color/blue_grey_300"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -170,8 +147,7 @@
 
         <View
             android:layout_width="0dp"
-            android:layout_height="@dimen/spacing_large" />
-
+            android:layout_height="16dp" />
     </LinearLayout>
 
 </RelativeLayout>

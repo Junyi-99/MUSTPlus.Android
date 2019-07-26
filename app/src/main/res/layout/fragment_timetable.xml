@@ -52,7 +52,7 @@
 
 
                 <ImageButton
-                    android:id="@+id/imageButtonSelectWeek"
+                    android:id="@+id/image_button_select_week"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"

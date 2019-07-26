@@ -7,6 +7,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -30,10 +31,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-//import com.bumptech.glide.Glide;
-//import com.bumptech.glide.load.engine.DiskCacheStrategy;
-//import com.bumptech.glide.request.target.BitmapImageViewTarget;
-//import com.google.android.gms.maps.GoogleMap;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -42,7 +39,20 @@ import com.example.myapplication.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static android.Manifest.permission.INTERNET;
+
+//import com.bumptech.glide.Glide;
+//import com.bumptech.glide.load.engine.DiskCacheStrategy;
+//import com.bumptech.glide.request.target.BitmapImageViewTarget;
+//import com.google.android.gms.maps.GoogleMap;
+
 public class Tools {
+
+    public static boolean isNetworkConnected(Context ctx) {
+        int permission = ctx.checkCallingOrSelfPermission(INTERNET);
+        return permission == PackageManager.PERMISSION_GRANTED;
+    }
+
     public static void displayImageOriginal(Context ctx, ImageView img, @DrawableRes int drawable) {
         try {
             Glide.with(ctx).load(drawable)
@@ -52,6 +62,7 @@ public class Tools {
         } catch (Exception e) {
         }
     }
+
     public static void displayImageRound(final Context ctx, final ImageView img, @DrawableRes int drawable) {
         try {
             Glide.with(ctx).load(drawable).asBitmap().centerCrop().into(new BitmapImageViewTarget(img) {
@@ -65,6 +76,7 @@ public class Tools {
         } catch (Exception e) {
         }
     }
+
     public static void setSystemBarColor(Activity act) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = act.getWindow();

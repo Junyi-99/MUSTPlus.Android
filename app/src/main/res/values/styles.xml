@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -82,18 +82,44 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="LoginEditText">
+        <item name="android:background">@drawable/shape_rounded_edittext_24dp</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableTint" tools:targetApi="m">@color/grey_500</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
 
+    <style name="LoginEditText.Username" parent="LoginEditText">
+        <item name="android:drawableLeft">@drawable/ic_baseline_person</item>
+        <item name="android:inputType">text</item>
+        <item name="android:maxLength">18</item>
+    </style>
+
+    <style name="LoginEditText.Password" parent="LoginEditText">
+        <item name="android:drawableLeft">@drawable/ic_baseline_lock</item>
+        <item name="android:inputType">textPassword</item>
+        <item name="android:maxLength">18</item>
+    </style>
+
+    <style name="LoginEditText.Captcha" parent="LoginEditText">
+        <item name="android:drawableLeft">@drawable/ic_baseline_verified_user</item>
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">4</item>
+    </style>
 
     <style name="Dialog.Theme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="EditText.Grey" parent="@style/AppTheme">
         <item name="colorControlActivated">@color/grey_60</item>
         <item name="colorControlHighlight">@color/grey_60</item>
         <item name="colorControlNormal">@color/grey_40</item>
     </style>
+
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/colorWhite</item>
