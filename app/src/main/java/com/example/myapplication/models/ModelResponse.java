@@ -3,6 +3,15 @@ package com.example.myapplication.models;
 public class ModelResponse {
     private int code;
     private String msg;
+    private String detail;
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
 
     public int getCode() {
         return code;

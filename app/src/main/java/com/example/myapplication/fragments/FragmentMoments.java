@@ -2,7 +2,6 @@ package com.example.myapplication.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,15 +11,14 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterMomentList;
-import com.example.myapplication.models.ModelMoment;
+import com.example.myapplication.models.ModelResponseMoment;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class FragmentMoments extends Fragment {
 
     private RecyclerView recyclerViewMomentList;
-    private ArrayList<ModelMoment> modelMomentArrayList;
+    private ArrayList<ModelResponseMoment> modelResponseMomentArrayList;
     private AdapterMomentList adapterMomentList;
 
     @Override
@@ -31,9 +29,9 @@ public class FragmentMoments extends Fragment {
         recyclerViewMomentList.setHasFixedSize(true);
         recyclerViewMomentList.setNestedScrollingEnabled(false);
 
-        modelMomentArrayList = new ArrayList<ModelMoment>();
+        modelResponseMomentArrayList = new ArrayList<ModelResponseMoment>();
 
-        modelMomentArrayList.add(new ModelMoment(
+        modelResponseMomentArrayList.add(new ModelResponseMoment(
                 0,
                 "1709853D-I011-0021",
                 "http://www.baidu.com",
@@ -52,7 +50,7 @@ public class FragmentMoments extends Fragment {
                 }
         ));
 
-        adapterMomentList = new AdapterMomentList(view.getContext(), modelMomentArrayList);
+        adapterMomentList = new AdapterMomentList(view.getContext(), modelResponseMomentArrayList);
         recyclerViewMomentList.setAdapter(adapterMomentList);
         // Inflate the layout for this fragment
         return view;

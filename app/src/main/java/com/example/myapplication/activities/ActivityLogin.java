@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelAuthHash;
+import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.utils.MPAPI;
 import com.example.myapplication.utils.Tools;
 
@@ -110,7 +111,12 @@ public class ActivityLogin extends AppCompatActivity {
                                 if (result == null) {
                                     showError("result is null!");
                                 } else {
-                                    showError(result);
+                                    ModelResponseLogin login = JSON.parseObject(result, ModelResponseLogin.class);
+                                    if (login.getCode() != 0) {
+                                        showError(login.getMsg());
+                                    } else {
+                                        showMsg(login.getStudent_name() + " " + login.getToken());
+                                    }
                                 }
                             } else {
                                 showError("请先刷新验证码");
@@ -162,6 +168,14 @@ public class ActivityLogin extends AppCompatActivity {
         });
     }
 
+    private void showMsg(final String result) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     private void showError(final String result) {
         runOnUiThread(new Runnable() {

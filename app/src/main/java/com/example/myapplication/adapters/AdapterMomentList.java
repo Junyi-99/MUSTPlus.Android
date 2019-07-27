@@ -1,22 +1,17 @@
 package com.example.myapplication.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.models.ModelMoment;
-import com.example.myapplication.models.ModelMoment;
 import com.example.myapplication.models.ModelMomentPicture;
+import com.example.myapplication.models.ModelResponseMoment;
 import com.example.myapplication.utils.Tools;
 
 import java.util.ArrayList;
@@ -29,7 +24,7 @@ public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int None = 0;
     private final int NotNone = 1;
 
-    private List<ModelMoment> items;
+    private List<ModelResponseMoment> items;
     private Context ctx;
     private AdapterMomentList.OnItemClickListener mOnItemClickListener;
 
@@ -70,13 +65,30 @@ public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
 
+    public AdapterMomentList(Context context, List<ModelResponseMoment> items) {
+        this.items = items;
+        this.ctx = context;
+    }
+
+    @Override
+    public int getItemCount() {
+        if (items.isEmpty())
+            return 1;
+        return items.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return items.isEmpty() ? None : NotNone;
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (!items.isEmpty()) {
 
 
-            ModelMoment m = items.get(position);
+            ModelResponseMoment m = items.get(position);
             AdapterMomentList.OriginalViewHolder v = (AdapterMomentList.OriginalViewHolder) holder;
 
             //v.image_view_avatar.setImageResource();
@@ -109,33 +121,16 @@ public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
-    @Override
-    public int getItemCount() {
-        if (items.isEmpty())
-            return 1;
-        return items.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return items.isEmpty() ? None : NotNone;
-    }
-
-    public void insertItem(int index, ModelMoment people) {
+    public void insertItem(int index, ModelResponseMoment people) {
         items.add(index, people);
         notifyItemInserted(index);
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(View view, ModelMoment obj, int position);
     }
 
     public void setOnItemClickListener(final AdapterMomentList.OnItemClickListener mItemClickListener) {
         this.mOnItemClickListener = mItemClickListener;
     }
 
-    public AdapterMomentList(Context context, List<ModelMoment> items) {
-        this.items = items;
-        this.ctx = context;
+    public interface OnItemClickListener {
+        void onItemClick(View view, ModelResponseMoment obj, int position);
     }
 }

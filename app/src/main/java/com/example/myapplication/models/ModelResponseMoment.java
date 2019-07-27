@@ -2,7 +2,7 @@ package com.example.myapplication.models;
 
 import java.util.List;
 
-public class ModelMoment {
+public class ModelResponseMoment {
 
 
     private Integer moment_id;
@@ -16,7 +16,7 @@ public class ModelMoment {
     private Integer comments;
     private List<String> img_url;
 
-    public ModelMoment(Integer moment_id, String student_id, String avatar_url, Integer avatar_img, String nickname, String publish_time, String content, Integer likes, Integer comments, List<String> img_url) {
+    public ModelResponseMoment(Integer moment_id, String student_id, String avatar_url, Integer avatar_img, String nickname, String publish_time, String content, Integer likes, Integer comments, List<String> img_url) {
         this.moment_id = moment_id;
         this.student_id = student_id;
         this.avatar_url = avatar_url;

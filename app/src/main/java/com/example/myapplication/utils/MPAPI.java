@@ -27,11 +27,11 @@ public class MPAPI {
             OkHttpClient client = new OkHttpClient();
             String url = api_base_url + api_login;
             RequestBody body = new FormBody.Builder()
-                    .add("username", RSAUtils.encrypt(pubkey, username))
-                    .add("password", RSAUtils.encrypt(pubkey, password))
-                    .add("token", RSAUtils.encrypt(pubkey, token))
-                    .add("cookies", RSAUtils.encrypt(pubkey, cookies))
-                    .add("captcha", RSAUtils.encrypt(pubkey, captcha))
+                    .add("username", RSAUtils.encrypt(username))
+                    .add("password", RSAUtils.encrypt(password))
+                    .add("token", RSAUtils.encrypt(token))
+                    .add("cookies", RSAUtils.encrypt(cookies))
+                    .add("captcha", RSAUtils.encrypt(captcha))
                     .build();
             Request request = new Request.Builder().url(url).post(body).build();
             Response response = client.newCall(request).execute();
