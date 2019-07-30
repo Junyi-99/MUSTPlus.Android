@@ -100,28 +100,66 @@ public class ActivityLogin extends AppCompatActivity {
                 new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            if (modelAuthHash != null) {
-                                String result = MPAPI.auth_login(modelAuthHash.getKey(),
-                                        edit_text_username.getText().toString(),
-                                        edit_text_password.getText().toString(),
-                                        modelAuthHash.getToken(),
-                                        modelAuthHash.getCookies(),
-                                        edit_text_captcha.getText().toString());
-                                if (result == null) {
-                                    showError("result is null!");
-                                } else {
-                                    ModelResponseLogin login = JSON.parseObject(result, ModelResponseLogin.class);
-                                    if (login.getCode() != 0) {
-                                        showError(login.getMsg());
-                                    } else {
-                                        showMsg(login.getStudent_name() + " " + login.getToken());
-                                    }
-                                }
-                            } else {
-                                showError("请先刷新验证码");
-                            }
+                        try { // 试一下状态机的写法
+                            int status = 0;
+                            final int STATUS_BEGIN = 0;
+                            final int STATUS_END = 1;
+                            final int STATUS_OTHER_ERROR = 2;
+                            final int STATUS_CAPTCHA_NOT_INITIALIZED = 3;
+                            final int STATUS_CAPTCHA_INITIALIZED = 4;
+                            final int STATUS_RESULT_IS_NULL = 5;
+                            final int STATUS_RESULT_IS_NOT_NULL = 6;
+                            final int STATUS_RET_CODE_OK = 7;
+                            final int STATUS_RET_CODE_ERROR = 8;
+                            String result = null;
+                            ModelResponseLogin login = null;
+                            while (status != STATUS_END) {
+                                switch (status) {
+                                    case STATUS_BEGIN:
+                                        if (modelAuthHash == null)
+                                            status = STATUS_CAPTCHA_NOT_INITIALIZED;
+                                        else
+                                            status = STATUS_CAPTCHA_INITIALIZED;
+                                        break;
+                                    case STATUS_CAPTCHA_INITIALIZED:
+                                        result = MPAPI.auth_login(modelAuthHash.getKey(),
+                                                edit_text_username.getText().toString(),
+                                                edit_text_password.getText().toString(),
+                                                modelAuthHash.getToken(),
+                                                modelAuthHash.getCookies(),
+                                                edit_text_captcha.getText().toString());
+                                        if (result == null) {
+                                            status = STATUS_RESULT_IS_NULL;
+                                        } else {
+                                            status = STATUS_RESULT_IS_NOT_NULL;
+                                        }
+                                        break;
 
+                                    case STATUS_RESULT_IS_NOT_NULL:
+                                        login = JSON.parseObject(result, ModelResponseLogin.class);
+                                        if (login.getCode() != 0)
+                                            status = STATUS_RET_CODE_ERROR;
+                                        else  // 登陆成功，可以进行下一步操作
+                                            status = STATUS_RET_CODE_OK;
+                                        break;
+                                    case STATUS_CAPTCHA_NOT_INITIALIZED:
+                                        showError("请先刷新验证码");
+                                        status = STATUS_END;
+                                        break;
+                                    case STATUS_RESULT_IS_NULL:
+                                        showError("result is null!");
+                                        status = STATUS_END;
+                                        break;
+                                    case STATUS_RET_CODE_ERROR:
+                                        showError(login.getMsg() + " " + login.getDetail());
+                                        status = STATUS_END;
+                                        break;
+                                    case STATUS_RET_CODE_OK:
+                                        showMsg(login.getStudent_name() + " " + login.getToken());
+                                        status = STATUS_END;
+                                        break;
+                                }
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                             showError(e.getMessage());

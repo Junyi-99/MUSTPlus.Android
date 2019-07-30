@@ -6,6 +6,8 @@ public class ModelResponse {
     private String detail;
 
     public String getDetail() {
+        if (detail == null)
+            return "";
         return detail;
     }
 
@@ -22,6 +24,8 @@ public class ModelResponse {
     }
 
     public String getMsg() {
+        if (msg == null)
+            return "";
         return msg;
     }
 

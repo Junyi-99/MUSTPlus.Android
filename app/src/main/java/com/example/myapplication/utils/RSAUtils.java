@@ -16,7 +16,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class RSAUtils {
-
     private static final int SEQUENCE_TAG = 0x30;
     private static final int BIT_STRING_TAG = 0x03;
     private static final byte[] NO_UNUSED_BITS = new byte[]{0x00};
