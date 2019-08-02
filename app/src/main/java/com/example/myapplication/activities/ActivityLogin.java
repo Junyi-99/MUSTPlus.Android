@@ -1,5 +1,7 @@
 package com.example.myapplication.activities;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelAuthHash;
 import com.example.myapplication.models.ModelResponseLogin;
@@ -85,7 +88,19 @@ public class ActivityLogin extends AppCompatActivity {
 
                 if (Tools.isNetworkConnected(v.getContext())) {
                     //TODO: Validate the Input
-                    login();
+                    DBHelper db = new DBHelper(v.getContext());
+                    SQLiteDatabase sqLiteDatabase = db.getWritableDatabase();
+                    ContentValues values = new ContentValues();
+                    values.put("id", 1);
+                    values.put("api", "aaa");
+                    values.put("value", "{\"code\":0}");
+                    long ret = sqLiteDatabase.insert("api_persistance", null, values);
+                    Log.d("SQLITE", String.valueOf(ret));
+                    if (ret == -1) {
+                        Log.d("log", "sqlitedatabase error");
+                    }
+
+                    //login();
                 } else {
                     Log.d("CHECK NETWORK", "FALSE");
                 }
