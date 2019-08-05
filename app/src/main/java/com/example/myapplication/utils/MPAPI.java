@@ -15,11 +15,12 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MPAPI {
-    private static String AUTH_SECRET = "flw4\\-t94!09tesldfgio30";
-    private static String api_base_url = "http://mp.junyi.pw:8000/";
-    private static String api_auth_hash = "auth/hash";
-    private static String api_auth_login = "auth/login";
-    private static String api_timetable = "timetable";
+    public static final String AUTH_SECRET = "flw4\\-t94!09tesldfgio30";
+    public static final String api_base_url = "http://mp.junyi.pw:8000/";
+    public static final String api_auth_hash = "auth/hash";
+    public static final int api_auth_login_id = 1;
+    public static final String api_auth_login = "auth/login";
+    public static final String api_timetable = "timetable";
 
     public static String auth_hash() throws IOException {
         OkHttpClient client = new OkHttpClient();
