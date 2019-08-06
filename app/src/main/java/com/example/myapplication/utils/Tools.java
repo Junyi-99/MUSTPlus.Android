@@ -40,6 +40,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static android.Manifest.permission.INTERNET;
@@ -348,6 +349,11 @@ public class Tools {
         } catch (ActivityNotFoundException e) {
             activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + activity.getPackageName())));
         }
+    }
+
+    public static long getUTCTimestamp() {
+        Calendar cal = Calendar.getInstance(); // UTC Timestamp
+        return cal.getTimeInMillis() / 1000;
     }
 
     public static String MD5(String sourceStr) {

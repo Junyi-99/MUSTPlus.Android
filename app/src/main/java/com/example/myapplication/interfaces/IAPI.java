@@ -2,16 +2,18 @@ package com.example.myapplication.interfaces;
 
 import com.example.myapplication.utils.APIOperation;
 
+import java.io.IOException;
 import java.util.TreeMap;
 
-// MUST Plus API 定义
+// MUST Plus API 接口
 public interface IAPI {
+    String AUTH_SECRET = "flw4\\-t94!09tesldfgio30";
 
     String calc_sign(TreeMap<String, String> get_data, TreeMap<String, String> post_data);
 
-    String auth_hash();
+    String auth_hash() throws IOException;
 
-    String auth_login(String pubkey, String username, String password, String token, String cookies, String captcha);
+    String auth_login(String pubkey, String username, String password, String token, String cookies, String captcha) throws IOException;
 
     String auth_logout(String token);
 
@@ -33,5 +35,5 @@ public interface IAPI {
 
     String teacher(String token, String name_zh);
 
-    String timetable(String token, Integer intake, Integer week);
+    String timetable(String token, Integer intake, Integer week) throws IOException;
 }

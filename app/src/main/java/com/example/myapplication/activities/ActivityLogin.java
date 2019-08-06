@@ -20,8 +20,9 @@ import com.alibaba.fastjson.JSON;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelAuthHash;
+import com.example.myapplication.models.ModelResponse;
 import com.example.myapplication.models.ModelResponseLogin;
-import com.example.myapplication.utils.APIBase;
+import com.example.myapplication.utils.API;
 import com.example.myapplication.utils.APIs;
 import com.example.myapplication.utils.Tools;
 
@@ -35,6 +36,7 @@ public class ActivityLogin extends AppCompatActivity {
     EditText edit_text_captcha;
     Button button_login;
     ModelAuthHash modelAuthHash;
+    ModelResponseLogin modelResponseLogin;
     boolean animating = false;
 
     private void startAnimation() {
@@ -58,12 +60,12 @@ public class ActivityLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        image_view_captcha = (ImageView) findViewById(R.id.image_view_captcha);
-        image_button_refresh = (ImageButton) findViewById(R.id.image_button_refresh);
-        edit_text_username = (EditText) findViewById(R.id.edit_text_username);
-        edit_text_password = (EditText) findViewById(R.id.edit_text_password);
-        edit_text_captcha = (EditText) findViewById(R.id.edit_text_captcha);
-        button_login = (Button) findViewById(R.id.button_login);
+        image_view_captcha = findViewById(R.id.image_view_captcha);
+        image_button_refresh = findViewById(R.id.image_button_refresh);
+        edit_text_username = findViewById(R.id.edit_text_username);
+        edit_text_password = findViewById(R.id.edit_text_password);
+        edit_text_captcha = findViewById(R.id.edit_text_captcha);
+        button_login = findViewById(R.id.button_login);
 
         image_button_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,18 +89,14 @@ public class ActivityLogin extends AppCompatActivity {
 
                 if (Tools.isNetworkConnected(v.getContext())) {
                     //TODO: Validate the Input
+                    /*Log.d("TEST","TEST");
                     DBHelper dbHelper = new DBHelper(getApplicationContext());
-                    ModelResponseLogin model = dbHelper.getLoginRecord();
-                    if (model == null) {
-                        Log.d("FAILED", "FAA");
-                    } else {
-                        Log.d("DATABASE", model.getToken());
-                        Log.d("DATABASE", model.getStudent_name());
-                    }
+                    Log.d("RECORD", dbHelper.getRecord(APIs.AUTH_LOGIN));
+*/
+
+                    login();
 
 
-
-                    //login();
                 } else {
                     Log.d("CHECK NETWORK", "FALSE");
                 }
@@ -113,7 +111,7 @@ public class ActivityLogin extends AppCompatActivity {
                 new Runnable() {
                     @Override
                     public void run() {
-                        try { // 试一下状态机的写法
+                        try {// 试一下状态机的写法
                             int status = 0;
                             final int STATUS_BEGIN = 0;
                             final int STATUS_END = 1;
@@ -125,7 +123,7 @@ public class ActivityLogin extends AppCompatActivity {
                             final int STATUS_RET_CODE_OK = 7;
                             final int STATUS_RET_CODE_ERROR = 8;
                             String result = null;
-                            ModelResponseLogin login = null;
+
                             while (status != STATUS_END) {
                                 switch (status) {
                                     case STATUS_BEGIN:
@@ -135,13 +133,16 @@ public class ActivityLogin extends AppCompatActivity {
                                             status = STATUS_CAPTCHA_INITIALIZED;
                                         break;
                                     case STATUS_CAPTCHA_INITIALIZED:
-                                        result = APIBase.auth_login(modelAuthHash.getKey(),
+                                        API api = new API(getApplicationContext());
+
+                                        result = api.auth_login(modelAuthHash.getKey(),
                                                 edit_text_username.getText().toString(),
                                                 edit_text_password.getText().toString(),
                                                 modelAuthHash.getToken(),
                                                 modelAuthHash.getCookies(),
                                                 edit_text_captcha.getText().toString());
-                                        if (result == null) {
+
+                                        if (result.isEmpty()) {
                                             status = STATUS_RESULT_IS_NULL;
                                         } else {
                                             status = STATUS_RESULT_IS_NOT_NULL;
@@ -149,8 +150,8 @@ public class ActivityLogin extends AppCompatActivity {
                                         break;
 
                                     case STATUS_RESULT_IS_NOT_NULL:
-                                        login = JSON.parseObject(result, ModelResponseLogin.class);
-                                        if (login.getCode() != 0)
+                                        modelResponseLogin = JSON.parseObject(result, ModelResponseLogin.class);
+                                        if (modelResponseLogin.getCode() != 0)
                                             status = STATUS_RET_CODE_ERROR;
                                         else  // 登陆成功，可以进行下一步操作
                                             status = STATUS_RET_CODE_OK;
@@ -164,11 +165,11 @@ public class ActivityLogin extends AppCompatActivity {
                                         status = STATUS_END;
                                         break;
                                     case STATUS_RET_CODE_ERROR:
-                                        showError(login.getMsg() + " " + login.getDetail());
+                                        showError(modelResponseLogin.getMsg() + " " + modelResponseLogin.getDetail());
                                         status = STATUS_END;
                                         break;
                                     case STATUS_RET_CODE_OK:
-                                        showMsg(login.getStudent_name() + " " + login.getToken());
+                                        showMsg(modelResponseLogin.getStudent_name() + " " + modelResponseLogin.getToken());
 
                                         DBHelper db = new DBHelper(getApplicationContext());
                                         long ret = db.updatePersistence(APIs.AUTH_LOGIN, result);
@@ -193,7 +194,29 @@ public class ActivityLogin extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    API api = new API(getApplicationContext());
+                    String result = null;
+                    result = api.timetable(modelResponseLogin.getToken(), 1909, 0);
+                    ModelResponse response = JSON.parseObject(result, ModelResponse.class);
+                    DBHelper db = new DBHelper(getApplicationContext());
+                    if (response.getCode() == 0) {
+                        // 成功
+                        long ret = db.updatePersistence(APIs.TIMETABLE, result);
+                        exit();// 返回上一级
+                    } else {
+                        // 出错
+                        if (response.getCode() == -7003) { // Cookie 过期
+                            db.removeRecord(APIs.AUTH_LOGIN);
+                        }
+                        db.removeRecord(APIs.TIMETABLE);
+                        showError(response.getMsg());
+                    }
 
+                    Log.d("TIMETABLEE", result);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }).start();
     }
@@ -204,7 +227,8 @@ public class ActivityLogin extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            String result = APIBase.auth_hash();
+                            API api = new API(getApplicationContext());
+                            String result = api.auth_hash();
                             updateCaptcha(result);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -222,6 +246,7 @@ public class ActivityLogin extends AppCompatActivity {
             public void run() {
                 Log.d("RESULT", result);
                 modelAuthHash = JSON.parseObject(result, ModelAuthHash.class);
+                Log.d("AuthHash", modelAuthHash.getCookies());
                 if (modelAuthHash == null) {
                     Log.d("JSON ERROR", "JSON ERROR");
                     Toast.makeText(getApplicationContext(), "解析验证码失败", Toast.LENGTH_SHORT).show();
@@ -235,6 +260,14 @@ public class ActivityLogin extends AppCompatActivity {
         });
     }
 
+    private void exit() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                onBackPressed();
+            }
+        });
+    }
     private void showMsg(final String result) {
         runOnUiThread(new Runnable() {
             @Override
