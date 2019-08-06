@@ -1,9 +1,6 @@
 package com.example.myapplication.utils;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -14,33 +11,20 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class MPAPI {
+public class APIBase {
+
     public static final String AUTH_SECRET = "flw4\\-t94!09tesldfgio30";
-    public static final String api_base_url = "http://mp.junyi.pw:8000/";
-    public static final String api_auth_hash = "auth/hash";
-    public static final int api_auth_login_id = 1;
-    public static final String api_auth_login = "auth/login";
-    public static final String api_timetable = "timetable";
+
 
     public static String auth_hash() throws IOException {
         OkHttpClient client = new OkHttpClient();
-        String url = api_base_url + api_auth_hash;
+        String url = APIs.BASE_URL.v() + APIs.AUTH_HASH.v();
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();//发送请求
         return response.body().string();
     }
 
-    private static String MD5(String sourceStr) {
-        String s = null;
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            BigInteger bigInt = new BigInteger(1, md.digest(sourceStr.getBytes()));
-            s = String.format("%032x", bigInt);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return s;
-    }
+
 
     private static String calc_sign(TreeMap<String, String> get_data, TreeMap<String, String> post_data) {
         StringBuilder get = new StringBuilder();
@@ -58,16 +42,16 @@ public class MPAPI {
             }
             post.substring(0, post.length() - 2);
         }
-        return MD5(String.valueOf(get) + post + AUTH_SECRET);
+        return Tools.MD5(String.valueOf(get) + post + AUTH_SECRET);
     }
 
     public static String timetable(String token, Integer intake, Integer week) throws IOException {
         OkHttpClient client = new OkHttpClient();
-        String url = api_base_url + api_timetable;
+        String url = APIs.BASE_URL.v() + APIs.TIMETABLE.v();
         HttpUrl.Builder httpUrl = HttpUrl.parse(url).newBuilder();
         TreeMap<String, String> params = new TreeMap<>();
         params.put("token", token);
-        params.put("time", String.valueOf((long) (System.currentTimeMillis() / 1000)));
+        params.put("time", String.valueOf(System.currentTimeMillis() / 1000));
         params.put("intake", String.valueOf(intake));
         params.put("week", String.valueOf(week));
         params.put("sign", calc_sign(params, null));
@@ -82,7 +66,7 @@ public class MPAPI {
     public static String auth_login(String pubkey, String username, String password, String token, String cookies, String captcha) throws IOException {
         try {
             OkHttpClient client = new OkHttpClient();
-            String url = api_base_url + api_auth_login;
+            String url = APIs.BASE_URL.v() + APIs.AUTH_LOGIN.v();
             RequestBody body = new FormBody.Builder()
                     .add("username", RSAUtils.encrypt(username))
                     .add("password", RSAUtils.encrypt(password))

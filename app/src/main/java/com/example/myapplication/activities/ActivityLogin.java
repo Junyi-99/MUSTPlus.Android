@@ -21,7 +21,8 @@ import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelAuthHash;
 import com.example.myapplication.models.ModelResponseLogin;
-import com.example.myapplication.utils.MPAPI;
+import com.example.myapplication.utils.APIBase;
+import com.example.myapplication.utils.APIs;
 import com.example.myapplication.utils.Tools;
 
 import java.io.IOException;
@@ -86,11 +87,16 @@ public class ActivityLogin extends AppCompatActivity {
 
                 if (Tools.isNetworkConnected(v.getContext())) {
                     //TODO: Validate the Input
+                    DBHelper dbHelper = new DBHelper(getApplicationContext());
+                    ModelResponseLogin model = dbHelper.getLoginRecord();
+                    if (model == null) {
+                        Log.d("FAILED", "FAA");
+                    } else {
+                        Log.d("DATABASE", model.getToken());
+                        Log.d("DATABASE", model.getStudent_name());
+                    }
 
-                    DBHelper db = new DBHelper(getApplicationContext());
-                    long ret = db.updatePersistence(2, "Test", "This is a test.");
 
-                    Log.d("DB RET", String.valueOf(ret));
 
                     //login();
                 } else {
@@ -129,7 +135,7 @@ public class ActivityLogin extends AppCompatActivity {
                                             status = STATUS_CAPTCHA_INITIALIZED;
                                         break;
                                     case STATUS_CAPTCHA_INITIALIZED:
-                                        result = MPAPI.auth_login(modelAuthHash.getKey(),
+                                        result = APIBase.auth_login(modelAuthHash.getKey(),
                                                 edit_text_username.getText().toString(),
                                                 edit_text_password.getText().toString(),
                                                 modelAuthHash.getToken(),
@@ -165,9 +171,9 @@ public class ActivityLogin extends AppCompatActivity {
                                         showMsg(login.getStudent_name() + " " + login.getToken());
 
                                         DBHelper db = new DBHelper(getApplicationContext());
-                                        long ret = db.updatePersistence(MPAPI.api_auth_login_id, MPAPI.api_auth_login, result);
-                                        Log.d("SQLITE RET", String.valueOf(ret));
+                                        long ret = db.updatePersistence(APIs.AUTH_LOGIN, result);
 
+                                        timetable();
 
                                         status = STATUS_END;
                                         break;
@@ -182,6 +188,7 @@ public class ActivityLogin extends AppCompatActivity {
         ).start();
     }
 
+    // 获取课程表
     private void timetable() {
         new Thread(new Runnable() {
             @Override
@@ -197,7 +204,7 @@ public class ActivityLogin extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            String result = MPAPI.auth_hash();
+                            String result = APIBase.auth_hash();
                             updateCaptcha(result);
                         } catch (IOException e) {
                             e.printStackTrace();

@@ -36,6 +36,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.myapplication.R;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -347,4 +350,15 @@ public class Tools {
         }
     }
 
+    public static String MD5(String sourceStr) {
+        String s = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            BigInteger bigInt = new BigInteger(1, md.digest(sourceStr.getBytes()));
+            s = String.format("%032x", bigInt);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
 }
