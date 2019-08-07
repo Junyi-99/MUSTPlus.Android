@@ -1,5 +1,7 @@
 package com.example.myapplication.models;
 
+import com.example.myapplication.R;
+
 public class ModelTeacher {
     private int avatar_img;
     private String position;
@@ -30,7 +32,9 @@ public class ModelTeacher {
     }
 
     public String getName_zh() {
-        return name_zh;
+        if (name_zh == null)
+            return "未知";
+        return name_zh.trim();
     }
 
     public void setName_zh(String name_zh) {
@@ -38,7 +42,9 @@ public class ModelTeacher {
     }
 
     public String getName_en() {
-        return name_en;
+        if (name_en == null)
+            return "Unknown";
+        return name_en.trim();
     }
 
     public void setName_en(String name_en) {
@@ -46,7 +52,9 @@ public class ModelTeacher {
     }
 
     public String getFaculty() {
-        return faculty;
+        if (faculty == null)
+            return "UNKNOWN";
+        return faculty.trim();
     }
 
     public void setFaculty(String faculty) {
@@ -103,7 +111,9 @@ public class ModelTeacher {
 
 
     public int getAvatar_img() {
-        return avatar_img;
+        //TODO: 获取头像
+
+        return R.drawable.photo_female_1;
     }
 
     public void setAvatar_img(int avatar_img) {

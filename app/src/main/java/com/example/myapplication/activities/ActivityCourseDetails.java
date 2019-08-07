@@ -186,7 +186,9 @@ public class ActivityCourseDetails extends AppCompatActivity {
                                     text_view_course_faculty.setText("学院：" + course.getFaculty());
                                     text_view_course_credit.setText("学分：" + course.getCredit());
                                     modelTeacherArrayList.addAll(course.getTeachers()); // 老师信息
-
+                                    //synchronized (adapterTeacherList) {
+                                    adapterTeacherList.notifyDataSetChanged();
+                                    //}
                                     for (ModelTeacher teacher : course.getTeachers()) {
                                         Log.d("TEACHERS", teacher.getName_zh());
                                     }
