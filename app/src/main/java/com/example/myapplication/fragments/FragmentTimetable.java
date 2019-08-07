@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class FragmentTimetable extends Fragment {
     private static final String TAG = "FragementTimeTable";
     private final List<Animator> animatorList = new ArrayList<Animator>();
     private ArrayList<Button> buttonArrayList = new ArrayList<Button>();
+    private ImageButton image_button_back;
 
     private int convertDpToPx(int dp) {
         return Math.round(dp * (getResources().getDisplayMetrics().density));
@@ -169,7 +171,15 @@ public class FragmentTimetable extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_timetable, container, false);
+        image_button_back = (ImageButton) view.findViewById(R.id.image_button_back);
+        image_button_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBHelper db = new DBHelper(getContext());
+                db.setLogout();
 
+            }
+        });
 
         updateTableHeaders(view);
 

@@ -69,6 +69,7 @@ public class API implements IAPI {
             Log.d("API Course", raw);
             course = JSON.parseObject(raw, ModelCourse.class);
             if (course.getCode() == 0) {
+                Log.d("API Course", "Saving data");
                 db.setCourseRecord(course_code, course_class, raw);
             }
             return course;

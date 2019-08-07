@@ -87,17 +87,24 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    // 置登录态为未登录
+    public void setLogout() {
+        removeRecord(APIs.AUTH_LOGIN);
+        removeRecord(APIs.TIMETABLE);
+    }
 
     // 设置 course 记录
     // 直接把后端返回的 json 放进来
     public void setCourseRecord(final String course_code, final String course_class, final String json_value) {
         SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_NAME_API_COURSE, "course_code=? AND course_class=?", new String[]{course_code, course_class});
+
         ContentValues values = new ContentValues();
         values.put("course_code", course_code);
         values.put("course_class", course_class);
         values.put("value", json_value);
         values.put("time", Tools.getUTCTimestamp());
-        db.insertWithOnConflict(TABLE_NAME_API_COURSE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        long ret = db.insert(TABLE_NAME_API_COURSE, null, values);
         db.close();
     }
 
@@ -114,30 +121,17 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(querySQL, null);
 
-        //TODO: 这一部分的逻辑还要改改，有点乱说实话
-        if (cursor.getCount() > 1) { // 找到重复，删除重复
-            String delete
-                    = "DELETE FROM " + TABLE_NAME_API_COURSE +
-                    " WHERE course_code='" + course_code + "'" +
-                    " AND course_class='" + course_class + "'";
-            db.rawQuery(delete, null).close();
+        // TODO: 这一部分的逻辑还要改改，有点乱说实话
+        // 这里的 getCount 只能是1，因为插入时会把之前的删掉，在setCourseRecord方法里可以保证数据唯一
+        if (cursor.moveToFirst()) {
+            result = cursor.getString(0);
+            time = cursor.getString(1);
+            cursor.close();
             db.close();
-            return null;
-        } else if (cursor.getCount() == 1) { // 恰好找到，检测时间
-            if (cursor.moveToFirst()) {
-                result = cursor.getString(0);
-                time = cursor.getString(1);
-                cursor.close();
-                db.close();
-                if (Tools.getUTCTimestamp() - Integer.valueOf(time) > 60 * 60 * 24 * COURSE_EXPIRES_DAY) {
-                    return null;
-                }
-                return JSON.parseObject(result, ModelCourse.class);
-            } else {
-                cursor.close();
-                db.close();
+            if (Tools.getUTCTimestamp() - Integer.valueOf(time) > 60 * 60 * 24 * COURSE_EXPIRES_DAY) {
                 return null;
             }
+            return JSON.parseObject(result, ModelCourse.class);
         } else {
             cursor.close();
             db.close();
