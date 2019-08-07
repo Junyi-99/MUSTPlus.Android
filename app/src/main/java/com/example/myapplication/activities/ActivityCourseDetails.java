@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -107,32 +108,6 @@ public class ActivityCourseDetails extends AppCompatActivity {
         text_view_course_code.setText("编号：" + course_code);
         text_view_course_class.setText("班级：" + course_class);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    DBHelper helper = new DBHelper(getApplicationContext());
-                    API api = new API(getApplicationContext());
-                    ModelCourse course = api.course(helper.getLoginRecord().getToken(), course_id, course_code, course_class);
-                    if (course == null) {
-                        // 无法获取课程数据
-                    } else {
-                        if (course.getCode() == 0) {
-                            //获取成功
-                            text_view_course_faculty.setText("学院：" + course.getFaculty());
-                            text_view_course_credit.setText("学分：" + course.getCredit());
-                            modelTeacherArrayList.addAll(course.getTeachers()); // 老师信息
-                            //TODO: 可以给老师信息列表加个动画
-                        } else {
-                            //获取失败，请看错误代码
-                        }
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
 
         //ScrollView scrollView = (ScrollView) findViewById(R.id.scroll_view);
         //OverScrollDecoratorHelper.setUpStaticOverScroll(scrollView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
@@ -191,5 +166,42 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
             }
         });
+
+        // 更新数据
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    DBHelper helper = new DBHelper(getApplicationContext());
+                    API api = new API(getApplicationContext());
+                    final ModelCourse course = api.course(helper.getLoginRecord().getToken(), course_id, course_code, course_class);
+                    if (course == null) {
+                        // 无法获取课程数据
+                    } else {
+                        if (course.getCode() == 0) {
+                            //获取成功
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    text_view_course_faculty.setText("学院：" + course.getFaculty());
+                                    text_view_course_credit.setText("学分：" + course.getCredit());
+                                    modelTeacherArrayList.addAll(course.getTeachers()); // 老师信息
+
+                                    for (ModelTeacher teacher : course.getTeachers()) {
+                                        Log.d("TEACHERS", teacher.getName_zh());
+                                    }
+                                }
+                            });
+                            //TODO: 可以给老师信息列表加个动画
+                        } else {
+                            //获取失败，请看错误代码
+                        }
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

@@ -114,6 +114,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(querySQL, null);
 
+        //TODO: 这一部分的逻辑还要改改，有点乱说实话
         if (cursor.getCount() > 1) { // 找到重复，删除重复
             String delete
                     = "DELETE FROM " + TABLE_NAME_API_COURSE +
@@ -123,14 +124,20 @@ public class DBHelper extends SQLiteOpenHelper {
             db.close();
             return null;
         } else if (cursor.getCount() == 1) { // 恰好找到，检测时间
-            result = cursor.getString(0);
-            time = cursor.getString(1);
-            cursor.close();
-            db.close();
-            if (Tools.getUTCTimestamp() - Integer.valueOf(time) > 60 * 60 * 24 * COURSE_EXPIRES_DAY) {
+            if (cursor.moveToFirst()) {
+                result = cursor.getString(0);
+                time = cursor.getString(1);
+                cursor.close();
+                db.close();
+                if (Tools.getUTCTimestamp() - Integer.valueOf(time) > 60 * 60 * 24 * COURSE_EXPIRES_DAY) {
+                    return null;
+                }
+                return JSON.parseObject(result, ModelCourse.class);
+            } else {
+                cursor.close();
+                db.close();
                 return null;
             }
-            return JSON.parseObject(result, ModelCourse.class);
         } else {
             cursor.close();
             db.close();
