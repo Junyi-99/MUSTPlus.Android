@@ -16,6 +16,10 @@ public class ModelResponseMoment {
     private Integer comments;
     private List<String> img_url;
 
+    public ModelResponseMoment() {
+
+    }
+
     public ModelResponseMoment(Integer moment_id, String student_id, String avatar_url, Integer avatar_img, String nickname, String publish_time, String content, Integer likes, Integer comments, List<String> img_url) {
         this.moment_id = moment_id;
         this.student_id = student_id;
@@ -34,16 +38,16 @@ public class ModelResponseMoment {
         return avatar_url;
     }
 
-    public void setAvatar_img(int avatar_img) {
-        this.avatar_img = avatar_img;
+    public void setAvatar_url(String avatar_url) {
+        this.avatar_url = avatar_url;
     }
 
     public int getAvatar_img() {
         return avatar_img;
     }
 
-    public void setAvatar_url(String avatar_url) {
-        this.avatar_url = avatar_url;
+    public void setAvatar_img(int avatar_img) {
+        this.avatar_img = avatar_img;
     }
 
     public Integer getMoment_id() {

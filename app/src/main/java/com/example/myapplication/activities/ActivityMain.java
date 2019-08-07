@@ -98,12 +98,22 @@ public class ActivityMain extends AppCompatActivity {
 
     private void checkTimetableStatus() {
         DBHelper db = new DBHelper(getApplicationContext());
-        String timetable = db.getRecord(APIs.TIMETABLE);
-        ModelResponse response = JSON.parseObject(timetable, ModelResponse.class);
-        if (response.getCode() != 0) {
-            // 无课表数据，跳转到登录页面
+        String timetable = db.getAPIRecord(APIs.TIMETABLE);
+        // 预感到这里是一个很蠢的写法，因为response不是0的数据不会被存在数据库里，
+        // 所以下面的 if response.getCode() != 0
+        // 是没有必要的
+        // 但是我懒得改
+        if (timetable.isEmpty()) {
             Intent intent = new Intent(this, ActivityLogin.class);
             startActivity(intent);
+        } else {
+            ModelResponse response = JSON.parseObject(timetable, ModelResponse.class);
+            if (response.getCode() != 0) {
+                // 无课表数据，跳转到登录页面
+                Intent intent = new Intent(this, ActivityLogin.class);
+                startActivity(intent);
+            }
         }
+
     }
 }

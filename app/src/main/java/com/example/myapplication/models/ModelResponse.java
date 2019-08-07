@@ -5,6 +5,10 @@ public class ModelResponse {
     private String msg;
     private String detail;
 
+    public ModelResponse() {
+
+    }
+
     public String getDetail() {
         if (detail == null)
             return "";

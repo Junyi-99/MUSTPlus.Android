@@ -12,6 +12,9 @@ public class ModelMomentPicture {
     private Bitmap img_bitmap;
     private Context context;
 
+    public ModelMomentPicture() {
+    }
+
     public void download() {
         // TODO: 实现下载图片功能
     }

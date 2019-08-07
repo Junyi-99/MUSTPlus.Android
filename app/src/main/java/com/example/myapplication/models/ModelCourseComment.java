@@ -9,6 +9,10 @@ public class ModelCourseComment {
     private String content;
     private String publish_time;
 
+    public ModelCourseComment() {
+
+    }
+
     public ModelCourseComment(Integer comment_id, String student_id, Integer thumbs_up, Integer thumbs_down, Double rank, String content, String publish_time) {
         this.comment_id = comment_id;
         this.student_id = student_id;

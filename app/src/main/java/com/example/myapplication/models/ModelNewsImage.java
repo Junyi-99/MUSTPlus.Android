@@ -10,4 +10,7 @@ public class ModelNewsImage {
     public String brief;
     public Integer counter = null;
 
+    public ModelNewsImage() {
+
+    }
 }

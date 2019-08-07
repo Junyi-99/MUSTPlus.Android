@@ -91,7 +91,7 @@ public class ActivityLogin extends AppCompatActivity {
                     //TODO: Validate the Input
                     /*Log.d("TEST","TEST");
                     DBHelper dbHelper = new DBHelper(getApplicationContext());
-                    Log.d("RECORD", dbHelper.getRecord(APIs.AUTH_LOGIN));
+                    Log.d("RECORD", dbHelper.getAPIRecord(APIs.AUTH_LOGIN));
 */
                     runOnUiThread(new Runnable() {
                         @Override

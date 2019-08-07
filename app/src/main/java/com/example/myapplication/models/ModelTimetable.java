@@ -8,6 +8,10 @@ public class ModelTimetable extends ModelResponse {
 
     private List<ModelTimetableCell> timetable = new ArrayList<ModelTimetableCell>();
 
+    public ModelTimetable() {
+
+    }
+
     public List<ModelTimetableCell> getTimetable() {
         return timetable;
     }

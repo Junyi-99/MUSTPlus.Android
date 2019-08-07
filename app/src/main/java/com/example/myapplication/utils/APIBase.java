@@ -52,11 +52,14 @@ public class APIBase implements IAPI {
 
     @Override
     public String auth_hash() throws IOException {
-        OkHttpClient client = new OkHttpClient();
         String url = APIs.BASE_URL.v() + APIs.AUTH_HASH.v();
+
+        OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
+
         Response response = client.newCall(request).execute();//发送请求
         ResponseBody body = response.body();
+
         if (body == null)
             throw new IOException("NULL ERROR");
         else
@@ -66,8 +69,9 @@ public class APIBase implements IAPI {
     @Override
     public String auth_login(String pubkey, String username, String password, String token, String cookies, String captcha) throws IOException {
         try {
-            OkHttpClient client = new OkHttpClient();
             String url = APIs.BASE_URL.v() + APIs.AUTH_LOGIN.v();
+
+            OkHttpClient client = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
                     .add("username", RSAUtils.encrypt(username))
                     .add("password", RSAUtils.encrypt(password))
@@ -76,8 +80,10 @@ public class APIBase implements IAPI {
                     .add("captcha", RSAUtils.encrypt(captcha))
                     .build();
             Request request = new Request.Builder().url(url).post(body).build();
+
             Response response = client.newCall(request).execute();
             ResponseBody responseBody = response.body();
+
             if (responseBody == null)
                 throw new IOException("NULL ERROR");
             else
@@ -103,8 +109,28 @@ public class APIBase implements IAPI {
     }
 
     @Override
-    public String course(String token, Integer course_id) {
-        return null;
+    public String course(String token, Integer course_id) throws IOException {
+        String url = APIs.BASE_URL.v() + APIs.COURSE_.v() + course_id;
+
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl.Builder httpUrl = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+
+        TreeMap<String, String> params = new TreeMap<>();
+        params.put("token", token);
+        params.put("time", String.valueOf(System.currentTimeMillis() / 1000));
+        params.put("sign", calc_sign(params, null));
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            httpUrl.addQueryParameter(entry.getKey(), entry.getValue());
+        }
+        Request request = new Request.Builder().url(httpUrl.build()).build();
+
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+
+        if (body == null)
+            throw new IOException("NULL ERROR");
+        else
+            return body.string();
     }
 
     @Override

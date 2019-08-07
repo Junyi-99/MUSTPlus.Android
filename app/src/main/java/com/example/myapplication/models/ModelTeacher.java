@@ -12,6 +12,10 @@ public class ModelTeacher {
     private String avatar_url;
     private ModelCourse courses;
 
+    public ModelTeacher() {
+
+    }
+
     public ModelTeacher(String name_zh, String name_en, String faculty, String avatar_url, int avatar_img, String position, String email, String office_room, String office_hour, ModelCourse courses) {
         this.name_zh = name_zh;
         this.name_en = name_en;

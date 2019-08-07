@@ -17,7 +17,7 @@ public interface IAPI {
 
     String auth_logout(String token);
 
-    String course(String token, Integer course_id);
+    String course(String token, Integer course_id) throws IOException;
 
     String course_comment(String token, Integer course_id, APIOperation operation);
 

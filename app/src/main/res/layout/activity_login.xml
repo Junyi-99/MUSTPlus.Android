@@ -45,7 +45,6 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/spacing_middle"
                     android:layout_marginBottom="@dimen/spacing_xlarge"
-                    android:fontFamily="@font/notosanshans_regular"
                     android:text="登录以继续"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                     android:textColor="@color/green_500"
@@ -57,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="学生号 XXXXXXXX-XXXX-XXXX"
-                    android:text="1709853D-I011-0021" />
+                    android:text="1809853D-B211-0078" />
 
                 <View
                     android:layout_width="0dp"
@@ -119,7 +118,6 @@
                     android:layout_marginLeft="-4dp"
                     android:layout_marginRight="-4dp"
                     android:background="@drawable/btn_rounded_primary"
-                    android:fontFamily="@font/notosanshans_regular"
                     android:text="登 录"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
@@ -136,7 +134,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/notosanshans_regular"
+                        android:fontFamily="@font/robotomedium"
                         android:text="无需注册,使用COES账号即可登录MUST+"
                         android:textColor="@color/blue_grey_300"
                         android:textSize="12sp" />

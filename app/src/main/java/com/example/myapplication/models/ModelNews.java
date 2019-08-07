@@ -8,6 +8,10 @@ public class ModelNews {
     public String url = "";
     public int image;
 
+    public ModelNews() {
+
+    }
+
     public ModelNews(String faculty_department, String title, String date, boolean type, String url) {
         this.faculty_department = faculty_department;
         this.title = title;

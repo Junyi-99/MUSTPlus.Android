@@ -2,7 +2,6 @@ package com.example.myapplication.models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -21,15 +20,18 @@ public class ModelTimetableCell {
     private int course_id;
     private SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm", Locale.US);
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd", Locale.US);
+    private SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM月dd日", Locale.US);
     private double MS_TO_HOURS = (0.00000027777777777777777777777);
+
+    public ModelTimetableCell() {
+        timeFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+    }
 
     public double duration() {
         return (time_end.getTime() - time_begin.getTime()) * MS_TO_HOURS;
     }
-    ModelTimetableCell(){
-        timeFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-    }
+
     // 获取应该在哪一列 [0, 6]
     public int getCellDayPosition() {
         return day - 1;
@@ -122,6 +124,11 @@ public class ModelTimetableCell {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getSchedule() {
+        return dateFormat2.format(date_begin) + "-" + dateFormat2.format(date_end) + " " +
+                getTime_begin() + " - " + getTime_end() + "\n@" + getClassroom();
     }
 
     public String getDate_end() {

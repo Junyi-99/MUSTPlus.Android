@@ -57,12 +57,21 @@ public class FragmentTimetable extends Fragment {
 
         int delay = 0;
 
-        for (ModelTimetableCell cell : modelTimetable.getTimetable()) {
+        for (final ModelTimetableCell cell : modelTimetable.getTimetable()) {
             final Button b = (Button) inflater.inflate(R.layout.timetable_course_cell, container, false);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), ActivityCourseDetails.class);
+                    intent.putExtra("course_title", cell.getCourse_name_zh());
+                    intent.putExtra("course_schedule", cell.getSchedule());
+                    intent.putExtra("course_code", cell.getCourse_code());
+                    intent.putExtra("course_id", cell.getCourse_id());
+                    intent.putExtra("course_class", cell.getCourse_class());
+                    intent.putExtra("course_faculty", "学院");
+                    intent.putExtra("course_credit", "0.0");
+                    intent.putExtra("teacher", cell.getTeacher());
+
                     startActivity(intent);
                 }
             });
@@ -112,11 +121,8 @@ public class FragmentTimetable extends Fragment {
         return days;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_timetable, container, false);
 
-
+    private void updateTableHeaders(final View view) {
         String[] days = getCurrentWeekDays();
         TextView text_view_monday = (TextView) view.findViewById(R.id.text_view_monday);
         TextView text_view_tuesday = (TextView) view.findViewById(R.id.text_view_tuesday);
@@ -158,7 +164,14 @@ public class FragmentTimetable extends Fragment {
                 text_view_saturday.setBackgroundResource(R.color.grey_10);
                 break;
         }
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_timetable, container, false);
+
+
+        updateTableHeaders(view);
 
         if (savedInstanceState != null) {
             // Restore last state
@@ -174,7 +187,7 @@ public class FragmentTimetable extends Fragment {
         LayoutInflater vi = LayoutInflater.from(getContext());
         RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutInnerContent);
         DBHelper db = new DBHelper(getContext());
-        String timetableRaw = db.getRecord(APIs.TIMETABLE);
+        String timetableRaw = db.getAPIRecord(APIs.TIMETABLE);
 
         calculateLayout(timetableRaw, container, vi, relativeLayout);
 

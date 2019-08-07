@@ -4,6 +4,10 @@ public class ModelResponseLogin extends ModelResponse {
     private String student_name;
     private String token;
 
+    public ModelResponseLogin() {
+        
+    }
+
     public String getStudent_name() {
         if (student_name == null)
             return "";

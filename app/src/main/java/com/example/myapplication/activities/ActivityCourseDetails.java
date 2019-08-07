@@ -1,5 +1,6 @@
 package com.example.myapplication.activities;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,30 +8,42 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterCourseCommentList;
 import com.example.myapplication.adapters.AdapterFtpList;
 import com.example.myapplication.adapters.AdapterTeacherList;
+import com.example.myapplication.models.ModelCourse;
 import com.example.myapplication.models.ModelCourseComment;
 import com.example.myapplication.models.ModelFtp;
 import com.example.myapplication.models.ModelTeacher;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.example.myapplication.utils.API;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ActivityCourseDetails extends AppCompatActivity {
+    private TextView text_view_course_title;
+    private TextView text_view_course_schedule;
+    private TextView text_view_course_code;
+    private TextView text_view_course_class;
+    private TextView text_view_course_faculty;
+    private TextView text_view_course_credit;
 
     private RecyclerView recyclerViewTeacherList;
-    private AdapterTeacherList adapterTeacherList;
     private RecyclerView recyclerViewCourseComment;
-    private AdapterCourseCommentList adapterCourseCommentList;
     private RecyclerView recyclerViewFtpList;
+
+    private AdapterTeacherList adapterTeacherList;
+    private AdapterCourseCommentList adapterCourseCommentList;
     private AdapterFtpList adapterFtpList;
 
-    private ArrayList<ModelTeacher> modelTeacherArrayList;
-    private ArrayList<ModelCourseComment> modelCourseCommentArrayList;
-    private ArrayList<ModelFtp> modelFtpArrayList;
+    private ArrayList<ModelTeacher> modelTeacherArrayList = new ArrayList<ModelTeacher>();
+    ;
+    private ArrayList<ModelCourseComment> modelCourseCommentArrayList = new ArrayList<ModelCourseComment>();
+    private ArrayList<ModelFtp> modelFtpArrayList = new ArrayList<ModelFtp>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,8 +52,11 @@ public class ActivityCourseDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_details_temp);
 
+
         initComponent();
         initButtons();
+
+
     }
 
     private void initButtons() {
@@ -73,6 +89,51 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
     private void initComponent() {
 
+
+        text_view_course_title = (TextView) findViewById(R.id.course_title);
+        text_view_course_schedule = (TextView) findViewById(R.id.course_schedule);
+        text_view_course_code = (TextView) findViewById(R.id.course_code);
+        text_view_course_class = (TextView) findViewById(R.id.course_class);
+        text_view_course_faculty = (TextView) findViewById(R.id.course_faculty);
+        text_view_course_credit = (TextView) findViewById(R.id.course_credit);
+
+        Intent intent = getIntent();
+        final int course_id = intent.getIntExtra("course_id", 0);
+        final String course_code = intent.getStringExtra("course_code");
+        final String course_class = intent.getStringExtra("course_class");
+
+        text_view_course_title.setText(intent.getStringExtra("course_title"));
+        text_view_course_schedule.setText(intent.getStringExtra("course_schedule"));
+        text_view_course_code.setText("编号：" + course_code);
+        text_view_course_class.setText("班级：" + course_class);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    DBHelper helper = new DBHelper(getApplicationContext());
+                    API api = new API(getApplicationContext());
+                    ModelCourse course = api.course(helper.getLoginRecord().getToken(), course_id, course_code, course_class);
+                    if (course == null) {
+                        // 无法获取课程数据
+                    } else {
+                        if (course.getCode() == 0) {
+                            //获取成功
+                            text_view_course_faculty.setText("学院：" + course.getFaculty());
+                            text_view_course_credit.setText("学分：" + course.getCredit());
+                            modelTeacherArrayList.addAll(course.getTeachers()); // 老师信息
+                            //TODO: 可以给老师信息列表加个动画
+                        } else {
+                            //获取失败，请看错误代码
+                        }
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
         //ScrollView scrollView = (ScrollView) findViewById(R.id.scroll_view);
         //OverScrollDecoratorHelper.setUpStaticOverScroll(scrollView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         //OverScrollDecoratorHelper.setUpOverScroll(scrollView);
@@ -93,29 +154,8 @@ public class ActivityCourseDetails extends AppCompatActivity {
         //recyclerViewFtpList.setHasFixedSize(true);
         //recyclerViewFtpList.setNestedScrollingEnabled(false);
 
-        modelTeacherArrayList = new ArrayList<ModelTeacher>();
-        modelCourseCommentArrayList = new ArrayList<ModelCourseComment>();
-        modelFtpArrayList = new ArrayList<ModelFtp>();
 
         TypedArray drw_arr = this.getResources().obtainTypedArray(R.array.people_images);
-
-        ModelTeacher modelTeacher1 = new ModelTeacher(
-                "罗绍龙",
-                "Lo Sio Long",
-                "IT",
-                "http://www.baidu.com",
-                drw_arr.getResourceId(0, -1),
-                null,
-                null,
-                null,
-                null,
-                null
-        );
-        modelTeacherArrayList.add(modelTeacher1);
-        modelTeacherArrayList.add(modelTeacher1);
-        //modelTeacherArrayList.add(modelTeacher1);
-        //modelTeacherArrayList.add(modelTeacher1);
-
         for (double i = 0.0; i <= 5.0; i += 0.5) {
             modelCourseCommentArrayList.add(new ModelCourseComment(
                     0,
@@ -127,7 +167,6 @@ public class ActivityCourseDetails extends AppCompatActivity {
                     "2019/7/" + String.format("%d", (int) i)
             ));
         }
-
 
         //set data and list adapter
         adapterTeacherList = new AdapterTeacherList(this, modelTeacherArrayList);

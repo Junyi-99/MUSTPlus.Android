@@ -6,6 +6,10 @@ public class ModelAuthHash extends ModelResponse {
     private String cookies;
     private String captcha;
 
+    public ModelAuthHash() {
+
+    }
+
     public String getKey() {
         return key;
     }
