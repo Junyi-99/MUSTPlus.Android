@@ -1,7 +1,7 @@
 package com.example.myapplication.models;
 
 public class ModelResponse {
-    private int code;
+    private Integer code;
     private String msg;
     private String detail;
 
@@ -15,11 +15,13 @@ public class ModelResponse {
         this.detail = detail;
     }
 
-    public int getCode() {
+    public Integer getCode() {
+        if (code == null)
+            return -1;
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

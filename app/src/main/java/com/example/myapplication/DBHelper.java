@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.utils.APIs;
@@ -66,16 +65,12 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             result = cursor.getString(0);
             time = cursor.getString(1);
-            Log.d("TYPE", "Record found");
             if (Tools.getUTCTimestamp() - Integer.valueOf(time) > 60 * 60 * 24 * 7) {
-                Log.d("TYPE", "Expired");
                 return "";
             } else {
-                Log.d("TYPE", "Valid");
                 return result;
             }
         } else {
-            Log.d("TYPE", "No Record found");
             result = "";
         }
         cursor.close();

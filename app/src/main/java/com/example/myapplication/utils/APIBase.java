@@ -38,8 +38,7 @@ public class APIBase implements IAPI {
             }
             get = get.deleteCharAt(get.length() - 1);
         }
-        //intake=1902&time=1565104749&token=6e812d5e-b859-11e9-9405-be63b5b3b608&week=0flw4\-t94!09tesldfgio30
-        //intake=1902&time=1565104589&token=6e812d5e-b859-11e9-9405-be63b5b3b608&week=0&flw4\-t94!09tesldfgio30
+
         StringBuilder post = new StringBuilder();
         if (post_data != null) {
             for (Map.Entry<String, String> entry : post_data.entrySet()) {
@@ -47,7 +46,7 @@ public class APIBase implements IAPI {
             }
             post = get.deleteCharAt(post.length() - 1);
         }
-        Log.d("CALCMD", String.valueOf(get) + post + AUTH_SECRET);
+
         return Tools.MD5(String.valueOf(get) + post + AUTH_SECRET);
     }
 

@@ -111,7 +111,8 @@
                     app:layout_row="0">
 
                     <TextView
-                        style="@style/TimetableHeader.Date.Today"
+                        android:id="@+id/text_view_monday"
+                        style="@style/TimetableHeader.Date"
                         android:layout_width="@dimen/timetable_header_width"
                         android:layout_height="@dimen/timetable_header_height"
                         android:fontFamily="@font/robotomedium"
@@ -119,6 +120,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/text_view_tuesday"
                         style="@style/TimetableHeader.Date"
                         android:layout_width="@dimen/timetable_header_width"
                         android:layout_height="@dimen/timetable_header_height"
@@ -127,6 +129,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/text_view_wednesday"
                         style="@style/TimetableHeader.Date"
                         android:layout_width="@dimen/timetable_header_width"
                         android:layout_height="@dimen/timetable_header_height"
@@ -135,6 +138,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/text_view_thursday"
                         style="@style/TimetableHeader.Date"
                         android:layout_width="@dimen/timetable_header_width"
                         android:layout_height="@dimen/timetable_header_height"
@@ -143,6 +147,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/text_view_friday"
                         style="@style/TimetableHeader.Date"
                         android:layout_width="@dimen/timetable_header_width"
                         android:layout_height="@dimen/timetable_header_height"
@@ -151,6 +156,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/text_view_saturday"
                         style="@style/TimetableHeader.Date"
                         android:layout_width="@dimen/timetable_header_width"
                         android:layout_height="@dimen/timetable_header_height"
@@ -159,6 +165,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/text_view_sunday"
                         style="@style/TimetableHeader.Date"
                         android:layout_width="@dimen/timetable_header_width"
                         android:layout_height="@dimen/timetable_header_height"
@@ -307,12 +314,12 @@
 
                 <RelativeLayout
                     android:id="@+id/relativeLayoutInnerContent"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/timetable_container_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/timetable_time_label_width"
                     android:layout_marginTop="@dimen/timetable_header_height">
 
-                    <include
+                    <!--  <include
                         android:id="@+id/course1"
                         layout="@layout/timetable_course_cell"
                         android:layout_width="69dp"
@@ -320,7 +327,7 @@
                         android:layout_marginStart="-2dp"
                         android:layout_marginTop="90dp"
 
-                         />
+                        tools:visibility="invisible" />-->
 
                     <TextView
                         android:id="@+id/timeDivider8"

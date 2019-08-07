@@ -5,6 +5,8 @@ public class ModelResponseLogin extends ModelResponse {
     private String token;
 
     public String getStudent_name() {
+        if (student_name == null)
+            return "";
         return student_name;
     }
 
@@ -13,6 +15,8 @@ public class ModelResponseLogin extends ModelResponse {
     }
 
     public String getToken() {
+        if (token == null)
+            return "";
         return token;
     }
 

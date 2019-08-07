@@ -2,11 +2,11 @@
 
 
     <string name="app_name">MUST+</string>
-    <string name="title_tab_timetable">Timetable</string>
-    <string name="title_tab_news">News</string>
-    <string name="title_tab_moments">Moments</string>
-    <string name="title_tab_mine">Me</string>
-    <string name="toolbarTimetableExample">Intake 1902 Week 8</string>
+    <string name="title_tab_timetable">课程表</string>
+    <string name="title_tab_news">资讯</string>
+    <string name="title_tab_moments">校友圈</string>
+    <string name="title_tab_mine">我的</string>
+    <string name="toolbarTimetableExample">学期 1909 第 8 周</string>
     <string name="imageButtonSelectWeek">选择其他周</string>
     <string name="imageButtonMore">更多选项</string>
     <string name="TimetableHeaderMonday">周一\n10.23</string>

@@ -93,9 +93,22 @@ public class ActivityLogin extends AppCompatActivity {
                     DBHelper dbHelper = new DBHelper(getApplicationContext());
                     Log.d("RECORD", dbHelper.getRecord(APIs.AUTH_LOGIN));
 */
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            button_login.setText("正 在 登 录");
+
+                        }
+                    });
 
                     login();
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            button_login.setText("登 录");
+                        }
+                    });
 
                 } else {
                     Log.d("CHECK NETWORK", "FALSE");

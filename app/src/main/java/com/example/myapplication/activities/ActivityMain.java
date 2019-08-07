@@ -3,20 +3,24 @@ package com.example.myapplication.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterSectionsStatePager;
 import com.example.myapplication.fragments.FragmentMine;
 import com.example.myapplication.fragments.FragmentMoments;
 import com.example.myapplication.fragments.FragmentNews;
 import com.example.myapplication.fragments.FragmentTimetable;
+import com.example.myapplication.models.ModelResponse;
+import com.example.myapplication.utils.APIs;
 
 public class ActivityMain extends AppCompatActivity {
     private TextView mTextMessage;
@@ -26,12 +30,6 @@ public class ActivityMain extends AppCompatActivity {
     private FragmentMine fragmentMine;
 
     private ViewPager viewPager;
-
-    // 设置当前 ViewPager 的 Fragment
-    public void setViewPager(int fragmentNumber) {
-        viewPager.setCurrentItem(fragmentNumber, true);
-    }
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -54,6 +52,11 @@ public class ActivityMain extends AppCompatActivity {
             return false;
         }
     };
+
+    // 设置当前 ViewPager 的 Fragment
+    public void setViewPager(int fragmentNumber) {
+        viewPager.setCurrentItem(fragmentNumber, true);
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -78,9 +81,11 @@ public class ActivityMain extends AppCompatActivity {
         // 设置Pages
         setupViewPager(viewPager);
 
-        Intent intent = new Intent(this, ActivityLogin.class);
-        startActivity(intent);
+        checkTimetableStatus();
+
+
     }
+
 
     private void setupViewPager(ViewPager viewPager) {
         AdapterSectionsStatePager adapter = new AdapterSectionsStatePager(getSupportFragmentManager());
@@ -91,5 +96,14 @@ public class ActivityMain extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-
+    private void checkTimetableStatus() {
+        DBHelper db = new DBHelper(getApplicationContext());
+        String timetable = db.getRecord(APIs.TIMETABLE);
+        ModelResponse response = JSON.parseObject(timetable, ModelResponse.class);
+        if (response.getCode() != 0) {
+            // 无课表数据，跳转到登录页面
+            Intent intent = new Intent(this, ActivityLogin.class);
+            startActivity(intent);
+        }
+    }
 }
