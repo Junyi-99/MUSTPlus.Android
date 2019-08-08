@@ -69,8 +69,8 @@ public class API implements IAPI {
         DBHelper db = new DBHelper(context);
         ModelCourse course = db.getCourseRecord(course_code, course_class);
         if (course == null || forceUpdate) {
-            Log.d("API Course", "Request new data");
             String raw = base.course(token, course_id);
+            Log.d("API Course", "Request new data");
             Log.d("API Course", raw);
             course = JSON.parseObject(raw, ModelCourse.class);
             if (course.getCode() == 0) {

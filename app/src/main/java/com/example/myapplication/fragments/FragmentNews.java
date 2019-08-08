@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,61 +55,6 @@ public class FragmentNews extends Fragment {
         return view;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("Fragment ModelNews", "onCreate");
-
-    }
-
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d("Fragment ModelNews", "onActivityCreated");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("Fragment ModelNews", "onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("Fragment ModelNews", "onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("Fragment ModelNews", "onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("Fragment ModelNews", "onStop");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d("Fragment ModelNews", "onDestroyView");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("Fragment ModelNews", "onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d("Fragment ModelNews", "onDetach");
-    }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 

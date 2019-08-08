@@ -5,10 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -193,22 +190,9 @@ public class FragmentTimetable extends Fragment {
 
         updateTableHeaders(this_view);
 
-        Toolbar toolbar = (Toolbar) this_view.findViewById(R.id.toolbarTimetable);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) this_view.findViewById(R.id.toolbar);
+        //((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         return this_view;
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("Fragment ModelTimetable", "onCreate");
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d("Fragment ModelTimetable", "onActivityCreated");
     }
 
     @Override
@@ -221,47 +205,5 @@ public class FragmentTimetable extends Fragment {
         calculateLayout(timetableRaw, this_container, vi, relativeLayout);
         animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
         Log.d("Fragment ModelTimetable", "onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("Fragment ModelTimetable", "onResume");
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d("Fragment ModelTimetable", "onSaveInstanceState 存一些状态");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("Fragment ModelTimetable", "onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("Fragment ModelTimetable", "onStop");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d("Fragment ModelTimetable", "onDestroyView 保存状态");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("Fragment ModelTimetable", "onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d("Fragment ModelTimetable", "onDetach");
     }
 }

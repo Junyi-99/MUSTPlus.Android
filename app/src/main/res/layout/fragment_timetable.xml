@@ -1,93 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbarTimetable"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/toolbar"
         style="@style/MyToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/gradient"
-
         android:minHeight="?attr/actionBarSize"
-        app:popupTheme="@style/ToolbarPopupTheme">
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/toolbarTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:singleLine="true"
-                    android:text="@string/toolbarTimetableExample"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
 
 
-                <ImageButton
-                    android:id="@+id/image_button_select_week"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/imageButtonSelectWeek"
-                    android:tint="@color/colorWhite"
-                    app:srcCompat="@drawable/ic_down" />
-            </LinearLayout>
+        <TextView
+            android:id="@+id/toolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
 
-            <ImageButton
-                android:id="@+id/image_button_back"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+            android:fontFamily="sans-serif-medium"
+            android:singleLine="true"
+            android:text="@string/toolbarTimetableExample"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-                android:layout_marginTop="8dp"
+        <ImageButton
+            android:id="@+id/image_button_select_week"
+            android:layout_width="24dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/imageButtonSelectWeek"
+            android:tint="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/toolbarTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_down"
+            tools:layout_editor_absoluteY="16dp" />
 
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/imageButtonMore"
-                android:tint="@color/colorWhite"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_more_vert" />
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v7.widget.Toolbar>
+
+        <ImageButton
+            android:id="@+id/image_button_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/imageButtonMore"
+            android:tint="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_more_vert" />
+    </android.support.constraint.ConstraintLayout>
 
     <ScrollView
         android:id="@+id/verticalScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbarTimetable"
+        android:layout_below="@+id/toolbar"
         android:layout_marginTop="0dp">
 
         <HorizontalScrollView

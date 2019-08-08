@@ -148,19 +148,24 @@ public class APIBase implements IAPI {
 
     @Override
     public String course_comment(String token, Integer course_id, APIOperation operation) throws IOException {
-        String url = APIs.BASE_URL.v() + APIs.COURSE_.v() + course_id + APIs.COURSE_COMMENT;
-
+        String url = APIs.BASE_URL.v() + APIs.COURSE_.v() + course_id + APIs.COURSE_COMMENT.v();
         OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder httpUrl = boxing(url, new TreeMap<String, String>(), token);
-
-        Request request = new Request.Builder().url(httpUrl.build()).build();
-
-        Response response = client.newCall(request).execute();
-        ResponseBody body = response.body();
-        if (body == null)
-            throw new IOException("NULL ERROR");
-        else
-            return body.string();
+        switch (operation) {
+            case GET:
+                HttpUrl.Builder httpUrl = boxing(url, new TreeMap<String, String>(), token);
+                Request request = new Request.Builder().url(httpUrl.build()).build();
+                Response response = client.newCall(request).execute();
+                ResponseBody body = response.body();
+                if (body == null)
+                    throw new IOException("NULL ERROR");
+                else
+                    return body.string();
+            case POST:
+                break;
+            case DELETE:
+                break;
+        }
+        throw new IOException("NULL ERROR");
     }
 
     @Override

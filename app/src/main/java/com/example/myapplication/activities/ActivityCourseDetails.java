@@ -62,8 +62,8 @@ public class ActivityCourseDetails extends AppCompatActivity {
         setContentView(R.layout.activity_course_details_temp);
 
 
-        initComponent();
         initButtons();
+        initComponent();
     }
 
     private void initButtons() {
@@ -99,57 +99,99 @@ public class ActivityCourseDetails extends AppCompatActivity {
         try {
             DBHelper helper = new DBHelper(getApplicationContext());
             API api = new API(getApplicationContext());
-            ModelResponseCourseComment responseCourseComment = null;
-            ModelResponseLogin login = helper.getLoginRecord();
+            final ModelResponseCourseComment responseCourseComment;
+            final ModelResponseLogin login = helper.getLoginRecord();
             if (login != null) {
                 responseCourseComment = api.course_comment_get(login.getToken(), this.course_id);
                 if (responseCourseComment != null) {
-                    modelCourseCommentArrayList.clear();
-                    modelCourseCommentArrayList.addAll(responseCourseComment.getComments());
-                    adapterCourseCommentList.notifyDataSetChanged();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            modelCourseCommentArrayList.clear();
+                            modelCourseCommentArrayList.addAll(responseCourseComment.getComments());
+                            adapterCourseCommentList.notifyDataSetChanged();
+                        }
+                    });
                 }
             } else {
                 //TODO： 通知用户token失效
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void refreshCourse(boolean force_update) {
-        Log.d("API refreshCourse", "entry");
-        try {
-            DBHelper helper = new DBHelper(getApplicationContext());
-            API api = new API(getApplicationContext());
-            if (force_update)
-                api.setForceUpdate(true);
-            modelCourse = api.course(helper.getLoginRecord().getToken(), this.course_id, this.course_code, this.course_class);
+    private void refreshCourse(final boolean force_update) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("API refreshCourse", "entry");
+                try {
+                    DBHelper helper = new DBHelper(getApplicationContext());
+                    API api = new API(getApplicationContext());
+                    if (force_update)
+                        api.setForceUpdate(true);
+                    modelCourse = api.course(helper.getLoginRecord().getToken(), course_id, course_code, course_class);
 
-            if (modelCourse != null) {
-                if (modelCourse.getCode() == 0) {// 获取成功
-                    runOnUiThread(new Runnable() { // 更新界面元素
-                        @Override
-                        public void run() {
-                            text_view_course_faculty.setText("评分：" + modelCourse.getRank());
-                            text_view_course_credit.setText("学分：" + modelCourse.getCredit());
-                            modelTeacherArrayList.clear();
-                            modelTeacherArrayList.addAll(modelCourse.getTeachers()); // 老师信息
-                            Log.d(modelCourse.getName_zh(), modelCourse.getRank());
-                            adapterTeacherList.notifyDataSetChanged();
-                            for (ModelTeacher teacher : modelCourse.getTeachers()) {
-                                Log.d("TEACHERS", teacher.getName_zh());
-                            }
+                    if (modelCourse != null) {
+                        if (modelCourse.getCode() == 0) {// 获取成功
+                            runOnUiThread(new Runnable() { // 更新界面元素
+                                @Override
+                                public void run() {
+                                    text_view_course_faculty.setText("评分：" + modelCourse.getRank());
+                                    text_view_course_credit.setText("学分：" + modelCourse.getCredit());
+                                    modelTeacherArrayList.clear();
+                                    modelTeacherArrayList.addAll(modelCourse.getTeachers()); // 老师信息
+                                    Log.d(modelCourse.getName_zh(), modelCourse.getRank());
+                                    adapterTeacherList.notifyDataSetChanged();
+                                    for (ModelTeacher teacher : modelCourse.getTeachers()) {
+                                        Log.d("TEACHERS", teacher.getName_zh());
+                                    }
+                                    if (!force_update) {
+                                        //这里可能会有疑问为什么要判断 force_update
+                                        // 因为 force_update 在目前看来，只有创建这个 Activity 的时候会设置成 false
+                                        // 来加载本地数据，force_update 在 true 的时候就是下拉刷新的状态了，
+                                        // 下拉刷新后 SwipeRefreshLayout 的 Refreshing 应该由 refreshCourseComment
+                                        // 结束后停止。
+                                        // 我们要做的效果是，初次加载这个科目的时候，他不是得请求后端API吗，这个过程没有动画
+                                        // 的话，用户可能以为程序死掉了，我们给这个耗时的过程
+                                        // 加一个 Refreshing 的效果，
+                                        // 所以你看 refreshCourse(false); 前面有一句
+                                        // swipe_refresh_layout.setRefreshing(true);
+                                        // 我们刷新完了（force_update=false的情况）在这里停下就好了
+                                        swipe_refresh_layout.setRefreshing(false);
+                                        isRefreshing = false;
+                                    }
+                                }
+                            });
+                            //TODO: 可以给老师信息列表加个动画
+                        } else {
+                            //获取失败，请看错误代码
                         }
-                    });
-                    //TODO: 可以给老师信息列表加个动画
-                } else {
-                    //获取失败，请看错误代码
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        }).start();
+    }
+
+    public void swipeRefreshLayoutOnRefresh() {
+        //检查是否处于刷新状态
+        Log.d("API onRefresh", String.valueOf(swipe_refresh_layout.isRefreshing()) + " " + String.valueOf(isRefreshing));
+        if (!isRefreshing) {
+            isRefreshing = true;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    refreshCourse(true);
+                    refreshCourseComment();
+
+                    swipe_refresh_layout.setRefreshing(false);
+                    isRefreshing = false;
+                }
+            }).start();
         }
     }
 
@@ -165,35 +207,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
         swipe_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //检查是否处于刷新状态
-                Log.d("API onRefresh", String.valueOf(swipe_refresh_layout.isRefreshing()) + " " + String.valueOf(isRefreshing));
-                if (!isRefreshing) {
-                    isRefreshing = true;
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshCourse(true);
-                            refreshCourseComment();
-
-                            swipe_refresh_layout.setRefreshing(false);
-                            isRefreshing = false;
-                        }
-                    }).start();
-                    /*//模拟加载网络数据，这里设置2秒，正好能看到2色进度条
-                    new Handler().postDelayed(new Runnable() {
-                        public void run() {
-
-                            //显示或隐藏刷新进度条
-                            swipe_refresh_layout.setRefreshing(false);
-                            //mSwipeLayout.setRefreshing(true);
-                            //修改adapter的数据
-                            //data.add("这是新添加的数据");
-                            modelNewsItems.add(new ModelNews("电竞学院", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-                            mAdapter.notifyDataSetChanged();
-
-                        }
-                    }, 2000);*/
-                }
+                swipeRefreshLayoutOnRefresh();
             }
         });
 
@@ -238,17 +252,26 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
 
         TypedArray drw_arr = this.getResources().obtainTypedArray(R.array.people_images);
-        for (double i = 0.0; i <= 5.0; i += 0.5) {
-            modelCourseCommentArrayList.add(new ModelCourseComment(
-                    0,
-                    "Junyi",
-                    (int) i * 3,
-                    (int) i * 2,
-                    i,
-                    String.format("支持罗老师 %f星好评！", i),
-                    "2019/7/" + String.format("%d", (int) i)
-            ));
-        }
+        ModelCourseComment comment = new ModelCourseComment(
+                0,
+                "Junyi",
+                96,
+                0,
+                4.5,
+                "下拉即可刷新课程信息和课程评价哦~下拉即可刷新课程信息和课程评价哦~",
+                "2019/8/8"
+        );
+        modelCourseCommentArrayList.add(comment);
+        modelCourseCommentArrayList.add(comment);
+        modelCourseCommentArrayList.add(comment);
+        modelCourseCommentArrayList.add(comment);
+        modelCourseCommentArrayList.add(comment);
+        modelCourseCommentArrayList.add(comment);
+        modelCourseCommentArrayList.add(comment);
+        modelCourseCommentArrayList.add(comment);
+        modelCourseCommentArrayList.add(comment);
+        modelCourseCommentArrayList.add(comment);
+        modelCourseCommentArrayList.add(comment);
 
         //set data and list adapter
         adapterTeacherList = new AdapterTeacherList(this, modelTeacherArrayList);
@@ -274,12 +297,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
             }
         });
 
-        // 更新数据
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                refreshCourse(false);
-            }
-        }).start();
+        swipe_refresh_layout.setRefreshing(true);
+        refreshCourse(false);
     }
 }

@@ -128,7 +128,7 @@ public class ModelTimetableCell {
 
     public String getSchedule() {
         return dateFormat2.format(date_begin) + "-" + dateFormat2.format(date_end) + " " +
-                getTime_begin() + " - " + getTime_end() + "\n@" + getClassroom();
+                getTime_begin() + " - " + getTime_end() + "@" + getClassroom();
     }
 
     public String getDate_end() {
