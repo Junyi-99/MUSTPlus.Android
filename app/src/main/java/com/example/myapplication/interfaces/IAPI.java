@@ -19,7 +19,7 @@ public interface IAPI {
 
     String course(String token, Integer course_id) throws IOException;
 
-    String course_comment(String token, Integer course_id, APIOperation operation);
+    String course_comment(String token, Integer course_id, APIOperation operation) throws IOException;
 
     String course_comment_thumbs_up(String token, Integer course_id, APIOperation operation);
 

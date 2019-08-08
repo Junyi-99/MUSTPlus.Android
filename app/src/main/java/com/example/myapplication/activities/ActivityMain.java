@@ -80,9 +80,12 @@ public class ActivityMain extends AppCompatActivity {
 
         // 设置Pages
         setupViewPager(viewPager);
-
         checkTimetableStatus();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
     }
 
@@ -99,6 +102,7 @@ public class ActivityMain extends AppCompatActivity {
     private void checkTimetableStatus() {
         DBHelper db = new DBHelper(getApplicationContext());
         String timetable = db.getAPIRecord(APIs.TIMETABLE);
+        Log.d("Token", db.getLoginRecord().getToken());
         // 预感到这里是一个很蠢的写法，因为response不是0的数据不会被存在数据库里，
         // 所以下面的 if response.getCode() != 0
         // 是没有必要的
@@ -114,6 +118,5 @@ public class ActivityMain extends AppCompatActivity {
                 startActivity(intent);
             }
         }
-
     }
 }

@@ -1,7 +1,5 @@
 package com.example.myapplication.utils;
 
-import android.util.Log;
-
 import com.example.myapplication.interfaces.IAPI;
 
 import java.io.IOException;
@@ -29,6 +27,27 @@ import okhttp3.ResponseBody;
 // **这个类无数据持久化的功能**
 // API类 与 APIBase类 都要实现 IAPI 接口
 public class APIBase implements IAPI {
+    // 方法介绍：用来给 HTTP请求 添加 token time sign 三个参数，使用方法很简单
+    // 只要传入 HttpUrl.Builder 和 TreeMap<String, String> 和 token 即可
+    // 因为Java内部使用指针，传入的 httpUrl 和 params 都是指针形式
+    // 所以在这个方法内 put() 和 addQueryParameter() 会影响到 caller 那边（也就是外面）的值
+    // 相当于（但严格意义上不是）引用传递了
+    private void boxing(HttpUrl.Builder httpUrl, TreeMap<String, String> params, String token) {
+        params.put("token", token);
+        params.put("time", String.valueOf(System.currentTimeMillis() / 1000));
+        params.put("sign", calc_sign(params, null));
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            httpUrl.addQueryParameter(entry.getKey(), entry.getValue());
+        }
+    }
+
+    // boxing 的另一种写法，内部帮你获得 HttpUrl.Builder
+    private HttpUrl.Builder boxing(String url, TreeMap<String, String> params, String token) {
+        HttpUrl.Builder httpUrl = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+        boxing(httpUrl, params, token);
+        return httpUrl;
+    }
+
     @Override
     public String calc_sign(TreeMap<String, String> get_data, TreeMap<String, String> post_data) {
         StringBuilder get = new StringBuilder();
@@ -113,15 +132,8 @@ public class APIBase implements IAPI {
         String url = APIs.BASE_URL.v() + APIs.COURSE_.v() + course_id;
 
         OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder httpUrl = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+        HttpUrl.Builder httpUrl = boxing(url, new TreeMap<String, String>(), token);
 
-        TreeMap<String, String> params = new TreeMap<>();
-        params.put("token", token);
-        params.put("time", String.valueOf(System.currentTimeMillis() / 1000));
-        params.put("sign", calc_sign(params, null));
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            httpUrl.addQueryParameter(entry.getKey(), entry.getValue());
-        }
         Request request = new Request.Builder().url(httpUrl.build()).build();
 
         Response response = client.newCall(request).execute();
@@ -133,9 +145,22 @@ public class APIBase implements IAPI {
             return body.string();
     }
 
+
     @Override
-    public String course_comment(String token, Integer course_id, APIOperation operation) {
-        return null;
+    public String course_comment(String token, Integer course_id, APIOperation operation) throws IOException {
+        String url = APIs.BASE_URL.v() + APIs.COURSE_.v() + course_id + APIs.COURSE_COMMENT;
+
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl.Builder httpUrl = boxing(url, new TreeMap<String, String>(), token);
+
+        Request request = new Request.Builder().url(httpUrl.build()).build();
+
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+        if (body == null)
+            throw new IOException("NULL ERROR");
+        else
+            return body.string();
     }
 
     @Override
@@ -175,19 +200,16 @@ public class APIBase implements IAPI {
 
     @Override
     public String timetable(String token, Integer intake, Integer week) throws IOException {
-        OkHttpClient client = new OkHttpClient();
         String url = APIs.BASE_URL.v() + APIs.TIMETABLE.v();
+        OkHttpClient client = new OkHttpClient();
+
         HttpUrl.Builder httpUrl = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         TreeMap<String, String> params = new TreeMap<>();
-        params.put("token", token);
-        params.put("time", String.valueOf(System.currentTimeMillis() / 1000));
         params.put("intake", String.valueOf(intake));
         params.put("week", String.valueOf(week));
-        params.put("sign", calc_sign(params, null));
-        Log.d("TI", url);
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            httpUrl.addQueryParameter(entry.getKey(), entry.getValue());
-        }
+
+        boxing(httpUrl, params, token);
+
         Request request = new Request.Builder().url(httpUrl.build()).build();
         Response response = client.newCall(request).execute();
         ResponseBody body = response.body();

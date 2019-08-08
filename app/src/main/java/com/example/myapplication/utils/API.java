@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.interfaces.IAPI;
 import com.example.myapplication.models.ModelCourse;
+import com.example.myapplication.models.ModelResponseCourseComment;
 
 import java.io.IOException;
 import java.util.TreeMap;
@@ -25,9 +26,13 @@ public class API implements IAPI {
         this.context = context;
     }
 
+    // new 完了可以设置强制更新。value为true时，不使用缓存
     public void setForceUpdate(boolean value) {
         this.forceUpdate = value;
     }
+
+
+    //TODO： Error Handler 用来处理登录信息失效的状态，并且从数据库里抹去登录信息
 
     @Override
     public String calc_sign(TreeMap<String, String> get_data, TreeMap<String, String> post_data) {
@@ -43,7 +48,7 @@ public class API implements IAPI {
     public String auth_login(String pubkey, String username, String password, String token, String cookies, String captcha) throws IOException {
         DBHelper db = new DBHelper(context);
         String record = db.getAPIRecord(APIs.AUTH_LOGIN);
-        if (record.isEmpty()) {
+        if (record.isEmpty() || forceUpdate) {
             return base.auth_login(pubkey, username, password, token, cookies, captcha);
         } else {
             return record;
@@ -63,7 +68,7 @@ public class API implements IAPI {
     public ModelCourse course(String token, Integer course_id, String course_code, String course_class) throws IOException {
         DBHelper db = new DBHelper(context);
         ModelCourse course = db.getCourseRecord(course_code, course_class);
-        if (course == null) {
+        if (course == null || forceUpdate) {
             Log.d("API Course", "Request new data");
             String raw = base.course(token, course_id);
             Log.d("API Course", raw);
@@ -86,6 +91,13 @@ public class API implements IAPI {
         return null;
     }
 
+    @Nullable
+    public ModelResponseCourseComment course_comment_get(String token, Integer course_id) throws IOException {
+        String raw = base.course_comment(token, course_id, APIOperation.GET);
+        return JSON.parseObject(raw, ModelResponseCourseComment.class);
+    }
+
+    @Deprecated
     @Override
     public String course_comment(String token, Integer course_id, APIOperation operation) {
         return null;
@@ -130,7 +142,7 @@ public class API implements IAPI {
     public String timetable(String token, Integer intake, Integer week) throws IOException {
         DBHelper db = new DBHelper(context);
         String record = db.getAPIRecord(APIs.TIMETABLE);
-        if (record.isEmpty()) {
+        if (record.isEmpty() || forceUpdate) {
             return base.timetable(token, intake, week);
         } else {
             return record;

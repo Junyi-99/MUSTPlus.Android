@@ -31,23 +31,33 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 
 public class FragmentTimetable extends Fragment {
     private static final String TAG = "FragementTimeTable";
-    private final List<Animator> animatorList = new ArrayList<Animator>();
+    private final ArrayList<Animator> animatorList = new ArrayList<Animator>();
+    private String timetableRaw = "";
+    private View this_view;
+    private ViewGroup this_container;
     private ArrayList<Button> buttonArrayList = new ArrayList<Button>();
     private ImageButton image_button_back;
+    private boolean animated = false; // 是否已经播放过动画
 
     private int convertDpToPx(int dp) {
         return Math.round(dp * (getResources().getDisplayMetrics().density));
     }
 
     private void animate() {
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(this.animatorList);
-        animatorSet.start();
+        if (!animated && !timetableRaw.isEmpty()) {
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(this.animatorList);
+            animatorSet.start();
+            animated = true;
+        } else {
+            for (Button button : buttonArrayList) {
+                button.setAlpha(1.f);
+            }
+        }
     }
 
     private void calculateLayout(String timetableRaw, ViewGroup container, LayoutInflater inflater, RelativeLayout relativeLayout) {
@@ -170,39 +180,22 @@ public class FragmentTimetable extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_timetable, container, false);
-        image_button_back = (ImageButton) view.findViewById(R.id.image_button_back);
+        this_view = inflater.inflate(R.layout.fragment_timetable, container, false);
+        this_container = container;
+        image_button_back = (ImageButton) this_view.findViewById(R.id.image_button_back);
         image_button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DBHelper db = new DBHelper(getContext());
                 db.setLogout();
-
             }
         });
 
-        updateTableHeaders(view);
+        updateTableHeaders(this_view);
 
-        if (savedInstanceState != null) {
-            // Restore last state
-
-        } else {
-
-        }
-
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbarTimetable);
+        Toolbar toolbar = (Toolbar) this_view.findViewById(R.id.toolbarTimetable);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-
-
-        LayoutInflater vi = LayoutInflater.from(getContext());
-        RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayoutInnerContent);
-        DBHelper db = new DBHelper(getContext());
-        String timetableRaw = db.getAPIRecord(APIs.TIMETABLE);
-
-        calculateLayout(timetableRaw, container, vi, relativeLayout);
-
-        animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
-        return view;
+        return this_view;
     }
 
 
@@ -221,6 +214,12 @@ public class FragmentTimetable extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        LayoutInflater vi = LayoutInflater.from(getContext());
+        RelativeLayout relativeLayout = (RelativeLayout) this_view.findViewById(R.id.relativeLayoutInnerContent);
+        DBHelper db = new DBHelper(getContext());
+        timetableRaw = db.getAPIRecord(APIs.TIMETABLE);
+        calculateLayout(timetableRaw, this_container, vi, relativeLayout);
+        animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
         Log.d("Fragment ModelTimetable", "onStart");
     }
 

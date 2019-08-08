@@ -2,6 +2,7 @@
 
 
     <string name="app_name">MUST+</string>
+    <string name="login_hint_text">无需注册,使用COES账号即可登录MUST+</string>
     <string name="title_tab_timetable">课程表</string>
     <string name="title_tab_news">资讯</string>
     <string name="title_tab_moments">校友圈</string>

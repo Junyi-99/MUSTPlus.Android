@@ -2,7 +2,9 @@ package com.example.myapplication.activities;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,8 @@ import com.example.myapplication.adapters.AdapterTeacherList;
 import com.example.myapplication.models.ModelCourse;
 import com.example.myapplication.models.ModelCourseComment;
 import com.example.myapplication.models.ModelFtp;
+import com.example.myapplication.models.ModelResponseCourseComment;
+import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.models.ModelTeacher;
 import com.example.myapplication.utils.API;
 
@@ -26,25 +30,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ActivityCourseDetails extends AppCompatActivity {
+    private boolean isRefreshing = false;
+    private int course_id;
+    private String course_code;
+    private String course_class;
     private TextView text_view_course_title;
     private TextView text_view_course_schedule;
     private TextView text_view_course_code;
     private TextView text_view_course_class;
     private TextView text_view_course_faculty;
     private TextView text_view_course_credit;
-
     private RecyclerView recyclerViewTeacherList;
     private RecyclerView recyclerViewCourseComment;
     private RecyclerView recyclerViewFtpList;
-
     private AdapterTeacherList adapterTeacherList;
     private AdapterCourseCommentList adapterCourseCommentList;
     private AdapterFtpList adapterFtpList;
+    private SwipeRefreshLayout swipe_refresh_layout;
 
     private ArrayList<ModelTeacher> modelTeacherArrayList = new ArrayList<ModelTeacher>();
-    ;
     private ArrayList<ModelCourseComment> modelCourseCommentArrayList = new ArrayList<ModelCourseComment>();
     private ArrayList<ModelFtp> modelFtpArrayList = new ArrayList<ModelFtp>();
+    private ModelCourse modelCourse;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,8 +64,6 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
         initComponent();
         initButtons();
-
-
     }
 
     private void initButtons() {
@@ -88,7 +94,108 @@ public class ActivityCourseDetails extends AppCompatActivity {
         });*/
     }
 
+    // 评论系统无本地缓存
+    private void refreshCourseComment() {
+        try {
+            DBHelper helper = new DBHelper(getApplicationContext());
+            API api = new API(getApplicationContext());
+            ModelResponseCourseComment responseCourseComment = null;
+            ModelResponseLogin login = helper.getLoginRecord();
+            if (login != null) {
+                responseCourseComment = api.course_comment_get(login.getToken(), this.course_id);
+                if (responseCourseComment != null) {
+                    modelCourseCommentArrayList.clear();
+                    modelCourseCommentArrayList.addAll(responseCourseComment.getComments());
+                    adapterCourseCommentList.notifyDataSetChanged();
+                }
+            } else {
+                //TODO： 通知用户token失效
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void refreshCourse(boolean force_update) {
+        Log.d("API refreshCourse", "entry");
+        try {
+            DBHelper helper = new DBHelper(getApplicationContext());
+            API api = new API(getApplicationContext());
+            if (force_update)
+                api.setForceUpdate(true);
+            modelCourse = api.course(helper.getLoginRecord().getToken(), this.course_id, this.course_code, this.course_class);
+
+            if (modelCourse != null) {
+                if (modelCourse.getCode() == 0) {// 获取成功
+                    runOnUiThread(new Runnable() { // 更新界面元素
+                        @Override
+                        public void run() {
+                            text_view_course_faculty.setText("评分：" + modelCourse.getRank());
+                            text_view_course_credit.setText("学分：" + modelCourse.getCredit());
+                            modelTeacherArrayList.clear();
+                            modelTeacherArrayList.addAll(modelCourse.getTeachers()); // 老师信息
+                            Log.d(modelCourse.getName_zh(), modelCourse.getRank());
+                            adapterTeacherList.notifyDataSetChanged();
+                            for (ModelTeacher teacher : modelCourse.getTeachers()) {
+                                Log.d("TEACHERS", teacher.getName_zh());
+                            }
+                        }
+                    });
+                    //TODO: 可以给老师信息列表加个动画
+                } else {
+                    //获取失败，请看错误代码
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initComponent() {
+        swipe_refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        // 设置手指在屏幕下拉多少距离会触发下拉刷新
+        swipe_refresh_layout.setDistanceToTriggerSync(300);
+        // 设定下拉圆圈的背景
+        swipe_refresh_layout.setProgressBackgroundColorSchemeColor(Color.WHITE);
+        // 设置圆圈的大小
+        swipe_refresh_layout.setSize(SwipeRefreshLayout.DEFAULT);
+        //设置下拉刷新的监听
+        swipe_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //检查是否处于刷新状态
+                Log.d("API onRefresh", String.valueOf(swipe_refresh_layout.isRefreshing()) + " " + String.valueOf(isRefreshing));
+                if (!isRefreshing) {
+                    isRefreshing = true;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshCourse(true);
+                            refreshCourseComment();
+
+                            swipe_refresh_layout.setRefreshing(false);
+                            isRefreshing = false;
+                        }
+                    }).start();
+                    /*//模拟加载网络数据，这里设置2秒，正好能看到2色进度条
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+
+                            //显示或隐藏刷新进度条
+                            swipe_refresh_layout.setRefreshing(false);
+                            //mSwipeLayout.setRefreshing(true);
+                            //修改adapter的数据
+                            //data.add("这是新添加的数据");
+                            modelNewsItems.add(new ModelNews("电竞学院", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+                            mAdapter.notifyDataSetChanged();
+
+                        }
+                    }, 2000);*/
+                }
+            }
+        });
 
 
         text_view_course_title = (TextView) findViewById(R.id.course_title);
@@ -99,9 +206,9 @@ public class ActivityCourseDetails extends AppCompatActivity {
         text_view_course_credit = (TextView) findViewById(R.id.course_credit);
 
         Intent intent = getIntent();
-        final int course_id = intent.getIntExtra("course_id", 0);
-        final String course_code = intent.getStringExtra("course_code");
-        final String course_class = intent.getStringExtra("course_class");
+        course_id = intent.getIntExtra("course_id", 0);
+        course_code = intent.getStringExtra("course_code");
+        course_class = intent.getStringExtra("course_class");
 
         text_view_course_title.setText(intent.getStringExtra("course_title"));
         text_view_course_schedule.setText(intent.getStringExtra("course_schedule"));
@@ -171,38 +278,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    DBHelper helper = new DBHelper(getApplicationContext());
-                    API api = new API(getApplicationContext());
-                    final ModelCourse course = api.course(helper.getLoginRecord().getToken(), course_id, course_code, course_class);
-                    if (course == null) {
-                        // 无法获取课程数据
-                    } else {
-                        if (course.getCode() == 0) {
-                            //获取成功
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    text_view_course_faculty.setText("学院：" + course.getFaculty());
-                                    text_view_course_credit.setText("学分：" + course.getCredit());
-                                    modelTeacherArrayList.addAll(course.getTeachers()); // 老师信息
-                                    //synchronized (adapterTeacherList) {
-                                    adapterTeacherList.notifyDataSetChanged();
-                                    //}
-                                    for (ModelTeacher teacher : course.getTeachers()) {
-                                        Log.d("TEACHERS", teacher.getName_zh());
-                                    }
-                                }
-                            });
-                            //TODO: 可以给老师信息列表加个动画
-                        } else {
-                            //获取失败，请看错误代码
-                        }
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                refreshCourse(false);
             }
         }).start();
     }
