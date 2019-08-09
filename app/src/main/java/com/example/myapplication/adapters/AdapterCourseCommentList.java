@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-
 import com.example.myapplication.models.ModelCourseComment;
 
 import java.util.List;
@@ -26,60 +25,21 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
     private Context ctx;
     private OnItemClickListener mOnItemClickListener;
 
+    public AdapterCourseCommentList(Context context, List<ModelCourseComment> items) {
+        this.items = items;
+        this.ctx = context;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        switch (viewType) {
-            case None:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment_none, parent, false);
-                return new OriginalViewHolder(v);
-            case NotNone:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment, parent, false);
-                return new OriginalViewHolder(v);
-            default:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment_none, parent, false);
-                return new OriginalViewHolder(v);
+        if (viewType == NotNone) {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment, parent, false);
+            return new OriginalViewHolder(v);
         }
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_comment_none, parent, false);
+        return new OriginalViewHolder(v);
     }
-
-
-    public class OriginalViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView comment_content;
-        public TextView comment_user;
-        public TextView comment_publish_time;
-        public TextView comment_thumbs_up;
-        public TextView comment_thumbs_down;
-        public ImageButton thumbs_up;
-        public ImageButton thumbs_down;
-        public View relative_parent;
-
-        public ImageView image_view_star1;
-        public ImageView image_view_star2;
-        public ImageView image_view_star3;
-        public ImageView image_view_star4;
-        public ImageView image_view_star5;
-
-
-        public OriginalViewHolder(View v) {
-            super(v);
-            comment_content = (TextView) v.findViewById(R.id.comment_content);
-            comment_user = (TextView) v.findViewById(R.id.comment_user);
-            comment_publish_time = (TextView) v.findViewById(R.id.comment_publish_time);
-            comment_thumbs_up = (TextView) v.findViewById(R.id.comment_thumbs_up);
-            comment_thumbs_down = (TextView) v.findViewById(R.id.comment_thumbs_down);
-            thumbs_up = (ImageButton) v.findViewById(R.id.thumbs_up);
-            thumbs_down = (ImageButton) v.findViewById(R.id.thumbs_down);
-            relative_parent = (View) v.findViewById(R.id.relative_parent);
-
-            image_view_star1 = (ImageView) v.findViewById(R.id.image_view_star1);
-            image_view_star2 = (ImageView) v.findViewById(R.id.image_view_star2);
-            image_view_star3 = (ImageView) v.findViewById(R.id.image_view_star3);
-            image_view_star4 = (ImageView) v.findViewById(R.id.image_view_star4);
-            image_view_star5 = (ImageView) v.findViewById(R.id.image_view_star5);
-        }
-    }
-
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
@@ -184,16 +144,48 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
         notifyItemInserted(index);
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, ModelCourseComment obj, int position);
-    }
-
     public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mOnItemClickListener = mItemClickListener;
     }
 
-    public AdapterCourseCommentList(Context context, List<ModelCourseComment> items) {
-        this.items = items;
-        this.ctx = context;
+    public interface OnItemClickListener {
+        void onItemClick(View view, ModelCourseComment obj, int position);
+    }
+
+    public class OriginalViewHolder extends RecyclerView.ViewHolder {
+
+        TextView comment_content;
+        TextView comment_user;
+        TextView comment_publish_time;
+        TextView comment_thumbs_up;
+        TextView comment_thumbs_down;
+        ImageButton thumbs_up;
+        ImageButton thumbs_down;
+        View relative_parent;
+
+        ImageView image_view_star1;
+        ImageView image_view_star2;
+        ImageView image_view_star3;
+        ImageView image_view_star4;
+        ImageView image_view_star5;
+
+
+        public OriginalViewHolder(View v) {
+            super(v);
+            comment_content = (TextView) v.findViewById(R.id.comment_content);
+            comment_user = (TextView) v.findViewById(R.id.comment_user);
+            comment_publish_time = (TextView) v.findViewById(R.id.comment_publish_time);
+            comment_thumbs_up = (TextView) v.findViewById(R.id.comment_thumbs_up);
+            comment_thumbs_down = (TextView) v.findViewById(R.id.comment_thumbs_down);
+            thumbs_up = (ImageButton) v.findViewById(R.id.thumbs_up);
+            thumbs_down = (ImageButton) v.findViewById(R.id.thumbs_down);
+            relative_parent = (View) v.findViewById(R.id.relative_parent);
+
+            image_view_star1 = (ImageView) v.findViewById(R.id.image_view_star1);
+            image_view_star2 = (ImageView) v.findViewById(R.id.image_view_star2);
+            image_view_star3 = (ImageView) v.findViewById(R.id.image_view_star3);
+            image_view_star4 = (ImageView) v.findViewById(R.id.image_view_star4);
+            image_view_star5 = (ImageView) v.findViewById(R.id.image_view_star5);
+        }
     }
 }

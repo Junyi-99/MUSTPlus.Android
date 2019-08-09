@@ -21,6 +21,7 @@ import com.example.myapplication.fragments.FragmentNews;
 import com.example.myapplication.fragments.FragmentTimetable;
 import com.example.myapplication.models.ModelResponse;
 import com.example.myapplication.utils.APIs;
+import com.idescout.sql.SqlScoutServer;
 
 public class ActivityMain extends AppCompatActivity {
     private TextView mTextMessage;
@@ -61,6 +62,7 @@ public class ActivityMain extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SqlScoutServer.create(this, getPackageName());
         Log.d("ActivityMain onCreate", "on create!");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -102,7 +104,6 @@ public class ActivityMain extends AppCompatActivity {
     private void checkTimetableStatus() {
         DBHelper db = new DBHelper(getApplicationContext());
         String timetable = db.getAPIRecord(APIs.TIMETABLE);
-        Log.d("Token", db.getLoginRecord().getToken());
         // 预感到这里是一个很蠢的写法，因为response不是0的数据不会被存在数据库里，
         // 所以下面的 if response.getCode() != 0
         // 是没有必要的

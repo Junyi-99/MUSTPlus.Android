@@ -9,12 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-
 import com.example.myapplication.models.ModelTeacher;
 import com.example.myapplication.utils.Tools;
 
-
-import java.util.List;
+import java.util.ArrayList;
 
 public class AdapterTeacherList extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // 两种显示模式
@@ -23,7 +21,7 @@ public class AdapterTeacherList extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final int None = 0;
     private final int NotNone = 1;
 
-    private List<ModelTeacher> items;
+    private ArrayList<ModelTeacher> items;
     private Context ctx;
     private OnItemClickListener mOnItemClickListener;
 
@@ -109,9 +107,13 @@ public class AdapterTeacherList extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.mOnItemClickListener = mItemClickListener;
     }
 
-    public AdapterTeacherList(Context context, List<ModelTeacher> items) {
+    public AdapterTeacherList(Context context, ArrayList<ModelTeacher> items) {
         this.items = items;
         ctx = context;
+    }
+
+    public ArrayList<ModelTeacher> getItems() {
+        return this.items;
     }
 
 }

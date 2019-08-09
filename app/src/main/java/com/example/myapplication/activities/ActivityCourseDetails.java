@@ -1,8 +1,6 @@
 package com.example.myapplication.activities;
 
 import android.content.Intent;
-import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -68,30 +66,12 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
     private void initButtons() {
         // 返回按钮
-        ImageButton button = (ImageButton) findViewById(R.id.image_button_back);
-        button.setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.image_button_back)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityCourseDetails.super.onBackPressed();
             }
         });
-
-        /*FloatingActionsMenu floatingActionButton = (FloatingActionsMenu) findViewById(R.id.floating_actions_menu);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                modelCourseCommentArrayList.add(new ModelCourseComment(
-                        2,
-                        "1709853D-I011-0021",
-                        0,
-                        0,
-                        4.89,
-                        "sllo老师讲课太有意思啦！",
-                        "2019-06-07 18:14:47"
-                ));
-                adapterCourseCommentList.notifyDataSetChanged();
-            }
-        });*/
     }
 
     // 评论系统无本地缓存
@@ -108,7 +88,8 @@ public class ActivityCourseDetails extends AppCompatActivity {
                         @Override
                         public void run() {
                             modelCourseCommentArrayList.clear();
-                            modelCourseCommentArrayList.addAll(responseCourseComment.getComments());
+                            if (responseCourseComment.getComments() != null)
+                                modelCourseCommentArrayList.addAll(responseCourseComment.getComments());
                             adapterCourseCommentList.notifyDataSetChanged();
                         }
                     });
@@ -145,6 +126,11 @@ public class ActivityCourseDetails extends AppCompatActivity {
                                     modelTeacherArrayList.addAll(modelCourse.getTeachers()); // 老师信息
                                     Log.d(modelCourse.getName_zh(), modelCourse.getRank());
                                     adapterTeacherList.notifyDataSetChanged();
+                                    //TODO:make sure that you're not calling
+                                    // notifyDataSetChanged(), setAdapter(Adapter), or swapAdapter(Adapter, boolean)
+                                    // for small updates. Those methods signal that the entire list content has changed,
+                                    // and will show up in Systrace as RV FullInvalidate. Instead, use SortedList or DiffUtil
+                                    // to generate minimal updates when content changes or is added.
                                     for (ModelTeacher teacher : modelCourse.getTeachers()) {
                                         Log.d("TEACHERS", teacher.getName_zh());
                                     }
@@ -196,14 +182,8 @@ public class ActivityCourseDetails extends AppCompatActivity {
     }
 
     private void initComponent() {
+
         swipe_refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        // 设置手指在屏幕下拉多少距离会触发下拉刷新
-        swipe_refresh_layout.setDistanceToTriggerSync(300);
-        // 设定下拉圆圈的背景
-        swipe_refresh_layout.setProgressBackgroundColorSchemeColor(Color.WHITE);
-        // 设置圆圈的大小
-        swipe_refresh_layout.setSize(SwipeRefreshLayout.DEFAULT);
-        //设置下拉刷新的监听
         swipe_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -251,7 +231,6 @@ public class ActivityCourseDetails extends AppCompatActivity {
         //recyclerViewFtpList.setNestedScrollingEnabled(false);
 
 
-        TypedArray drw_arr = this.getResources().obtainTypedArray(R.array.people_images);
         ModelCourseComment comment = new ModelCourseComment(
                 0,
                 "Junyi",
@@ -261,17 +240,9 @@ public class ActivityCourseDetails extends AppCompatActivity {
                 "下拉即可刷新课程信息和课程评价哦~下拉即可刷新课程信息和课程评价哦~",
                 "2019/8/8"
         );
-        modelCourseCommentArrayList.add(comment);
-        modelCourseCommentArrayList.add(comment);
-        modelCourseCommentArrayList.add(comment);
-        modelCourseCommentArrayList.add(comment);
-        modelCourseCommentArrayList.add(comment);
-        modelCourseCommentArrayList.add(comment);
-        modelCourseCommentArrayList.add(comment);
-        modelCourseCommentArrayList.add(comment);
-        modelCourseCommentArrayList.add(comment);
-        modelCourseCommentArrayList.add(comment);
-        modelCourseCommentArrayList.add(comment);
+        for (int i = 0; i < 25; i++) {
+            modelCourseCommentArrayList.add(comment);
+        }
 
         //set data and list adapter
         adapterTeacherList = new AdapterTeacherList(this, modelTeacherArrayList);

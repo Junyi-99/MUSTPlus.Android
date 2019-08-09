@@ -1,152 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/relative_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    android:background="@drawable/layout_bg_course_detail_comment_list"
-    android:elevation="1dp">
+    android:background="@drawable/layout_bg_course_detail_comment_list">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/comment_content"
 
-        <TextView
-            android:id="@+id/comment_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/robotomedium"
+        android:text="轻松而愉悦的课！"
+        android:textColor="#DE000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/comment_user"
+        app:layout_constraintEnd_toStartOf="@id/image_view_star1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/robotomedium"
-            android:text="轻松而愉悦的课！"
-            android:textColor="#DE000000"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/comment_user"
-            app:layout_constraintEnd_toStartOf="@id/linear_layout_stars"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/comment_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/robotomedium"
+        android:text="Junyi"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/comment_content" />
 
-        <TextView
-            android:id="@+id/comment_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:fontFamily="@font/robotomedium"
-            android:text="Junyi"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/comment_content" />
+    <TextView
+        android:id="@+id/comment_publish_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_8dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/robotomedium"
+        android:text="2019/7/12 23:32"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/comment_user"
+        app:layout_constraintTop_toBottomOf="@id/comment_content" />
 
-        <TextView
-            android:id="@+id/comment_publish_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_8dp"
-            android:layout_marginTop="4dp"
-            android:fontFamily="@font/robotomedium"
-            android:text="2019/7/12 23:32"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@id/comment_user"
-            app:layout_constraintTop_toBottomOf="@id/comment_content" />
+    <ImageView
+        android:id="@+id/image_view_star5"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_weight="1"
+        android:tint="#FF8F00"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/comment_publish_time"
+        app:srcCompat="@drawable/ic_star_unfilled" />
 
-        <LinearLayout
-            android:id="@+id/linear_layout_stars"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/comment_publish_time">
 
-            <ImageView
-                android:id="@+id/image_view_star1"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_weight="1"
-                android:tint="#FF8F00"
-                app:srcCompat="@drawable/ic_star_full" />
+    <ImageView
+        android:id="@+id/image_view_star4"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_weight="1"
+        android:tint="#FF8F00"
+        app:layout_constraintEnd_toStartOf="@id/image_view_star5"
+        app:layout_constraintTop_toTopOf="@id/comment_publish_time"
+        app:srcCompat="@drawable/ic_star_unfilled" />
 
-            <ImageView
-                android:id="@+id/image_view_star2"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_weight="1"
-                android:tint="#FF8F00"
-                app:srcCompat="@drawable/ic_star_full" />
 
-            <ImageView
-                android:id="@+id/image_view_star3"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_weight="1"
-                android:tint="#FF8F00"
-                app:srcCompat="@drawable/ic_star_half_filled" />
+    <ImageView
+        android:id="@+id/image_view_star3"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_weight="1"
+        android:tint="#FF8F00"
+        app:layout_constraintEnd_toStartOf="@id/image_view_star4"
+        app:layout_constraintTop_toTopOf="@id/comment_publish_time"
+        app:srcCompat="@drawable/ic_star_half_filled" />
 
-            <ImageView
-                android:id="@+id/image_view_star4"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_weight="1"
-                android:tint="#FF8F00"
-                app:srcCompat="@drawable/ic_star_unfilled" />
+    <ImageView
+        android:id="@+id/image_view_star2"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_weight="1"
+        android:tint="#FF8F00"
+        app:layout_constraintEnd_toStartOf="@id/image_view_star3"
+        app:layout_constraintTop_toTopOf="@id/comment_publish_time"
+        app:srcCompat="@drawable/ic_star_full" />
 
-            <ImageView
-                android:id="@+id/image_view_star5"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_weight="1"
-                android:tint="#FF8F00"
-                app:srcCompat="@drawable/ic_star_unfilled" />
-        </LinearLayout>
+    <ImageView
+        android:id="@+id/image_view_star1"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_weight="1"
+        android:tint="#FF8F00"
+        app:layout_constraintEnd_toStartOf="@id/image_view_star2"
+        app:layout_constraintTop_toTopOf="@id/comment_publish_time"
+        app:srcCompat="@drawable/ic_star_full" />
 
-        <LinearLayout
-            android:id="@+id/linear_layout_thumbs"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent">
 
-            <ImageButton
-                android:id="@+id/thumbs_up"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginEnd="4dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="fitXY"
-                android:tint="#9EFFFFFF"
-                app:srcCompat="@drawable/ic_thumb_up" />
+    <TextView
+        android:id="@+id/comment_thumbs_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/robotomedium"
+        android:text="@string/Time10"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/comment_thumbs_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:fontFamily="@font/robotomedium"
-                android:text="4"
-                android:textSize="12sp" />
+    <ImageButton
+        android:id="@+id/thumbs_down"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="4dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitXY"
+        android:tint="#9EFFFFFF"
+        app:layout_constraintEnd_toStartOf="@id/comment_thumbs_down"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_thumb_down" />
 
-            <ImageButton
-                android:id="@+id/thumbs_down"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginEnd="4dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="fitXY"
-                android:tint="#9EFFFFFF"
-                app:srcCompat="@drawable/ic_thumb_down" />
+    <TextView
+        android:id="@+id/comment_thumbs_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/robotomedium"
+        android:text="4"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@id/thumbs_down"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/comment_thumbs_down"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/robotomedium"
-                android:text="@string/Time10"
-                android:textSize="12sp" />
-        </LinearLayout>
+    <ImageButton
+        android:id="@+id/thumbs_up"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="4dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitXY"
+        android:tint="#9EFFFFFF"
+        app:layout_constraintEnd_toStartOf="@id/comment_thumbs_up"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_thumb_up" />
 
-    </android.support.constraint.ConstraintLayout>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
 

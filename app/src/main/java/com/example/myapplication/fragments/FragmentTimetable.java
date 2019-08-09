@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.activities.ActivityCourseDetails;
+import com.example.myapplication.activities.ActivityLogin;
 import com.example.myapplication.models.ModelTimetable;
 import com.example.myapplication.models.ModelTimetableCell;
 import com.example.myapplication.utils.APIs;
@@ -179,6 +180,13 @@ public class FragmentTimetable extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         this_view = inflater.inflate(R.layout.fragment_timetable, container, false);
         this_container = container;
+        ((ImageButton) this_view.findViewById(R.id.image_button_select_week)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ActivityLogin.class);
+                startActivity(intent);
+            }
+        });
         image_button_back = (ImageButton) this_view.findViewById(R.id.image_button_back);
         image_button_back.setOnClickListener(new View.OnClickListener() {
             @Override
