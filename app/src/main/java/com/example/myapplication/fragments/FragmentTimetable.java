@@ -151,25 +151,25 @@ public class FragmentTimetable extends Fragment {
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         switch (day) {
             case Calendar.SUNDAY:
-                text_view_sunday.setBackgroundResource(R.color.grey_10);
+                text_view_sunday.setBackgroundResource(R.color.grey_20);
                 break;
             case Calendar.MONDAY:
-                text_view_monday.setBackgroundResource(R.color.grey_10);
+                text_view_monday.setBackgroundResource(R.color.grey_20);
                 break;
             case Calendar.TUESDAY:
-                text_view_tuesday.setBackgroundResource(R.color.grey_10);
+                text_view_tuesday.setBackgroundResource(R.color.grey_20);
                 break;
             case Calendar.WEDNESDAY:
-                text_view_wednesday.setBackgroundResource(R.color.grey_10);
+                text_view_wednesday.setBackgroundResource(R.color.grey_20);
                 break;
             case Calendar.THURSDAY:
-                text_view_thursday.setBackgroundResource(R.color.grey_10);
+                text_view_thursday.setBackgroundResource(R.color.grey_20);
                 break;
             case Calendar.FRIDAY:
-                text_view_friday.setBackgroundResource(R.color.grey_10);
+                text_view_friday.setBackgroundResource(R.color.grey_20);
                 break;
             case Calendar.SATURDAY:
-                text_view_saturday.setBackgroundResource(R.color.grey_10);
+                text_view_saturday.setBackgroundResource(R.color.grey_20);
                 break;
         }
     }

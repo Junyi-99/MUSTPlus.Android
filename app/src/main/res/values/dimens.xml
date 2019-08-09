@@ -7,10 +7,16 @@
     <dimen name="design_bottom_navigation_text_size" tools:override="true">12dp</dimen>
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12dp</dimen>
 
-    <dimen name="timetable_header_layout_width">488dp
-    </dimen> <!-- timetable_header_width * 7 + timetable_time_label_width -->
-    <dimen name="timetable_container_width">462dp
-    </dimen> <!-- timetable_header_width * 7 -->
+    <dimen name="timetable_header_layout_width">
+        491dp
+        <!-- timetable_header_width * 7 + timetable_time_label_width -->
+    </dimen>
+
+    <dimen name="timetable_container_width">
+        462dp
+        <!-- timetable_header_width * 7 -->
+    </dimen>
+
     <dimen name="timetable_header_width">66dp</dimen>
     <dimen name="timetable_header_height">41dp</dimen>
     <dimen name="timetable_time_cell_width">64dp</dimen> <!-- 64 = timetable_header_width - 2 -->

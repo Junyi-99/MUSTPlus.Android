@@ -12,8 +12,8 @@
     android:fontFamily="@font/robotomedium"
     android:gravity="start"
     android:maxWidth="@dimen/timetable_time_cell_width"
-    android:padding="8dp"
-    android:text="數據庫系統\n@C408（实验室）"
+    android:padding="7dp"
+    android:text="體育I - 少林養身功"
     android:textColor="@android:color/white"
     android:textSize="@dimen/timetable_time_cell_font_size"
 
