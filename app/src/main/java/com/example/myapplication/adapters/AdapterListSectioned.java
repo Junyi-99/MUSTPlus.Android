@@ -12,7 +12,6 @@ import com.example.myapplication.R;
 import com.example.myapplication.models.ModelNews;
 import com.example.myapplication.utils.Tools;
 
-
 import java.util.List;
 
 public class AdapterListSectioned extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -46,8 +45,8 @@ public class AdapterListSectioned extends RecyclerView.Adapter<RecyclerView.View
 
         public OriginalViewHolder(View v) {
             super(v);
-            image = (ImageView) v.findViewById(R.id.teacher_avatar);
-            name = (TextView) v.findViewById(R.id.teacher_name_zh); // item people chat
+            image = (ImageView) v.findViewById(R.id.icon);
+            name = (TextView) v.findViewById(R.id.name); // item people chat
             news_fac_dep = (TextView) v.findViewById(R.id.teacher_name_en);
             news_time = (TextView) v.findViewById(R.id.news_time);
             lyt_parent = (View) v.findViewById(R.id.lyt_parent);

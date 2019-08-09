@@ -50,8 +50,8 @@ public class AdapterTeacherList extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public OriginalViewHolder(View v) {
             super(v);
-            teacher_avatar = (ImageView) v.findViewById(R.id.teacher_avatar);
-            teacher_name_zh = (TextView) v.findViewById(R.id.teacher_name_zh); // item people chat
+            teacher_avatar = (ImageView) v.findViewById(R.id.icon);
+            teacher_name_zh = (TextView) v.findViewById(R.id.name); // item people chat
             teacher_name_en = (TextView) v.findViewById(R.id.teacher_name_en);
             lyt_parent = (View) v.findViewById(R.id.lyt_parent);
         }

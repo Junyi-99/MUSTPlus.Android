@@ -8,31 +8,32 @@
     <color name="colorMBlueTimetableColumn">#F5F7FF</color>
     <color name="colorMBlueTimetableColumnActive">#E3E9FF</color>
 
- <!--
-     Material Design Blue
- -->
- <!-- <color name="colorPrimary">#1976D2</color>
-  <color name="colorPrimaryDark">#1565C0</color>
-  <color name="colorPrimaryLight">#1E88E5</color>
-  <color name="colorAccent">#FF4081</color>
-  <color name="colorAccentDark">#F50057</color>
-  <color name="colorAccentLight">#FF80AB</color>   -->
+    <color name="backgroundColorLight">#e6e6e6</color>
+    <!--
+        Material Design Blue
+    -->
+    <!-- <color name="colorPrimary">#1976D2</color>
+     <color name="colorPrimaryDark">#1565C0</color>
+     <color name="colorPrimaryLight">#1E88E5</color>
+     <color name="colorAccent">#FF4081</color>
+     <color name="colorAccentDark">#F50057</color>
+     <color name="colorAccentLight">#FF80AB</color>   -->
 
- <!-- Material Deign Green -->
- <!--<color name="colorPrimary">#00796B</color>
- <color name="colorPrimaryDark">#00695C</color>
- <color name="colorPrimaryLight">#00897B</color>
- <color name="colorAccent">#536DFE</color>
- <color name="colorAccentDark">#3D5AFE</color>
- <color name="colorAccentLight">#8C9EFF</color>-->
+    <!-- Material Deign Green -->
+    <!--<color name="colorPrimary">#00796B</color>
+    <color name="colorPrimaryDark">#00695C</color>
+    <color name="colorPrimaryLight">#00897B</color>
+    <color name="colorAccent">#536DFE</color>
+    <color name="colorAccentDark">#3D5AFE</color>
+    <color name="colorAccentLight">#8C9EFF</color>-->
 
- <!-- Material Design Reply Blue -->
- <color name="colorPrimary">#344955</color>
- <color name="colorPrimaryDark">#232F34</color>
- <color name="colorPrimaryLight">#4A6572</color>
- <color name="colorAccent">#F9AA33</color>
- <color name="colorAccentDark">#F9AA33</color>
- <color name="colorAccentLight">#F9AA33</color>
+    <!-- Material Design Reply Blue -->
+    <color name="colorPrimary">#344955</color>
+    <color name="colorPrimaryDark">#232F34</color>
+    <color name="colorPrimaryLight">#4A6572</color>
+    <color name="colorAccent">#F9AA33</color>
+    <color name="colorAccentDark">#F9AA33</color>
+    <color name="colorAccentLight">#F9AA33</color>
 
     <color name="overlay_dark_10">#1A000000</color>
     <color name="overlay_dark_20">#33000000</color>

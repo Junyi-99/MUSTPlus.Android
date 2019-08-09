@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,11 +32,11 @@ import java.util.Calendar;
 
 public class FragmentTimetable extends Fragment {
     private static final String TAG = "FragementTimeTable";
-    private final ArrayList<Animator> animatorList = new ArrayList<Animator>();
-    private String timetableRaw = "";
+    private final ArrayList<Animator> animators = new ArrayList<Animator>();
+    private String timetable_raw = "";
     private View this_view;
     private ViewGroup this_container;
-    private ArrayList<Button> buttonArrayList = new ArrayList<Button>();
+    private ArrayList<TextView> timetable_cell_list = new ArrayList<TextView>();
     private ImageButton image_button_back;
     private boolean animated = false; // 是否已经播放过动画
 
@@ -46,20 +45,20 @@ public class FragmentTimetable extends Fragment {
     }
 
     private void animate() {
-        if (!animated && !timetableRaw.isEmpty()) {
+        if (!animated && !timetable_raw.isEmpty()) {
             AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.playTogether(this.animatorList);
+            animatorSet.playTogether(this.animators);
             animatorSet.start();
             animated = true;
         } else {
-            for (Button button : buttonArrayList) {
+            for (TextView button : timetable_cell_list) {
                 button.setAlpha(1.f);
             }
         }
     }
 
     private void calculateLayout(String timetableRaw, ViewGroup container, LayoutInflater inflater, RelativeLayout relativeLayout) {
-        buttonArrayList.clear();
+        timetable_cell_list.clear();
 
         ModelTimetable modelTimetable = JSON.parseObject(timetableRaw, ModelTimetable.class);
         if (modelTimetable == null)
@@ -68,7 +67,8 @@ public class FragmentTimetable extends Fragment {
         int delay = 0;
 
         for (final ModelTimetableCell cell : modelTimetable.getTimetable()) {
-            final Button b = (Button) inflater.inflate(R.layout.timetable_course_cell, container, false);
+            //final Button b = (Button) inflater.inflate(R.layout.timetable_course_cell, container, false);
+            final TextView b = (TextView) inflater.inflate(R.layout.timetable_course_cell_new, container, false);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -88,7 +88,7 @@ public class FragmentTimetable extends Fragment {
 
             Animator animator = ObjectAnimator.ofFloat(b, "alpha", 0.f, 0.5f, 1.f);
             animator.setDuration(500).setStartDelay(delay);
-            animatorList.add(animator);
+            animators.add(animator);
             delay += 100;
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -96,24 +96,22 @@ public class FragmentTimetable extends Fragment {
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
 
-            int offsetHeight = convertDpToPx(10);
-            int offsetMarginLeft = -(int) (getResources().getDimension(R.dimen.timetable_time_cell_width) - getResources().getDimension(R.dimen.timetable_header_width)) / 2; // negative
-            int offsetMarginTop = -convertDpToPx(5);
-            params.width = (int) getResources().getDimension(R.dimen.timetable_time_cell_width); // 补齐由于margin而缺少的宽高
-            params.height = (int) (getResources().getDimension(R.dimen.timetable_time_label_height) * cell.duration()) + offsetHeight;
-            int marginLeft = (int) getResources().getDimension(R.dimen.timetable_header_width) * cell.getCellDayPosition() + offsetMarginLeft;
-            int marginTop = (int) (getResources().getDimension(R.dimen.timetable_time_label_height) * cell.getCellLinePosition()) + offsetMarginTop;
+            params.width = (int) getResources().getDimension(R.dimen.timetable_time_cell_width);
+            params.height = (int) (getResources().getDimension(R.dimen.timetable_time_label_height) * cell.duration());
+            int marginLeft = (int) getResources().getDimension(R.dimen.timetable_header_width) * cell.getCellDayPosition() + convertDpToPx(2);
+            int marginTop = (int) (getResources().getDimension(R.dimen.timetable_time_label_height) * cell.getCellLinePosition());
+
             params.setMargins(marginLeft, marginTop, 0, 0);
             String title = cell.getCourse_name_zh() + "\n@" + cell.getClassroom();
             b.setLayoutParams(params);
             b.setText(title);
             b.setAlpha(0.f);
 
-            buttonArrayList.add(b);
-
+            timetable_cell_list.add(b);
+            Log.d("单元格", title);
         }
 
-        for (Button b : buttonArrayList) {
+        for (TextView b : timetable_cell_list) {
             relativeLayout.addView(b);
         }
     }
@@ -209,8 +207,8 @@ public class FragmentTimetable extends Fragment {
         LayoutInflater vi = LayoutInflater.from(getContext());
         RelativeLayout relativeLayout = (RelativeLayout) this_view.findViewById(R.id.relativeLayoutInnerContent);
         DBHelper db = new DBHelper(getContext());
-        timetableRaw = db.getAPIRecord(APIs.TIMETABLE);
-        calculateLayout(timetableRaw, this_container, vi, relativeLayout);
+        timetable_raw = db.getAPIRecord(APIs.TIMETABLE);
+        calculateLayout(timetable_raw, this_container, vi, relativeLayout);
         animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
         Log.d("Fragment ModelTimetable", "onStart");
     }

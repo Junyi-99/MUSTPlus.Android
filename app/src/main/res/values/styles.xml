@@ -82,7 +82,7 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="LoginEditText">
+    <style name="MyEditText">
         <item name="android:background">@drawable/shape_rounded_edittext_24dp</item>
         <item name="android:drawablePadding">8dp</item>
         <item name="android:drawableTint" tools:targetApi="m">@color/grey_500</item>
@@ -90,19 +90,25 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="LoginEditText.Username" parent="LoginEditText">
+    <style name="LoginEditText.Search" parent="MyEditText">
+        <item name="android:drawableLeft">@drawable/ic_search_black_24dp</item>
+        <item name="android:inputType">text</item>
+        <item name="android:maxLength">18</item>
+    </style>
+
+    <style name="LoginEditText.Username" parent="MyEditText">
         <item name="android:drawableLeft">@drawable/ic_baseline_person</item>
         <item name="android:inputType">text</item>
         <item name="android:maxLength">18</item>
     </style>
 
-    <style name="LoginEditText.Password" parent="LoginEditText">
+    <style name="LoginEditText.Password" parent="MyEditText">
         <item name="android:drawableLeft">@drawable/ic_baseline_lock</item>
         <item name="android:inputType">textPassword</item>
         <item name="android:maxLength">18</item>
     </style>
 
-    <style name="LoginEditText.Captcha" parent="LoginEditText">
+    <style name="LoginEditText.Captcha" parent="MyEditText">
         <item name="android:drawableLeft">@drawable/ic_baseline_verified_user</item>
         <item name="android:inputType">number</item>
         <item name="android:maxLength">4</item>

@@ -3,6 +3,7 @@ package com.example.myapplication.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,8 +71,8 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         this_view = inflater.inflate(R.layout.fragment_news_all, container, false);
-        return this_view;
-        /*mSwipeLayout = (SwipeRefreshLayout) this_view.findViewById(R.id.swipeLayout);
+
+        mSwipeLayout = (SwipeRefreshLayout) this_view.findViewById(R.id.swipeLayout);
 
         //设置进度条的颜色主题，最多能设置四种 加载颜色是循环播放的，只要没有完成刷新就会一直循环，
         mSwipeLayout.setColorSchemeColors(Color.rgb(25, 118, 210));
@@ -86,7 +88,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         initComponent();
         Log.d("Fragment ModelNews All", "onCreateView");
         // Inflate the layout for this fragment
-        return this_view;*/
+        return this_view;
     }
 
     private void initComponent() {
@@ -256,7 +258,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
             LayoutInflater inflater = (LayoutInflater) act.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View v = inflater.inflate(R.layout.item_slider_image, container, false);
 
-            ImageView image = (ImageView) v.findViewById(R.id.teacher_avatar);
+            ImageView image = (ImageView) v.findViewById(R.id.icon);
             RelativeLayout lyt_parent = (RelativeLayout) v.findViewById(R.id.lyt_parent);
             Tools.displayImageOriginal(act, image, o.image);
             lyt_parent.setOnClickListener(new View.OnClickListener() {

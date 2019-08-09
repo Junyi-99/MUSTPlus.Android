@@ -13,10 +13,10 @@
     </dimen> <!-- timetable_header_width * 7 -->
     <dimen name="timetable_header_width">66dp</dimen>
     <dimen name="timetable_header_height">41dp</dimen>
+    <dimen name="timetable_time_cell_width">64dp</dimen> <!-- 64 = timetable_header_width - 2 -->
+    <dimen name="timetable_time_cell_font_size">12sp</dimen>
     <dimen name="timetable_time_label_width">29dp</dimen>
     <dimen name="timetable_time_label_height">68dp</dimen>
-    <dimen name="timetable_time_cell_width">71dp</dimen> <!-- 71 = 65 + 6 -->
-    <dimen name="timetable_time_cell_font_size">12sp</dimen>
 
     <dimen name="spacing_4dp">4dp</dimen>
     <dimen name="spacing_8dp">8dp</dimen>

@@ -240,7 +240,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
                 "下拉即可刷新课程信息和课程评价哦~下拉即可刷新课程信息和课程评价哦~",
                 "2019/8/8"
         );
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 1; i++) {
             modelCourseCommentArrayList.add(comment);
         }
 

@@ -11,7 +11,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/teacher_avatar"
+        android:id="@+id/icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginLeft="@dimen/spacing_16dp"
@@ -37,7 +37,7 @@
             android:paddingBottom="@dimen/spacing_20dp">
 
             <TextView
-                android:id="@+id/teacher_name_zh"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="通告：領取2018年12月大學英語四六級考試成績報告單"

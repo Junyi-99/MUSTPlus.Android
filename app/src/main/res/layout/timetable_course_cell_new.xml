@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/text_view_title"
+    android:layout_width="@dimen/timetable_time_cell_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/layout_bg_timetable_cell"
+    android:clickable="true"
+    android:focusable="true"
+    android:fontFamily="@font/robotomedium"
+    android:gravity="start"
+    android:maxWidth="@dimen/timetable_time_cell_width"
+    android:padding="8dp"
+    android:text="數據庫系統\n@C408（实验室）"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/timetable_time_cell_font_size"
+
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />

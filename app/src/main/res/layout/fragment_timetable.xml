@@ -23,7 +23,8 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
 
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@font/robotomedium"
+            android:gravity="center"
             android:singleLine="true"
             android:text="@string/toolbarTimetableExample"
             android:textColor="@color/colorWhite"
