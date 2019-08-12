@@ -3,7 +3,6 @@ package com.example.myapplication.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -22,68 +21,116 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
-import com.example.myapplication.adapters.AdapterListSectioned;
+import com.example.myapplication.adapters.AdapterNewsListSectioned;
 import com.example.myapplication.models.ModelNews;
 import com.example.myapplication.models.ModelNewsImage;
+import com.example.myapplication.models.ModelResponseNewsAll;
+import com.example.myapplication.utils.API;
 import com.example.myapplication.utils.Tools;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private View this_view;
-    private ViewPager view_pager;
-    private LinearLayout layout_dots;
-    private AdapterImageSlider adapterImageSlider;
-    private RecyclerView recyclerView;
-    private AdapterListSectioned mAdapter;
-    private SwipeRefreshLayout mSwipeLayout;
-    private Runnable runnable = null;
-    private Handler handler = new Handler();
-    List<ModelNews> modelNewsItems;
-    TypedArray drw_arr;
-    private TextView slider_image_title;
-    private TextView slider_image_brief;
-    private boolean isRefresh = false;//是否刷新中
-
     private static int[] array_image_place = {
             R.drawable.image_1,
             R.drawable.image_2,
             R.drawable.image_3,
     };
-
     private static String[] array_title_place = {
             "澳科大於墨爾本舉辦《回歸盛世》影像展覽",
             "2019年澳門僱員信心及滿意度指數",
             "傑出華人數學家張益唐教授於澳科大报告",
 
     };
-
     private static String[] array_brief_place = {
             "澳門影像舘",
             "可持續發展研究所",
             "N211",
     };
+    ArrayList<ModelNews> modelNewsItems;
+    ModelResponseNewsAll modelResponseNewsAll;
+    TypedArray drw_arr;
+    private View this_view;
+    private ViewPager view_pager;
+    private LinearLayout layout_dots;
+    private AdapterImageSlider adapterImageSlider;
+    private RecyclerView recyclerView;
+    private AdapterNewsListSectioned mAdapter;
+    private SwipeRefreshLayout swipe_refresh_layout;
+    private Runnable runnable = null;
+    private Handler handler = new Handler();
+    private TextView slider_image_title;
+    private TextView slider_image_brief;
+    private boolean isRefreshing = false;//是否刷新中
+
+    // 第一次更新 News
+    public void refreshNewsAll(final boolean force) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    DBHelper helper = new DBHelper(getContext());
+                    API api = new API(getContext());
+                    if (force)
+                        api.setForceUpdate(true);
+                    modelResponseNewsAll = api.news_all_get(helper.getLoginRecord().getToken(), 0, 20);
+                    if (modelResponseNewsAll != null) {
+                        if (modelResponseNewsAll.getCode() == 0) {
+                            modelNewsItems.clear();
+                            modelNewsItems.addAll(modelResponseNewsAll.getNews_list());
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                            });
+                            if (!force) { // 为啥这样写原理请见 ActivityCourseDetails 类似部分
+                                swipe_refresh_layout.setRefreshing(false);
+                                isRefreshing = false;
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void swipeRefreshLayoutOnRefresh() {
+        //检查是否处于刷新状态
+        Log.d("API onRefresh", String.valueOf(swipe_refresh_layout.isRefreshing()) + " " + String.valueOf(isRefreshing));
+        if (!isRefreshing) {
+            isRefreshing = true;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    swipe_refresh_layout.setRefreshing(false);
+                    isRefreshing = false;
+                }
+            }).start();
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         this_view = inflater.inflate(R.layout.fragment_news_all, container, false);
 
-        mSwipeLayout = (SwipeRefreshLayout) this_view.findViewById(R.id.swipeLayout);
+        swipe_refresh_layout = (SwipeRefreshLayout) this_view.findViewById(R.id.swipe_refresh_layout);
+        swipe_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayoutOnRefresh();
+            }
+        });
 
-        //设置进度条的颜色主题，最多能设置四种 加载颜色是循环播放的，只要没有完成刷新就会一直循环，
-        mSwipeLayout.setColorSchemeColors(Color.rgb(25, 118, 210));
-        // 设置手指在屏幕下拉多少距离会触发下拉刷新
-        mSwipeLayout.setDistanceToTriggerSync(300);
-        // 设定下拉圆圈的背景
-        mSwipeLayout.setProgressBackgroundColorSchemeColor(Color.WHITE);
-        // 设置圆圈的大小
-        mSwipeLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        //设置下拉刷新的监听
-        mSwipeLayout.setOnRefreshListener(this);
 
         initComponent();
         Log.d("Fragment ModelNews All", "onCreateView");
@@ -109,14 +156,14 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         modelNewsItems.add(new ModelNews("酒店與旅遊管理學院", "2019年畢業典禮事宜", "2019-06-04", true, "downContent('12294');", drw_arr.getResourceId(0, -1)));
 
         //set data and list adapter
-        mAdapter = new AdapterListSectioned(this_view.getContext(), modelNewsItems);
+        mAdapter = new AdapterNewsListSectioned(this_view.getContext(), modelNewsItems);
         recyclerView.setAdapter(mAdapter);
 
         // on item list clicked
-        mAdapter.setOnItemClickListener(new AdapterListSectioned.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new AdapterNewsListSectioned.OnItemClickListener() {
             @Override
             public void onItemClick(View view, ModelNews obj, int position) {
-                Snackbar.make(this_view, "Item " + obj.title + " clicked", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(this_view, "Item " + obj.getTitle() + " clicked", Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -169,6 +216,9 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
             public void onPageScrollStateChanged(int state) {
             }
         });
+        swipe_refresh_layout.setRefreshing(true);
+        refreshNewsAll(false);
+
 
         startAutoSlider(adapterImageSlider.getCount());
     }
@@ -211,6 +261,35 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         handler.postDelayed(runnable, 3000);
     }
 
+    @Override
+    public void onDestroy() {
+        if (runnable != null) handler.removeCallbacks(runnable);
+        super.onDestroy();
+    }
+
+    /*
+     * 监听器SwipeRefreshLayout.OnRefreshListener中的方法，当下拉刷新后触发
+     */
+    public void onRefresh() {
+        //检查是否处于刷新状态
+        if (!isRefreshing) {
+            isRefreshing = true;
+            //模拟加载网络数据，这里设置2秒，正好能看到2色进度条
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+
+                    //显示或隐藏刷新进度条
+                    swipe_refresh_layout.setRefreshing(false);
+                    //swipe_refresh_layout.setRefreshing(true);
+                    //修改adapter的数据
+                    //data.add("这是新添加的数据");
+                    modelNewsItems.add(new ModelNews("电竞学院", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+                    mAdapter.notifyDataSetChanged();
+                    isRefreshing = false;
+                }
+            }, 2000);
+        }
+    }
 
     private static class AdapterImageSlider extends PagerAdapter {
 
@@ -219,18 +298,14 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
 
         private AdapterImageSlider.OnItemClickListener onItemClickListener;
 
-        private interface OnItemClickListener {
-            void onItemClick(View view, ModelNewsImage obj);
-        }
-
-        public void setOnItemClickListener(AdapterImageSlider.OnItemClickListener onItemClickListener) {
-            this.onItemClickListener = onItemClickListener;
-        }
-
         // constructor
         private AdapterImageSlider(Activity activity, List<ModelNewsImage> items) {
             this.act = activity;
             this.items = items;
+        }
+
+        public void setOnItemClickListener(AdapterImageSlider.OnItemClickListener onItemClickListener) {
+            this.onItemClickListener = onItemClickListener;
         }
 
         @Override
@@ -281,36 +356,9 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
 
         }
 
-    }
-
-    @Override
-    public void onDestroy() {
-        if (runnable != null) handler.removeCallbacks(runnable);
-        super.onDestroy();
-    }
-
-
-    /*
-     * 监听器SwipeRefreshLayout.OnRefreshListener中的方法，当下拉刷新后触发
-     */
-    public void onRefresh() {
-        //检查是否处于刷新状态
-        if (!isRefresh) {
-            isRefresh = true;
-            //模拟加载网络数据，这里设置2秒，正好能看到2色进度条
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-
-                    //显示或隐藏刷新进度条
-                    mSwipeLayout.setRefreshing(false);
-                    //mSwipeLayout.setRefreshing(true);
-                    //修改adapter的数据
-                    //data.add("这是新添加的数据");
-                    modelNewsItems.add(new ModelNews("电竞学院", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-                    mAdapter.notifyDataSetChanged();
-                    isRefresh = false;
-                }
-            }, 2000);
+        private interface OnItemClickListener {
+            void onItemClick(View view, ModelNewsImage obj);
         }
+
     }
 }

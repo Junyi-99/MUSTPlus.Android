@@ -38,13 +38,13 @@ public class AdapterSectionsPager extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             default:
-                return FragmentTimetable.newInstance();
+                return new FragmentTimetable();
             case 1:
-                return FragmentNews.newInstance();
+                return new FragmentNews();
             case 2:
-                return FragmentMoments.newInstance();
+                return new FragmentMoments();
             case 3:
-                return FragmentMine.newInstance();
+                return new FragmentMine();
         }
     }
 

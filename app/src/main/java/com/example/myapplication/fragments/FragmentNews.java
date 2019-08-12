@@ -1,6 +1,7 @@
 package com.example.myapplication.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,61 +13,34 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FragmentNews extends Fragment {
-    private static final String TAG = "FragementNews";
-
-    public static FragmentNews newInstance() {
-        FragmentNews fragment = new FragmentNews();
-        //Bundle bundle = new Bundle();
-        //fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-
-        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getFragmentManager());
-        adapter.addFragment(new FragmentNewsAll(), "All");
-        adapter.addFragment(new FragmentMine(), "資訊科技學院");
-        adapter.addFragment(new FragmentMine(), "商學院");
-        adapter.addFragment(new FragmentMine(), "法學院");
-        adapter.addFragment(new FragmentMine(), "中醫藥學院");
-        adapter.addFragment(new FragmentMine(), "酒店與旅遊管理學院");
-        adapter.addFragment(new FragmentMine(), "人文藝術學院");
-        adapter.addFragment(new FragmentMine(), "醫學院");
-        adapter.addFragment(new FragmentMine(), "國際學院");
-        adapter.addFragment(new FragmentMine(), "藥學院");
-        adapter.addFragment(new FragmentMine(), "研究生院");
-        adapter.addFragment(new FragmentMine(), "通識教育部");
-        adapter.addFragment(new FragmentMine(), "持續教育學院");
-        adapter.addFragment(new FragmentMine(), "健康科學學院");
-
-
-        viewPager.setAdapter(adapter);
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_news, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
+        View fragment_news = inflater.inflate(R.layout.fragment_news, container, false);
 
-        // Inflate the layout for this fragment
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
-        setupViewPager(viewPager);
+        ViewPager view_pager = (ViewPager) fragment_news.findViewById(R.id.view_pager);
+        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getFragmentManager());
+        view_pager.setAdapter(adapter);
+        view_pager.setOffscreenPageLimit(4);
 
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(viewPager);
+        TabLayout tabLayout = (TabLayout) fragment_news.findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(view_pager);
 
-
-        return view;
+        return fragment_news;
     }
 
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+        private String[] titles = new String[]{
+                "全部",
+                "学院",
+                "通知",
+                "文件"
+        };
 
         public SectionsPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -74,22 +48,26 @@ public class FragmentNews extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            switch (position) {
+                default:
+                    return new FragmentNewsAll();
+                case 1:
+                    return new FragmentNewsUniversal();
+                case 2:
+                    return new FragmentNewsUniversal();
+                case 3:
+                    return new FragmentNewsUniversal();
+            }
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            return titles.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            return titles[position];
         }
     }
 }

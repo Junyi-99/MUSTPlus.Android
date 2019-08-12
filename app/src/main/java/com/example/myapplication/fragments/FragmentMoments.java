@@ -16,24 +16,18 @@ import java.util.ArrayList;
 
 public class FragmentMoments extends Fragment {
 
-    private RecyclerView recyclerViewMomentList;
+    private RecyclerView recycler_view_moment_list;
     private ArrayList<ModelResponseMoment> modelResponseMomentArrayList;
     private AdapterMomentList adapterMomentList;
 
-    public static FragmentMoments newInstance() {
-        FragmentMoments fragment = new FragmentMoments();
-        //Bundle bundle = new Bundle();
-        //fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_moments, container, false);
-        recyclerViewMomentList = (RecyclerView) view.findViewById(R.id.recyclerViewMomentList);
-        recyclerViewMomentList.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerViewMomentList.setHasFixedSize(true);
-        recyclerViewMomentList.setNestedScrollingEnabled(false);
+        recycler_view_moment_list = (RecyclerView) view.findViewById(R.id.recycler_view_moment_list);
+        recycler_view_moment_list.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recycler_view_moment_list.setHasFixedSize(true);
+        recycler_view_moment_list.setNestedScrollingEnabled(false);
 
         modelResponseMomentArrayList = new ArrayList<ModelResponseMoment>();
 
@@ -57,7 +51,7 @@ public class FragmentMoments extends Fragment {
         ));
 
         adapterMomentList = new AdapterMomentList(view.getContext(), modelResponseMomentArrayList);
-        recyclerViewMomentList.setAdapter(adapterMomentList);
+        recycler_view_moment_list.setAdapter(adapterMomentList);
         // Inflate the layout for this fragment
         return view;
     }

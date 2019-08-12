@@ -13,10 +13,6 @@ import com.example.myapplication.R;
 public class FragmentMine extends Fragment {
 
 
-    public static FragmentMine newInstance() {
-        return new FragmentMine();
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

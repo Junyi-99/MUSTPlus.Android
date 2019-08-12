@@ -9,4 +9,41 @@
         <item>@drawable/photo_female_1</item>
 
     </integer-array>
+    <string-array name="faculties">
+        <item>資訊科技學院</item>
+        <item>商學院</item>
+        <item>法學院</item>
+        <item>中醫藥學院</item>
+        <item>酒店與旅遊管理學院</item>
+        <item>人文藝術學院</item>
+        <item>醫學院</item>
+        <item>國際學院</item>
+        <item>藥學院</item>
+        <item>研究生院</item>
+        <item>通識教育部</item>
+        <item>持續教育學院</item>
+        <item>健康科學學院</item>
+    </string-array>
+    <string-array name="departments">
+        <item>學生事務處</item>
+        <item>教務處</item>
+        <item>註冊處</item>
+        <item>校長室</item>
+        <item>會計處</item>
+        <item>總務處</item>
+        <item>人事處</item>
+        <item>求職訊息</item>
+        <item>學術研究處</item>
+        <item>資訊處</item>
+        <item>圖書出版及供應中心</item>
+        <item>物業及設施管理處</item>
+        <item>可持續發展研究所</item>
+        <item>圖書館</item>
+        <item>教育發展中心</item>
+        <item>科研管理處</item>
+        <item>招生處</item>
+        <item>創業就業發展中心</item>
+        <item>教學質量督導處</item>
+        <item>人力資源處</item>
+    </string-array>
 </resources>

@@ -246,7 +246,7 @@ public class ActivityLogin extends AppCompatActivity {
                                         showMsg(modelResponseLogin.getStudent_name() + " " + modelResponseLogin.getToken());
 
                                         DBHelper db = new DBHelper(getApplicationContext());
-                                        long ret = db.updatePersistence(APIs.AUTH_LOGIN, result);
+                                        long ret = db.setAPIRecord(APIs.AUTH_LOGIN, result);
 
                                         setHintText("欢迎您，" + modelResponseLogin.getStudent_name() + "。正在更新您的课表，请稍后");
                                         timetable();
@@ -277,7 +277,7 @@ public class ActivityLogin extends AppCompatActivity {
                     DBHelper db = new DBHelper(getApplicationContext());
                     if (response.getCode() == 0) {
                         // 成功
-                        long ret = db.updatePersistence(APIs.TIMETABLE, result);
+                        long ret = db.setAPIRecord(APIs.TIMETABLE, result);
 
                         setHintText("一切准备就绪，欢迎使用MUST+！");
                         Thread.sleep(1000);

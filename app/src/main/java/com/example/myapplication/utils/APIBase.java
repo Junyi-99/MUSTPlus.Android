@@ -184,8 +184,24 @@ public class APIBase implements IAPI {
     }
 
     @Override
-    public String news_all(String token, Integer from, Integer count) {
-        return null;
+    public String news_all(String token, Integer from, Integer count) throws IOException {
+        String url = APIs.BASE_URL.v() + APIs.NEWS_.v() + APIs.NEWS_ALL.v();
+        OkHttpClient client = new OkHttpClient();
+
+        HttpUrl.Builder httpUrl = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+        TreeMap<String, String> params = new TreeMap<>();
+        params.put("from", String.valueOf(from));
+        params.put("count", String.valueOf(count));
+
+        boxing(httpUrl, params, token);
+
+        Request request = new Request.Builder().url(httpUrl.build()).build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+        if (body == null)
+            throw new IOException("NULL ERROR");
+        else
+            return body.string();
     }
 
     @Override

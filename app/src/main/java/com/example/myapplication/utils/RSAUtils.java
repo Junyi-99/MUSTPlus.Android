@@ -87,7 +87,6 @@ public class RSAUtils {
             // triple byte length encoding
             return new byte[]{(byte) 0x82, (byte) (size >> Byte.SIZE), (byte) size};
         }
-
         throw new IllegalArgumentException("size too large, only up to 64KiB length encoding supported: " + size);
     }
 

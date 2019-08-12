@@ -5,10 +5,12 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.interfaces.IAPI;
 import com.example.myapplication.models.ModelCourse;
 import com.example.myapplication.models.ModelResponseCourseComment;
+import com.example.myapplication.models.ModelResponseNewsAll;
 
 import java.io.IOException;
 import java.util.TreeMap;
@@ -118,8 +120,32 @@ public class API implements IAPI {
         return null;
     }
 
+    @Nullable
+    public ModelResponseNewsAll news_all_get(String token, Integer from, Integer count) throws IOException {
+        try {
+            DBHelper db = new DBHelper(context);
+            ModelResponseNewsAll record = db.getNewsRecord();
+            if (record == null || forceUpdate) {
+                String raw = base.news_all(token, from, count);
+                ModelResponseNewsAll news = JSON.parseObject(raw, ModelResponseNewsAll.class);
+                if (news.getCode() == 0) {
+                    Log.d("API NewsAll", "Saving data");
+                    db.setAPIRecord(APIs.NEWS_ALL, raw);
+                }
+                return news;
+            } else {
+                return record;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Deprecated
     @Override
-    public String news_all(String token, Integer from, Integer count) {
+    public String news_all(String token, Integer from, Integer count) throws IOException {
         return null;
     }
 

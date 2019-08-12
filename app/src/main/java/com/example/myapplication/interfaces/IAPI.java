@@ -27,7 +27,7 @@ public interface IAPI {
 
     String course_ftp(String token, Integer course_id, APIOperation operation);
 
-    String news_all(String token, Integer from, Integer count);
+    String news_all(String token, Integer from, Integer count) throws IOException;
 
     String news_faculty(String token, String faculty_name_zh, Integer from, Integer count);
 

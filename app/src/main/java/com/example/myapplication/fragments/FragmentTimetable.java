@@ -41,13 +41,6 @@ public class FragmentTimetable extends Fragment {
     private ImageButton image_button_back;
     private boolean animated = false; // 是否已经播放过动画
 
-    public static FragmentTimetable newInstance() {
-        FragmentTimetable fragment = new FragmentTimetable();
-        Bundle bundle = new Bundle();
-
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     private int convertDpToPx(int dp) {
         return Math.round(dp * (getResources().getDisplayMetrics().density));

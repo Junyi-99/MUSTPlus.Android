@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import com.alibaba.fastjson.JSON;
 import com.example.myapplication.models.ModelCourse;
 import com.example.myapplication.models.ModelResponseLogin;
+import com.example.myapplication.models.ModelResponseNewsAll;
 import com.example.myapplication.utils.APIs;
 import com.example.myapplication.utils.Tools;
 
@@ -22,7 +23,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static String TABLE_NAME_API_COURSE = "courses";// 表名
     private static String TABLE_NAME_API_TEACHER = "teachers";// 表名
     private static String TABLE_NAME_API_STUDENT = "students";// 表名
-    private final int API_PERSISTENCE_EXPIRES_DAY = 30; // API_PERSISTENCE记录 30天后 失效
+    private final int API_PERSISTENCE_EXPIRES_DAY_DEFAULT = 30; // API_PERSISTENCE记录 30天后 失效
     private final int COURSE_EXPIRES_DAY = 30; // COURSE记录 30天后 失效
     private final int TEACHER_EXPIRES_DAY = 30; // TEACHER记录 30天后 失效
     private final int STUDENT_EXPIRES_DAY = 7; // STUDENT记录 7天后 失效
@@ -32,10 +33,10 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void removeRecord(APIs api) {
-        updatePersistence(api, "", 0);
+        setAPIRecord(api, "", 0);
     }
 
-    private long updatePersistence(APIs api, String value, long time) {
+    private long setAPIRecord(APIs api, String value, long time) {
         ContentValues values = new ContentValues();
         SQLiteDatabase db = getWritableDatabase();
         values.put("id", api.i());
@@ -48,8 +49,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return ret;
     }
 
-    public long updatePersistence(APIs api, String value) {
-        return updatePersistence(api, value, Tools.getUTCTimestamp());
+    public long setAPIRecord(APIs api, String value) {
+        return setAPIRecord(api, value, Tools.getUTCTimestamp());
     }
 
     // 从数据库中获取登录记录
@@ -60,9 +61,16 @@ public class DBHelper extends SQLiteOpenHelper {
         return model;
     }
 
-    // 从数据库中获取API记录
+    // 获取 NewsAll 的数据记录
+    @Nullable
+    public ModelResponseNewsAll getNewsRecord() {
+        ModelResponseNewsAll news = JSON.parseObject(getAPIRecordTimeLimit(APIs.NEWS_ALL, 1), ModelResponseNewsAll.class);
+        return news;
+    }
+
+    // 从数据库中获取API记录，并且限制時間，超時的數據返回空字符串
     // 失败返回 空字符串
-    public String getAPIRecord(APIs api) {
+    public String getAPIRecordTimeLimit(APIs api, int days) {
         String result, time;
         String querySQL
                 = "SELECT value, time" +
@@ -77,7 +85,7 @@ public class DBHelper extends SQLiteOpenHelper {
             time = cursor.getString(1);
             cursor.close();
             db.close();
-            if (Tools.getUTCTimestamp() - Integer.valueOf(time) > 60 * 60 * 24 * API_PERSISTENCE_EXPIRES_DAY)
+            if (Tools.getUTCTimestamp() - Integer.valueOf(time) > 60 * 60 * 24 * days)
                 result = "";
             return result;
         } else {
@@ -85,6 +93,12 @@ public class DBHelper extends SQLiteOpenHelper {
             db.close();
             return "";
         }
+    }
+
+    // 从数据库中获取API记录
+    // 失败返回 空字符串
+    public String getAPIRecord(APIs api) {
+        return getAPIRecordTimeLimit(api, API_PERSISTENCE_EXPIRES_DAY_DEFAULT);
     }
 
     // 置登录态为未登录
@@ -167,6 +181,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "student_id TEXT PRIMARY KEY," +
                 "value TEXT," +
                 "time INTEGER);";
+
 
         db.execSQL(sql_apis);
         db.execSQL(sql_config);
