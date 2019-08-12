@@ -4,5 +4,4 @@ public enum APIOperation {
     GET,
     POST,
     DELETE,
-
 }

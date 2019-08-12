@@ -39,10 +39,10 @@
                 android:id="@+id/toolbar"
                 style="@style/MyToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="@dimen/action_bar_size"
                 android:background="@drawable/gradient"
                 android:elevation="4dp"
-                android:minHeight="?attr/actionBarSize"
+                android:minHeight="@dimen/action_bar_size"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ToolbarPopupTheme">
 

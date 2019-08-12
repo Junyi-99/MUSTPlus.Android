@@ -18,6 +18,13 @@ import java.util.List;
 public class FragmentNews extends Fragment {
     private static final String TAG = "FragementNews";
 
+    public static FragmentNews newInstance() {
+        FragmentNews fragment = new FragmentNews();
+        //Bundle bundle = new Bundle();
+        //fragment.setArguments(bundle);
+        return fragment;
+    }
+
     private void setupViewPager(ViewPager viewPager) {
 
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getFragmentManager());

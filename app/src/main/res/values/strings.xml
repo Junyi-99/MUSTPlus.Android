@@ -3,10 +3,10 @@
 
     <string name="app_name">MUST+</string>
     <string name="login_hint_text">无需注册,使用COES账号即可登录MUST+</string>
-    <string name="title_tab_timetable">课程表</string>
-    <string name="title_tab_news">资讯</string>
-    <string name="title_tab_moments">校友圈</string>
-    <string name="title_tab_mine">我的</string>
+    <string name="tab_text_timetable">课程表</string>
+    <string name="tab_text_news">资讯</string>
+    <string name="tab_text_moments">校友圈</string>
+    <string name="tab_text_mine">我的</string>
     <string name="toolbarTimetableExample">学期 1909 第 8 周</string>
     <string name="imageButtonSelectWeek">选择其他周</string>
     <string name="imageButtonMore">更多选项</string>

@@ -24,6 +24,8 @@
     <dimen name="timetable_time_label_width">29dp</dimen>
     <dimen name="timetable_time_label_height">68dp</dimen>
 
+    <dimen name="action_bar_size">56dp</dimen>
+
     <dimen name="spacing_4dp">4dp</dimen>
     <dimen name="spacing_8dp">8dp</dimen>
     <dimen name="spacing_16dp">16dp</dimen>

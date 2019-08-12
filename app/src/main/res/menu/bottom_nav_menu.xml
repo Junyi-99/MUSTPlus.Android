@@ -4,20 +4,20 @@
     <item
         android:id="@+id/navigation_timetable"
         android:icon="@drawable/ic_icon_calendar"
-        android:title="@string/title_tab_timetable" />
+        android:title="@string/tab_text_timetable" />
 
     <item
         android:id="@+id/navigation_news"
         android:icon="@drawable/ic_icon_invite"
-        android:title="@string/title_tab_news" />
+        android:title="@string/tab_text_news" />
 
     <item
         android:id="@+id/navigation_moments"
         android:icon="@drawable/ic_icon_group"
-        android:title="@string/title_tab_moments" />
+        android:title="@string/tab_text_moments" />
     <item
         android:id="@+id/navigation_mine"
         android:icon="@drawable/ic_icon_signal"
-        android:title="@string/title_tab_mine" />
+        android:title="@string/tab_text_mine" />
 
 </menu>

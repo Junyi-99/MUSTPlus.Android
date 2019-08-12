@@ -20,6 +20,13 @@ public class FragmentMoments extends Fragment {
     private ArrayList<ModelResponseMoment> modelResponseMomentArrayList;
     private AdapterMomentList adapterMomentList;
 
+    public static FragmentMoments newInstance() {
+        FragmentMoments fragment = new FragmentMoments();
+        //Bundle bundle = new Bundle();
+        //fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_moments, container, false);

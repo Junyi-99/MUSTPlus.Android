@@ -7,21 +7,19 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
-import com.example.myapplication.adapters.AdapterSectionsStatePager;
+import com.example.myapplication.adapters.AdapterSectionsPager;
 import com.example.myapplication.fragments.FragmentMine;
 import com.example.myapplication.fragments.FragmentMoments;
 import com.example.myapplication.fragments.FragmentNews;
 import com.example.myapplication.fragments.FragmentTimetable;
 import com.example.myapplication.models.ModelResponse;
 import com.example.myapplication.utils.APIs;
-import com.idescout.sql.SqlScoutServer;
 
 public class ActivityMain extends AppCompatActivity {
     private TextView mTextMessage;
@@ -56,32 +54,26 @@ public class ActivityMain extends AppCompatActivity {
 
     // 设置当前 ViewPager 的 Fragment
     public void setViewPager(int fragmentNumber) {
-        viewPager.setCurrentItem(fragmentNumber, true);
+        viewPager.setCurrentItem(fragmentNumber, false);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SqlScoutServer.create(this, getPackageName());
-        Log.d("ActivityMain onCreate", "on create!");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-
-
         BottomNavigationView navView = findViewById(R.id.navigation);
-        mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        // 初始化 Fragments
-        fragmentTimetable = new FragmentTimetable();
-        fragmentNews = new FragmentNews();
-        fragmentMoments = new FragmentMoments();
-        fragmentMine = new FragmentMine();
+        AdapterSectionsPager adapterSectionsPager = new AdapterSectionsPager(this, getSupportFragmentManager());
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(adapterSectionsPager);
 
-        // 设置Pages
-        setupViewPager(viewPager);
+        viewPager.setOffscreenPageLimit(4); // 有效改善用户体验
+
+        mTextMessage = findViewById(R.id.message);
+
+
         checkTimetableStatus();
     }
 
@@ -91,15 +83,6 @@ public class ActivityMain extends AppCompatActivity {
 
     }
 
-
-    private void setupViewPager(ViewPager viewPager) {
-        AdapterSectionsStatePager adapter = new AdapterSectionsStatePager(getSupportFragmentManager());
-        adapter.addFragment(fragmentTimetable, "FragmentTimetable");
-        adapter.addFragment(fragmentNews, "FragmentNews");
-        adapter.addFragment(fragmentMoments, "FragmentMoments");
-        adapter.addFragment(fragmentMine, "FragmentMine");
-        viewPager.setAdapter(adapter);
-    }
 
     private void checkTimetableStatus() {
         DBHelper db = new DBHelper(getApplicationContext());

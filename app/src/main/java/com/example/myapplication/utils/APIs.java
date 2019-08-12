@@ -28,7 +28,6 @@ public enum APIs {
         this.value = value;
     }
 
-
     // Set Index
     public void si(int index) {
         this.index = index;
