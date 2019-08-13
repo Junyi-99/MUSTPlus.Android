@@ -121,6 +121,40 @@ public class API implements IAPI {
     }
 
     @Nullable
+    public ModelResponseNewsAll news_announcements_get(String token, Integer from, Integer count) throws IOException {
+        try {
+            String raw = base.news_announcements(token, from, count);
+            Log.d("RAWRAW", raw);
+            return JSON.parseObject(raw, ModelResponseNewsAll.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Deprecated
+    @Override
+    public String news_announcements(String token, Integer from, Integer count) throws IOException {
+        return null;
+    }
+
+    @Nullable
+    public ModelResponseNewsAll news_documents_get(String token, Integer from, Integer count) throws IOException {
+        try {
+            return JSON.parseObject(base.news_documents(token, from, count), ModelResponseNewsAll.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Deprecated
+    @Override
+    public String news_documents(String token, Integer from, Integer count) throws IOException {
+        return null;
+    }
+
+    @Nullable
     public ModelResponseNewsAll news_all_get(String token, Integer from, Integer count) throws IOException {
         try {
             DBHelper db = new DBHelper(context);
@@ -140,7 +174,6 @@ public class API implements IAPI {
             e.printStackTrace();
             return null;
         }
-
     }
 
     @Deprecated

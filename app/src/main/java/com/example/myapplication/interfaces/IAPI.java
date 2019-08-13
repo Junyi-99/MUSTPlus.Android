@@ -29,6 +29,10 @@ public interface IAPI {
 
     String news_all(String token, Integer from, Integer count) throws IOException;
 
+    String news_announcements(String token, Integer from, Integer count) throws IOException;
+
+    String news_documents(String token, Integer from, Integer count) throws IOException;
+
     String news_faculty(String token, String faculty_name_zh, Integer from, Integer count);
 
     String news_department(String token, String department_name_zh, Integer from, Integer count);

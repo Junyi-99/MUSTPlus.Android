@@ -178,6 +178,11 @@ public class ActivityLogin extends AppCompatActivity {
                 new Runnable() {
                     @Override
                     public void run() {
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         try {// 试一下状态机的写法
                             int status = 0;
                             final int STATUS_BEGIN = 0;

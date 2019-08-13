@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -35,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FragmentNewsAll extends LazyLoadFragment {
     private static int[] array_image_place = {
             R.drawable.image_1,
             R.drawable.image_2,
@@ -70,36 +69,32 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
 
     // 第一次更新 News
     public void refreshNewsAll(final boolean force) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    DBHelper helper = new DBHelper(getContext());
-                    API api = new API(getContext());
-                    if (force)
-                        api.setForceUpdate(true);
-                    modelResponseNewsAll = api.news_all_get(helper.getLoginRecord().getToken(), 0, 20);
-                    if (modelResponseNewsAll != null) {
-                        if (modelResponseNewsAll.getCode() == 0) {
-                            modelNewsItems.clear();
-                            modelNewsItems.addAll(modelResponseNewsAll.getNews_list());
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mAdapter.notifyDataSetChanged();
-                                }
-                            });
-                            if (!force) { // 为啥这样写原理请见 ActivityCourseDetails 类似部分
-                                swipe_refresh_layout.setRefreshing(false);
-                                isRefreshing = false;
-                            }
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        Log.e("RefreshNewsAll", "" + force);
+        try {
+            DBHelper helper = new DBHelper(getContext());
+            API api = new API(getContext());
+            api.setForceUpdate(force);
+
+            modelResponseNewsAll = api.news_all_get(helper.getLoginRecord().getToken(), 0, 20);
+            if (modelResponseNewsAll != null && modelResponseNewsAll.getCode() == 0) {
+                modelNewsItems.clear();
+                modelNewsItems.addAll(modelResponseNewsAll.getNews_list());
             }
-        }).start();
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+            if (!force) { // 为啥这样写原理请见 ActivityCourseDetails 类似部分
+                swipe_refresh_layout.setRefreshing(false);
+                isRefreshing = false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void swipeRefreshLayoutOnRefresh() {
@@ -110,6 +105,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    refreshNewsAll(true);
                     swipe_refresh_layout.setRefreshing(false);
                     isRefreshing = false;
                 }
@@ -130,11 +126,8 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
                 swipeRefreshLayoutOnRefresh();
             }
         });
-
-
         initComponent();
         Log.d("Fragment ModelNews All", "onCreateView");
-        // Inflate the layout for this fragment
         return this_view;
     }
 
@@ -148,12 +141,7 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         modelNewsItems = new ArrayList<ModelNews>();
 
         drw_arr = this_view.getContext().getResources().obtainTypedArray(R.array.people_images);
-        modelNewsItems.add(new ModelNews("商學院", "更改 消費者行為(BBAZ16401)D2的上課時間", "2019-06-21", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-        modelNewsItems.add(new ModelNews("教務處", "通告：領取2018年12月大學英語四六級考試成績報告單", "2019-06-19", false, "downContent('12293');", drw_arr.getResourceId(0, -1)));
-        modelNewsItems.add(new ModelNews("通識教育部", "通識教育部招聘教學助理", "2019-06-18", true, "downContent('12292');", drw_arr.getResourceId(0, -1)));
-        modelNewsItems.add(new ModelNews("教務處", "通告：2018/2019學年第二學期期末補考時間表", "2019-06-17", true, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-        modelNewsItems.add(new ModelNews("總務處", "學校商戶於暑假的營業時間", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-        modelNewsItems.add(new ModelNews("酒店與旅遊管理學院", "2019年畢業典禮事宜", "2019-06-04", true, "downContent('12294');", drw_arr.getResourceId(0, -1)));
+        modelNewsItems.add(new ModelNews("MUST+提示", "这里是你所在学院的新闻，下拉即可刷新新闻列表", "2019-06-21", true, "", R.drawable.image_junyi));
 
         //set data and list adapter
         mAdapter = new AdapterNewsListSectioned(this_view.getContext(), modelNewsItems);
@@ -216,10 +204,9 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
             public void onPageScrollStateChanged(int state) {
             }
         });
-        swipe_refresh_layout.setRefreshing(true);
-        refreshNewsAll(false);
 
-
+        onFirstVisible(); // 懒加载对于 create 的默认 fragment 不会执行 onFirstVisible
+        // 因为没有切换 fragment，adapter 不会调用 setUserVisibleHint
         startAutoSlider(adapterImageSlider.getCount());
     }
 
@@ -267,28 +254,24 @@ public class FragmentNewsAll extends Fragment implements SwipeRefreshLayout.OnRe
         super.onDestroy();
     }
 
-    /*
-     * 监听器SwipeRefreshLayout.OnRefreshListener中的方法，当下拉刷新后触发
-     */
-    public void onRefresh() {
-        //检查是否处于刷新状态
-        if (!isRefreshing) {
-            isRefreshing = true;
-            //模拟加载网络数据，这里设置2秒，正好能看到2色进度条
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
+    @Override
+    protected void onFirstVisible() {
+        super.onFirstVisible();
+        Log.e("FragmentNewsAll", "onFirstVisible");
+        swipe_refresh_layout.setRefreshing(true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                refreshNewsAll(false);
+                swipe_refresh_layout.setRefreshing(false);
+                isRefreshing = false;
+            }
+        }).start();
+    }
 
-                    //显示或隐藏刷新进度条
-                    swipe_refresh_layout.setRefreshing(false);
-                    //swipe_refresh_layout.setRefreshing(true);
-                    //修改adapter的数据
-                    //data.add("这是新添加的数据");
-                    modelNewsItems.add(new ModelNews("电竞学院", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "2019-06-05", false, "downContent('12294');", drw_arr.getResourceId(0, -1)));
-                    mAdapter.notifyDataSetChanged();
-                    isRefreshing = false;
-                }
-            }, 2000);
-        }
+    @Override
+    protected void onVisibilityChange(boolean isVisible) {
+        super.onVisibilityChange(isVisible);
     }
 
     private static class AdapterImageSlider extends PagerAdapter {

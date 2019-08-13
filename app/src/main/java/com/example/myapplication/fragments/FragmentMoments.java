@@ -1,9 +1,8 @@
 package com.example.myapplication.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import com.example.myapplication.models.ModelResponseMoment;
 
 import java.util.ArrayList;
 
-public class FragmentMoments extends Fragment {
+public class FragmentMoments extends LazyLoadFragment {
 
     private RecyclerView recycler_view_moment_list;
     private ArrayList<ModelResponseMoment> modelResponseMomentArrayList;
@@ -23,8 +22,8 @@ public class FragmentMoments extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_moments, container, false);
-        recycler_view_moment_list = (RecyclerView) view.findViewById(R.id.recycler_view_moment_list);
+        View view = inflater.inflate(R.layout.fragment_moments_temp, container, false);
+        /*recycler_view_moment_list = (RecyclerView) view.findViewById(R.id.recycler_view_moment_list);
         recycler_view_moment_list.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recycler_view_moment_list.setHasFixedSize(true);
         recycler_view_moment_list.setNestedScrollingEnabled(false);
@@ -52,7 +51,14 @@ public class FragmentMoments extends Fragment {
 
         adapterMomentList = new AdapterMomentList(view.getContext(), modelResponseMomentArrayList);
         recycler_view_moment_list.setAdapter(adapterMomentList);
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment*/
         return view;
+    }
+
+
+    @Override
+    protected void onFirstVisible() {
+        super.onFirstVisible();
+        Log.e("FragmentMoments", "onFirstVisible");
     }
 }

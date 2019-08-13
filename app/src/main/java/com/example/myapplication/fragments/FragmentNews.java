@@ -7,18 +7,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 
-public class FragmentNews extends Fragment {
+public class FragmentNews extends LazyLoadFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e("FragmentNews", "onCreateView");
         View fragment_news = inflater.inflate(R.layout.fragment_news, container, false);
 
         ViewPager view_pager = (ViewPager) fragment_news.findViewById(R.id.view_pager);
@@ -30,6 +32,12 @@ public class FragmentNews extends Fragment {
         tabLayout.setupWithViewPager(view_pager);
 
         return fragment_news;
+    }
+
+    @Override
+    protected void onFirstVisible() {
+        super.onFirstVisible();
+        Log.e("FragmentNews", "onFirstVisible");
     }
 
 
@@ -48,16 +56,10 @@ public class FragmentNews extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                default:
-                    return new FragmentNewsAll();
-                case 1:
-                    return new FragmentNewsUniversal();
-                case 2:
-                    return new FragmentNewsUniversal();
-                case 3:
-                    return new FragmentNewsUniversal();
-            }
+            if (position == 0)
+                return new FragmentNewsAll();
+            // 这里的position跟FragmentNewsUniversal的position是对应的
+            return FragmentNewsUniversal.newInstance(position);
         }
 
         @Override

@@ -57,7 +57,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
         // call the super class onCreate to complete the creation of activity like
         // the view hierarchy
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_details_temp);
+        setContentView(R.layout.activity_course_details);
 
 
         initButtons();
@@ -104,63 +104,59 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
 
     private void refreshCourse(final boolean force_update) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("API refreshCourse", "entry");
-                try {
-                    DBHelper helper = new DBHelper(getApplicationContext());
-                    API api = new API(getApplicationContext());
-                    if (force_update)
-                        api.setForceUpdate(true);
-                    modelCourse = api.course(helper.getLoginRecord().getToken(), course_id, course_code, course_class);
+        try {
+            DBHelper helper = new DBHelper(getApplicationContext());
+            API api = new API(getApplicationContext());
+            api.setForceUpdate(force_update);
+            modelCourse = api.course(helper.getLoginRecord().getToken(), course_id, course_code, course_class);
 
-                    if (modelCourse != null) {
-                        if (modelCourse.getCode() == 0) {// 获取成功
-                            runOnUiThread(new Runnable() { // 更新界面元素
-                                @Override
-                                public void run() {
-                                    text_view_course_faculty.setText("评分：" + modelCourse.getRank());
-                                    text_view_course_credit.setText("学分：" + modelCourse.getCredit());
-                                    modelTeacherArrayList.clear();
-                                    modelTeacherArrayList.addAll(modelCourse.getTeachers()); // 老师信息
-                                    Log.d(modelCourse.getName_zh(), modelCourse.getRank());
-                                    adapterTeacherList.notifyDataSetChanged();
-                                    //TODO:make sure that you're not calling
-                                    // notifyDataSetChanged(), setAdapter(Adapter), or swapAdapter(Adapter, boolean)
-                                    // for small updates. Those methods signal that the entire list content has changed,
-                                    // and will show up in Systrace as RV FullInvalidate. Instead, use SortedList or DiffUtil
-                                    // to generate minimal updates when content changes or is added.
-                                    for (ModelTeacher teacher : modelCourse.getTeachers()) {
-                                        Log.d("TEACHERS", teacher.getName_zh());
-                                    }
-                                    if (!force_update) {
-                                        //这里可能会有疑问为什么要判断 force_update
-                                        // 因为 force_update 在目前看来，只有创建这个 Activity 的时候会设置成 false
-                                        // 来加载本地数据，force_update 在 true 的时候就是下拉刷新的状态了，
-                                        // 下拉刷新后 SwipeRefreshLayout 的 Refreshing 应该由 refreshCourseComment
-                                        // 结束后停止。
-                                        // 我们要做的效果是，初次加载这个科目的时候，他不是得请求后端API吗，这个过程没有动画
-                                        // 的话，用户可能以为程序死掉了，我们给这个耗时的过程
-                                        // 加一个 Refreshing 的效果，
-                                        // 所以你看 refreshCourse(false); 前面有一句
-                                        // swipe_refresh_layout.setRefreshing(true);
-                                        // 我们刷新完了（force_update=false的情况）在这里停下就好了
-                                        swipe_refresh_layout.setRefreshing(false);
-                                        isRefreshing = false;
-                                    }
-                                }
-                            });
-                            //TODO: 可以给老师信息列表加个动画
-                        } else {
-                            //获取失败，请看错误代码
+            if (modelCourse != null) {
+                if (modelCourse.getCode() == 0) {// 获取成功
+                    runOnUiThread(new Runnable() { // 更新界面元素
+                        @Override
+                        public void run() {
+                            text_view_course_faculty.setText("评分：" + modelCourse.getRank());
+                            text_view_course_credit.setText("学分：" + modelCourse.getCredit());
+                            modelTeacherArrayList.clear();
+                            modelTeacherArrayList.addAll(modelCourse.getTeachers()); // 老师信息
+                            Log.d(modelCourse.getName_zh(), modelCourse.getRank());
+                            adapterTeacherList.notifyDataSetChanged();
+                            //TODO:make sure that you're not calling
+                            // notifyDataSetChanged(), setAdapter(Adapter), or swapAdapter(Adapter, boolean)
+                            // for small updates. Those methods signal that the entire list content has changed,
+                            // and will show up in Systrace as RV FullInvalidate. Instead, use SortedList or DiffUtil
+                            // to generate minimal updates when content changes or is added.
+                            for (ModelTeacher teacher : modelCourse.getTeachers()) {
+                                Log.d("TEACHERS", teacher.getName_zh());
+                            }
+
                         }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    });
+                    //TODO: 可以给老师信息列表加个动画
+                } else {
+                    //获取失败，请看错误代码
+                }
+
+                if (!force_update) {
+                    //这里可能会有疑问为什么要判断 force_update
+                    // 因为 force_update 在目前看来，只有创建这个 Activity 的时候会设置成 false
+                    // 来加载本地数据，force_update 在 true 的时候就是下拉刷新的状态了，
+                    // 下拉刷新后 SwipeRefreshLayout 的 Refreshing 应该由 refreshCourseComment
+                    // 结束后停止。
+                    // 我们要做的效果是，初次加载这个科目的时候，他不是得请求后端API吗，这个过程没有动画
+                    // 的话，用户可能以为程序死掉了，我们给这个耗时的过程
+                    // 加一个 Refreshing 的效果，
+                    // 所以你看 refreshCourse(false); 前面有一句
+                    // swipe_refresh_layout.setRefreshing(true);
+                    // 我们刷新完了（force_update=false的情况）在这里停下就好了
+                    swipe_refresh_layout.setRefreshing(false);
+                    isRefreshing = false;
                 }
             }
-        }).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void swipeRefreshLayoutOnRefresh() {
@@ -173,7 +169,6 @@ public class ActivityCourseDetails extends AppCompatActivity {
                 public void run() {
                     refreshCourse(true);
                     refreshCourseComment();
-
                     swipe_refresh_layout.setRefreshing(false);
                     isRefreshing = false;
                 }
@@ -237,7 +232,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
                 96,
                 0,
                 4.5,
-                "下拉即可刷新课程信息和课程评价哦~下拉即可刷新课程信息和课程评价哦~",
+                "下拉即可刷新课程信息和课程评价哦~",
                 "2019/8/8"
         );
         for (int i = 0; i < 1; i++) {
@@ -269,6 +264,11 @@ public class ActivityCourseDetails extends AppCompatActivity {
         });
 
         swipe_refresh_layout.setRefreshing(true);
-        refreshCourse(false);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                refreshCourse(false);
+            }
+        }).start();
     }
 }

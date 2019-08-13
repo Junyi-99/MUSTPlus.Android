@@ -17,6 +17,8 @@ public enum APIs {
     NEWS_DEPARTMENT_(402, "department/"),
     NEWS_BANNERS(403, "banners"),
     NEWS_ALL(404, "all"),
+    NEWS_ANNOUNCEMENTS(405, "announcements"),
+    NEWS_DOCUMENTS(406, "documents"),
     TEACHER(500, "teacher"),
     TIMETABLE(600, "timetable");
 

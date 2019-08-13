@@ -5,7 +5,7 @@ import com.example.myapplication.R;
 import java.util.ArrayList;
 
 public class ModelNews extends ModelResponse {
-    private String faculty_department;
+    private String fac_dep;
     private String title;
     private String date;
     private boolean type; // false: downContent, true: viewContent
@@ -18,8 +18,8 @@ public class ModelNews extends ModelResponse {
 
     }
 
-    public ModelNews(String faculty_department, String title, String date, boolean type, String url, int image) {
-        this.faculty_department = faculty_department;
+    public ModelNews(String fac_dep, String title, String date, boolean type, String url, int image) {
+        this.fac_dep = fac_dep;
         this.title = title;
         this.date = date;
         this.type = type;
@@ -27,12 +27,12 @@ public class ModelNews extends ModelResponse {
         this.image = image;
     }
 
-    public String getFaculty_department() {
-        return faculty_department;
+    public String getFac_dep() {
+        return fac_dep;
     }
 
-    public void setFaculty_department(String faculty_department) {
-        this.faculty_department = faculty_department;
+    public void setFac_dep(String fac_dep) {
+        this.fac_dep = fac_dep;
     }
 
     public String getTitle() {

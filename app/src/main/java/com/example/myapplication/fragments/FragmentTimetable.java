@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class FragmentTimetable extends Fragment {
-    private static final String TAG = "FragementTimeTable";
+public class FragmentTimetable extends LazyLoadFragment {
     private final ArrayList<Animator> animators = new ArrayList<Animator>();
     private String timetable_raw = "";
     private View root;
@@ -199,25 +197,20 @@ public class FragmentTimetable extends Fragment {
             }
         });
         updateTableHeaders(root);
+        onFirstVisible(); // 默认首先加载课表，如果没这句话就懒加载不了了
+        return root;
+    }
 
+
+    @Override
+    protected void onFirstVisible() {
+        super.onFirstVisible();
+        Log.e("FragmentTimetable", "onFirstVisible");
         LayoutInflater vi = LayoutInflater.from(getContext());
         RelativeLayout relativeLayout = (RelativeLayout) root.findViewById(R.id.relativeLayoutInnerContent);
         DBHelper db = new DBHelper(getContext());
         timetable_raw = db.getAPIRecord(APIs.TIMETABLE);
         calculateLayout(timetable_raw, this_container, vi, relativeLayout);
         animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
-        return root;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("FragmentTimetable", "onStart");
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.d("FragmentTimetable", "onDestroy");
-        super.onDestroy();
     }
 }
