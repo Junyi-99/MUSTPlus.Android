@@ -232,7 +232,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
                 96,
                 0,
                 4.5,
-                "下拉即可刷新课程信息和课程评价哦~",
+                "下拉即可刷新课程信息和评价",
                 "2019/8/8"
         );
         for (int i = 0; i < 1; i++) {

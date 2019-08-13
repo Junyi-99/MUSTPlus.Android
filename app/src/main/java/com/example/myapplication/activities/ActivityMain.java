@@ -60,21 +60,20 @@ public class ActivityMain extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkTimetableStatus();
+
         BottomNavigationView navView = findViewById(R.id.navigation);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         AdapterSectionsPager adapterSectionsPager = new AdapterSectionsPager(this, getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapterSectionsPager);
-
         viewPager.setOffscreenPageLimit(4); // 有效改善用户体验
-
         mTextMessage = findViewById(R.id.message);
-
-
-        checkTimetableStatus();
     }
 
     @Override

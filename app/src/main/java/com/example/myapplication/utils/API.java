@@ -70,18 +70,20 @@ public class API implements IAPI {
     public ModelCourse course(String token, Integer course_id, String course_code, String course_class) throws IOException {
         DBHelper db = new DBHelper(context);
         ModelCourse course = db.getCourseRecord(course_code, course_class);
+        Log.i("R_course", "Get Record");
+
         if (course == null || forceUpdate) {
+            Log.i("R_course", "Request New Data");
             String raw = base.course(token, course_id);
-            Log.d("API Course", "Request new data");
-            Log.d("API Course", raw);
+            Log.i("R_course", raw);
             course = JSON.parseObject(raw, ModelCourse.class);
             if (course.getCode() == 0) {
-                Log.d("API Course", "Saving data");
+                Log.i("R_course", "Saving Data");
                 db.setCourseRecord(course_code, course_class, raw);
             }
             return course;
         } else {
-            Log.d("API Course", "Found old data");
+            Log.i("R_course", "Found Old Data");
             return course;
         }
     }
@@ -95,8 +97,15 @@ public class API implements IAPI {
 
     @Nullable
     public ModelResponseCourseComment course_comment_get(String token, Integer course_id) throws IOException {
-        String raw = base.course_comment(token, course_id, APIOperation.GET);
-        return JSON.parseObject(raw, ModelResponseCourseComment.class);
+        Log.i("R_course_comment_get", "Get Record");
+        try {
+            Log.i("R_course_comment_get", "Request New Data");
+            String raw = base.course_comment(token, course_id, APIOperation.GET);
+            Log.i("R_course_comment_get", raw);
+            return JSON.parseObject(raw, ModelResponseCourseComment.class);
+        } catch (JSONException e) {
+            return null;
+        }
     }
 
     @Deprecated
@@ -122,9 +131,11 @@ public class API implements IAPI {
 
     @Nullable
     public ModelResponseNewsAll news_announcements_get(String token, Integer from, Integer count) throws IOException {
+        Log.i("R_news_announcement_get", "Get Record");
         try {
+            Log.i("R_news_announcement_get", "Request New Data");
             String raw = base.news_announcements(token, from, count);
-            Log.d("RAWRAW", raw);
+            Log.i("R_news_announcement_get", raw);
             return JSON.parseObject(raw, ModelResponseNewsAll.class);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -159,15 +170,20 @@ public class API implements IAPI {
         try {
             DBHelper db = new DBHelper(context);
             ModelResponseNewsAll record = db.getNewsRecord();
+            Log.i("R_news_all_get", "Get Record");
             if (record == null || forceUpdate) {
+                Log.i("R_news_all_get", "Request New Data");
                 String raw = base.news_all(token, from, count);
+                Log.i("R_news_all_get", raw);
                 ModelResponseNewsAll news = JSON.parseObject(raw, ModelResponseNewsAll.class);
+
                 if (news.getCode() == 0) {
-                    Log.d("API NewsAll", "Saving data");
+                    Log.i("R_news_all_get", "Saving data");
                     db.setAPIRecord(APIs.NEWS_ALL, raw);
                 }
                 return news;
             } else {
+                Log.i("R_news_all_get", "Found Old Data");
                 return record;
             }
         } catch (JSONException e) {
@@ -201,6 +217,7 @@ public class API implements IAPI {
     public String timetable(String token, Integer intake, Integer week) throws IOException {
         DBHelper db = new DBHelper(context);
         String record = db.getAPIRecord(APIs.TIMETABLE);
+        Log.i("R_timetable", record);
         if (record.isEmpty() || forceUpdate) {
             return base.timetable(token, intake, week);
         } else {

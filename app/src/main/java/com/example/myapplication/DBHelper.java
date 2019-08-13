@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.example.myapplication.models.ModelCourse;
 import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.models.ModelResponseNewsAll;
@@ -57,15 +58,21 @@ public class DBHelper extends SQLiteOpenHelper {
     // 失败返回 null
     @Nullable
     public ModelResponseLogin getLoginRecord() {
-        ModelResponseLogin model = JSON.parseObject(getAPIRecord(APIs.AUTH_LOGIN), ModelResponseLogin.class);
-        return model;
+        try {
+            return JSON.parseObject(getAPIRecord(APIs.AUTH_LOGIN), ModelResponseLogin.class);
+        } catch (JSONException e) {
+            return null;
+        }
     }
 
     // 获取 NewsAll 的数据记录
     @Nullable
     public ModelResponseNewsAll getNewsRecord() {
-        ModelResponseNewsAll news = JSON.parseObject(getAPIRecordTimeLimit(APIs.NEWS_ALL, 1), ModelResponseNewsAll.class);
-        return news;
+        try {
+            return JSON.parseObject(getAPIRecordTimeLimit(APIs.NEWS_ALL, 1), ModelResponseNewsAll.class);
+        } catch (JSONException e) {
+            return null;
+        }
     }
 
     // 从数据库中获取API记录，并且限制時間，超時的數據返回空字符串
@@ -125,30 +132,33 @@ public class DBHelper extends SQLiteOpenHelper {
     // 读取 course 记录
     @Nullable
     public ModelCourse getCourseRecord(final String course_code, final String course_class) {
-        ModelCourse course;
-        String result, time;
-        String querySQL
-                = "SELECT value, time" +
-                " FROM " + TABLE_NAME_API_COURSE +
-                " WHERE course_code='" + course_code + "'" +
-                " AND course_class='" + course_class + "'";
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery(querySQL, null);
+        try {
+            String result, time;
+            String querySQL
+                    = "SELECT value, time" +
+                    " FROM " + TABLE_NAME_API_COURSE +
+                    " WHERE course_code='" + course_code + "'" +
+                    " AND course_class='" + course_class + "'";
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery(querySQL, null);
 
-        // TODO: 这一部分的逻辑还要改改，有点乱说实话
-        // 这里的 getCount 只能是1，因为插入时会把之前的删掉，在setCourseRecord方法里可以保证数据唯一
-        if (cursor.moveToFirst()) {
-            result = cursor.getString(0);
-            time = cursor.getString(1);
-            cursor.close();
-            db.close();
-            if (Tools.getUTCTimestamp() - Integer.valueOf(time) > 60 * 60 * 24 * COURSE_EXPIRES_DAY) {
+            // TODO: 这一部分的逻辑还要改改，有点乱说实话
+            // 这里的 getCount 只能是1，因为插入时会把之前的删掉，在setCourseRecord方法里可以保证数据唯一
+            if (cursor.moveToFirst()) {
+                result = cursor.getString(0);
+                time = cursor.getString(1);
+                cursor.close();
+                db.close();
+                if (Tools.getUTCTimestamp() - Integer.valueOf(time) > 60 * 60 * 24 * COURSE_EXPIRES_DAY) {
+                    return null;
+                }
+                return JSON.parseObject(result, ModelCourse.class);
+            } else {
+                cursor.close();
+                db.close();
                 return null;
             }
-            return JSON.parseObject(result, ModelCourse.class);
-        } else {
-            cursor.close();
-            db.close();
+        } catch (JSONException e) {
             return null;
         }
     }

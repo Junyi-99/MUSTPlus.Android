@@ -15,19 +15,18 @@ import android.view.ViewGroup;
 import com.example.myapplication.R;
 
 public class FragmentNews extends LazyLoadFragment {
+    boolean visible = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e("FragmentNews", "onCreateView");
         View fragment_news = inflater.inflate(R.layout.fragment_news, container, false);
 
         ViewPager view_pager = (ViewPager) fragment_news.findViewById(R.id.view_pager);
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getFragmentManager());
         view_pager.setAdapter(adapter);
         view_pager.setOffscreenPageLimit(4);
-
         TabLayout tabLayout = (TabLayout) fragment_news.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(view_pager);
 
@@ -37,6 +36,7 @@ public class FragmentNews extends LazyLoadFragment {
     @Override
     protected void onFirstVisible() {
         super.onFirstVisible();
+        visible = true;
         Log.e("FragmentNews", "onFirstVisible");
     }
 
@@ -61,6 +61,7 @@ public class FragmentNews extends LazyLoadFragment {
             // 这里的position跟FragmentNewsUniversal的position是对应的
             return FragmentNewsUniversal.newInstance(position);
         }
+
 
         @Override
         public int getCount() {

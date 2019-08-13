@@ -3,9 +3,11 @@ package com.example.myapplication.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -174,6 +176,26 @@ public class FragmentTimetable extends LazyLoadFragment {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.e("FragmentTimetable", "onHiddenChanged");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.e("FragmentTimetable", "onAttach");
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.e("FragmentTimetable", "onCreate");
+
+    }
+
+    @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, final ViewGroup container,
             Bundle savedInstanceState) {
@@ -201,10 +223,17 @@ public class FragmentTimetable extends LazyLoadFragment {
         return root;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.e("FragmentTimetable", "onViewCreated");
+
+    }
 
     @Override
-    protected void onFirstVisible() {
-        super.onFirstVisible();
+    public void onResume() {
+        super.onResume();
+        Log.e("FragmentTimetable", "onResume");
         Log.e("FragmentTimetable", "onFirstVisible");
         LayoutInflater vi = LayoutInflater.from(getContext());
         RelativeLayout relativeLayout = (RelativeLayout) root.findViewById(R.id.relativeLayoutInnerContent);
@@ -212,5 +241,47 @@ public class FragmentTimetable extends LazyLoadFragment {
         timetable_raw = db.getAPIRecord(APIs.TIMETABLE);
         calculateLayout(timetable_raw, this_container, vi, relativeLayout);
         animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("FragmentTimetable", "onPause");
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("FragmentTimetable", "onStop");
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e("FragmentTimetable", "onDestroyView");
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("FragmentTimetable", "onDestroy");
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.e("FragmentTimetable", "onDetach");
+
+    }
+
+
+    @Override
+    protected void onFirstVisible() {
+        super.onFirstVisible();
+
     }
 }

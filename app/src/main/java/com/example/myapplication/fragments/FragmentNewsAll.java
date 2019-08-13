@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -115,6 +116,19 @@ public class FragmentNewsAll extends LazyLoadFragment {
 
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.e("NewsAll", "onAttach");
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.e("NewsAll", "onCreate");
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         this_view = inflater.inflate(R.layout.fragment_news_all, container, false);
@@ -129,6 +143,26 @@ public class FragmentNewsAll extends LazyLoadFragment {
         initComponent();
         Log.d("Fragment ModelNews All", "onCreateView");
         return this_view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("NewsAll", "onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("NewsAll", "onResume");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("NewsAll", "onPause");
+
     }
 
     private void initComponent() {
@@ -205,7 +239,7 @@ public class FragmentNewsAll extends LazyLoadFragment {
             }
         });
 
-        onFirstVisible(); // 懒加载对于 create 的默认 fragment 不会执行 onFirstVisible
+
         // 因为没有切换 fragment，adapter 不会调用 setUserVisibleHint
         startAutoSlider(adapterImageSlider.getCount());
     }
@@ -272,6 +306,8 @@ public class FragmentNewsAll extends LazyLoadFragment {
     @Override
     protected void onVisibilityChange(boolean isVisible) {
         super.onVisibilityChange(isVisible);
+        Log.e("NewsAll", "onVisiblityChange " + isVisible);
+
     }
 
     private static class AdapterImageSlider extends PagerAdapter {

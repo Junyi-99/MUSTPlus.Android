@@ -55,8 +55,7 @@
                     style="@style/LoginEditText.Username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="学生号 XXXXXXXX-XXXX-XXXX"
-                    android:text="1809853D-B211-0078" />
+                    android:hint="学生号 XXXXXXXX-XXXX-XXXX" />
 
                 <View
                     android:layout_width="0dp"
