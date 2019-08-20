@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--<item-->
         <!--android:id="@+id/action_compose"-->
         <!--android:icon="@drawable/ic_icon_up"-->
         <!--app:showAsAction="always" />-->
+
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="Settings"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_settings2"
+        android:id="@+id/action_refresh"
         android:orderInCategory="100"
         android:title="Refresh"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_settings3"
+        android:id="@+id/action_export"
         android:orderInCategory="100"
         android:title="Export to Calendar"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_settings4"
+        android:id="@+id/action_logout"
         android:orderInCategory="100"
-        android:title="Signout"
+        android:title="Logout"
         app:showAsAction="never" />
 </menu>

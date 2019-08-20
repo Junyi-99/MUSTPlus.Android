@@ -66,7 +66,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
     private void initButtons() {
         // 返回按钮
-        ((ImageButton) findViewById(R.id.image_button_back)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.image_button_more)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityCourseDetails.super.onBackPressed();

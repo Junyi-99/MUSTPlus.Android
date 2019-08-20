@@ -10,10 +10,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,7 +41,7 @@ public class FragmentTimetable extends LazyLoadFragment {
     private View root;
     private ViewGroup this_container;
     private ArrayList<TextView> timetable_cell_list = new ArrayList<TextView>();
-    private ImageButton image_button_back;
+    private ImageButton image_button_more;
     private boolean animated = false; // 是否已经播放过动画
 
 
@@ -197,7 +200,7 @@ public class FragmentTimetable extends LazyLoadFragment {
 
     @Override
     public View onCreateView(
-            @NonNull LayoutInflater inflater, final ViewGroup container,
+            @NonNull final LayoutInflater inflater, final ViewGroup container,
             Bundle savedInstanceState) {
 
         Log.d("FragmentTimetable", "onCreateView");
@@ -210,12 +213,31 @@ public class FragmentTimetable extends LazyLoadFragment {
                 startActivity(intent);
             }
         });
-        image_button_back = (ImageButton) root.findViewById(R.id.image_button_back);
-        image_button_back.setOnClickListener(new View.OnClickListener() {
+        image_button_more = (ImageButton) root.findViewById(R.id.image_button_more);
+        image_button_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper db = new DBHelper(getContext());
-                db.setLogout();
+                PopupMenu popupMenu = new PopupMenu(getContext(), v);
+                MenuInflater menuInflater = popupMenu.getMenuInflater();
+                menuInflater.inflate(R.menu.fragment_timetable, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_export:
+                                break;
+                            case R.id.action_logout:
+                                DBHelper db = new DBHelper(getContext());
+                                db.setLogout();
+                                break;
+                            case R.id.action_refresh:
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+
             }
         });
         updateTableHeaders(root);

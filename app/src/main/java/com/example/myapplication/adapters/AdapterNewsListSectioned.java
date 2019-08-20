@@ -3,6 +3,7 @@ package com.example.myapplication.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,9 @@ public class AdapterNewsListSectioned extends RecyclerView.Adapter<RecyclerView.
     private int lastPosition = -1;
 
     public AdapterNewsListSectioned(Context context, List<ModelNews> news) {
+        if (news == null) {
+            Log.e("AdapterError!", "news is null!");
+        }
         this.news = news;
         this.context = context;
     }
@@ -82,6 +86,14 @@ public class AdapterNewsListSectioned extends RecyclerView.Adapter<RecyclerView.
         if (position > lastPosition) {
             ItemAnimation.animate(view.itemView, on_attach ? position : -1, ItemAnimation.FADE_IN);
             lastPosition = position;
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+        if (position == news.size()) {
+
         }
     }
 

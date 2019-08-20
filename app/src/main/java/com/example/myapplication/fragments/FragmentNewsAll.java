@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -59,7 +61,8 @@ public class FragmentNewsAll extends LazyLoadFragment {
     private ViewPager view_pager;
     private LinearLayout layout_dots;
     private AdapterImageSlider adapterImageSlider;
-    private RecyclerView recyclerView;
+    private RecyclerView recycler_view;
+    private NestedScrollView nested_scroll_view;
     private AdapterNewsListSectioned mAdapter;
     private SwipeRefreshLayout swipe_refresh_layout;
     private Runnable runnable = null;
@@ -140,6 +143,7 @@ public class FragmentNewsAll extends LazyLoadFragment {
                 swipeRefreshLayoutOnRefresh();
             }
         });
+
         initComponent();
         Log.d("Fragment ModelNews All", "onCreateView");
         return this_view;
@@ -166,22 +170,15 @@ public class FragmentNewsAll extends LazyLoadFragment {
     }
 
     private void initComponent() {
+
         /*
          * ModelNews List
          * */
-        recyclerView = (RecyclerView) this_view.findViewById(R.id.recyclerViewNewsList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this_view.getContext()));
-        recyclerView.setHasFixedSize(true);
-        modelNewsItems = new ArrayList<ModelNews>();
 
-        drw_arr = this_view.getContext().getResources().obtainTypedArray(R.array.people_images);
+        modelNewsItems = new ArrayList<ModelNews>();
         modelNewsItems.add(new ModelNews("MUST+提示", "这里是你所在学院的新闻，下拉即可刷新新闻列表", "2019-06-21", true, "", R.drawable.image_junyi));
 
-        //set data and list adapter
         mAdapter = new AdapterNewsListSectioned(this_view.getContext(), modelNewsItems);
-        recyclerView.setAdapter(mAdapter);
-
-        // on item list clicked
         mAdapter.setOnItemClickListener(new AdapterNewsListSectioned.OnItemClickListener() {
             @Override
             public void onItemClick(View view, ModelNews obj, int position) {
@@ -189,10 +186,49 @@ public class FragmentNewsAll extends LazyLoadFragment {
             }
         });
 
-        /*
-         * Set Slider ModelNewsImage
-         *
-         * */
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this_view.getContext());
+        layoutManager.setSmoothScrollbarEnabled(true);
+        recycler_view = (RecyclerView) this_view.findViewById(R.id.recyclerViewNewsList);
+        recycler_view.setLayoutManager(layoutManager);
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setNestedScrollingEnabled(false);
+        recycler_view.setAdapter(mAdapter);
+        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                NestedScrollView scroller = (NestedScrollView) this_view.findViewById(R.id.nested_scroll_view);
+
+                if (scroller != null) {
+
+                    scroller.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                        @Override
+                        public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                            if (scrollY > oldScrollY) {
+                                Log.i("recyclerView", "Scroll DOWN");
+                            }
+                            if (scrollY < oldScrollY) {
+                                Log.i("recyclerView", "Scroll UP");
+                            }
+
+                            if (scrollY == 0) {
+                                Log.i("recyclerView", "TOP SCROLL");
+                            }
+
+                            if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                                Log.i("recyclerView", "BOTTOM SCROLL");
+                                Snackbar.make(this_view, "触底，这里是加载更多刷新操作", Snackbar.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+                }
+
+            }
+        });
+
+
         slider_image_title = ((TextView) this_view.findViewById(R.id.title)); // findView之后放到变量里，防止下次再find一次，优化性能
         slider_image_brief = ((TextView) this_view.findViewById(R.id.brief));
         layout_dots = (LinearLayout) this_view.findViewById(R.id.layout_dots);
@@ -242,6 +278,8 @@ public class FragmentNewsAll extends LazyLoadFragment {
 
         // 因为没有切换 fragment，adapter 不会调用 setUserVisibleHint
         startAutoSlider(adapterImageSlider.getCount());
+
+
     }
 
     // 给 Slider ModelNewsImage 添加下面的导航圆点
