@@ -19,7 +19,7 @@
         android:textColor="#DE000000"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/comment_user"
-        app:layout_constraintEnd_toStartOf="@id/image_view_star1"
+        app:layout_constraintEnd_toStartOf="@id/rating_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +46,21 @@
         app:layout_constraintStart_toEndOf="@id/comment_user"
         app:layout_constraintTop_toBottomOf="@id/comment_content" />
 
-    <ImageView
+    <RatingBar
+
+        android:id="@+id/rating_bar"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:isIndicator="true"
+        android:max="5"
+        android:numStars="5"
+        android:rating="2.5"
+        android:stepSize="0.5"
+        app:layout_constraintEnd_toEndOf="@+id/comment_thumbs_down"
+        app:layout_constraintTop_toTopOf="@+id/comment_publish_time" />
+    <!--<ImageView
         android:id="@+id/image_view_star5"
         android:layout_width="16dp"
         android:layout_height="16dp"
@@ -97,7 +111,7 @@
         app:layout_constraintEnd_toStartOf="@id/image_view_star2"
         app:layout_constraintTop_toTopOf="@id/comment_publish_time"
         app:srcCompat="@drawable/ic_star_full" />
-
+-->
 
     <TextView
         android:id="@+id/comment_thumbs_down"

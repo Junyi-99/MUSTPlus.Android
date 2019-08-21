@@ -71,11 +71,6 @@ public class AdapterFtpList extends RecyclerView.Adapter<RecyclerView.ViewHolder
             thumbs_down = (ImageButton) v.findViewById(R.id.thumbs_down);
             relative_parent = (View) v.findViewById(R.id.relative_parent);
 
-            image_view_star1 = (ImageView) v.findViewById(R.id.image_view_star1);
-            image_view_star2 = (ImageView) v.findViewById(R.id.image_view_star2);
-            image_view_star3 = (ImageView) v.findViewById(R.id.image_view_star3);
-            image_view_star4 = (ImageView) v.findViewById(R.id.image_view_star4);
-            image_view_star5 = (ImageView) v.findViewById(R.id.image_view_star5);
         }
     }
 

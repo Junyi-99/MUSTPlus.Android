@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
@@ -53,51 +53,7 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
             v.comment_user.setText(m.getStudent_id());
             v.comment_publish_time.setText(m.getPublish_time());
             v.comment_thumbs_up.setText(String.valueOf(m.getThumbs_up()));
-
-
-            // 评分范围 [0, 5] ，步进 0.5
-            // 4-5 星
-            if (5.0 - m.getRank() < 0.1) {
-                v.image_view_star5.setImageResource(R.drawable.ic_star_full);
-            } else if (5.0 - m.getRank() < 0.6) {
-                v.image_view_star5.setImageResource(R.drawable.ic_star_half_filled);
-            } else {
-                v.image_view_star5.setImageResource(R.drawable.ic_star_unfilled);
-            }
-            // 3-4 星
-            if (5.0 - m.getRank() < 1.1) {
-                v.image_view_star4.setImageResource(R.drawable.ic_star_full);
-            } else if (5.0 - m.getRank() < 1.6) {
-                v.image_view_star4.setImageResource(R.drawable.ic_star_half_filled);
-            } else {
-                v.image_view_star4.setImageResource(R.drawable.ic_star_unfilled);
-            }
-            // 2-3 星
-            if (5.0 - m.getRank() < 2.1) {
-                v.image_view_star3.setImageResource(R.drawable.ic_star_full);
-            } else if (5.0 - m.getRank() < 2.6) {
-                v.image_view_star3.setImageResource(R.drawable.ic_star_half_filled);
-            } else {
-                v.image_view_star3.setImageResource(R.drawable.ic_star_unfilled);
-            }
-            // 1-2 星
-            if (5.0 - m.getRank() < 3.1) {
-                v.image_view_star2.setImageResource(R.drawable.ic_star_full);
-            } else if (5.0 - m.getRank() < 3.6) {
-                v.image_view_star2.setImageResource(R.drawable.ic_star_half_filled);
-            } else {
-                v.image_view_star2.setImageResource(R.drawable.ic_star_unfilled);
-            }
-            // 0-1 星
-            if (5.0 - m.getRank() < 4.1) {
-                v.image_view_star1.setImageResource(R.drawable.ic_star_full);
-            } else if (5.0 - m.getRank() < 4.6) {
-                v.image_view_star1.setImageResource(R.drawable.ic_star_half_filled);
-            } else {
-                v.image_view_star1.setImageResource(R.drawable.ic_star_unfilled);
-            }
-            // 处理小星星完毕
-
+            v.rating_bar.setRating(m.getRank().floatValue());
             v.thumbs_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -163,11 +119,7 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
         ImageButton thumbs_down;
         View relative_parent;
 
-        ImageView image_view_star1;
-        ImageView image_view_star2;
-        ImageView image_view_star3;
-        ImageView image_view_star4;
-        ImageView image_view_star5;
+        RatingBar rating_bar;
 
 
         public OriginalViewHolder(View v) {
@@ -180,12 +132,7 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
             thumbs_up = (ImageButton) v.findViewById(R.id.thumbs_up);
             thumbs_down = (ImageButton) v.findViewById(R.id.thumbs_down);
             relative_parent = (View) v.findViewById(R.id.relative_parent);
-
-            image_view_star1 = (ImageView) v.findViewById(R.id.image_view_star1);
-            image_view_star2 = (ImageView) v.findViewById(R.id.image_view_star2);
-            image_view_star3 = (ImageView) v.findViewById(R.id.image_view_star3);
-            image_view_star4 = (ImageView) v.findViewById(R.id.image_view_star4);
-            image_view_star5 = (ImageView) v.findViewById(R.id.image_view_star5);
+            rating_bar = (RatingBar) v.findViewById(R.id.rating_bar);
         }
     }
 }
