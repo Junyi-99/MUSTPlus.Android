@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -67,7 +66,8 @@
         style="@style/Widget.AppCompat.RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:indeterminate="false"
         android:isIndicator="false"
         android:max="5"
@@ -76,49 +76,55 @@
         android:scaleX="0.8"
         android:scaleY="0.8"
         android:stepSize="0.5"
+        fab:layout_constraintEnd_toEndOf="parent"
         fab:layout_constraintStart_toStartOf="parent"
-        fab:layout_constraintTop_toBottomOf="@+id/textView2" />
+        fab:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-
-        android:textColor="#000000"
-        android:textSize="34sp"
-        android:textStyle="bold"
+        android:layout_marginEnd="8dp"
+        android:text="你觉得这节课如何"
+        android:textSize="36sp"
+        fab:layout_constraintEnd_toEndOf="parent"
         fab:layout_constraintStart_toStartOf="parent"
-        fab:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:text="你觉得这节课如何？" />
-
-    <SeekBar
-        android:id="@+id/seek_bar_t"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:max="100"
-        android:progress="7"
-        fab:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="36dp" />
-
-    <SeekBar
-        android:id="@+id/seek_bar_f"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:max="100"
-        android:progress="30"
-        fab:layout_constraintBottom_toTopOf="@+id/seek_bar_t"
-        tools:layout_editor_absoluteX="36dp" />
+        fab:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
-        android:id="@+id/textView_indicator"
+        android:id="@+id/text_view_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="TextView"
-        fab:layout_constraintBottom_toTopOf="@+id/seek_bar_f"
-        fab:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="中规中矩"
+        android:textSize="24sp"
+        fab:layout_constraintEnd_toEndOf="parent"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toBottomOf="@+id/rating_bar" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/shape_rounded_edittext_24dp"
+        android:gravity="top"
+        android:hint="在这里输入你要评论的内容"
+        android:inputType="textMultiLine"
+        android:padding="24dp"
+        fab:layout_constraintBottom_toBottomOf="parent"
+        fab:layout_constraintEnd_toEndOf="parent"
+        fab:layout_constraintHorizontal_bias="0.0"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toBottomOf="@+id/text_view_rate"
+        fab:layout_constraintVertical_bias="1.0" />
 
 
 </android.support.constraint.ConstraintLayout>

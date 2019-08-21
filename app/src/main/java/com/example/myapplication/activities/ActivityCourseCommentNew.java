@@ -3,10 +3,8 @@ package com.example.myapplication.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -18,14 +16,25 @@ import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 
 public class ActivityCourseCommentNew extends AppCompatActivity {
+    TextView text_view_rate;
     SeekBar seek_bar_t;
     SeekBar seek_bar_f;
     RatingBar rating_bar;
-    ImageView image_view_star_1;
-    ImageView image_view_star_2;
-    ImageView image_view_star_3;
-    ImageView image_view_star_4;
-    ImageView image_view_star_5;
+
+    // 对应的描述文本
+    private String[] rating_description = {
+            "害群之马",
+            "一败涂地",
+            "惨不忍睹",
+            "胸无点墨",
+            "差强人意",
+            "中规中矩",
+            "一般般",
+            "还不错",
+            "有意思",
+            "太好了",
+            "好极了",
+    };
 
 
     @Override
@@ -52,71 +61,33 @@ public class ActivityCourseCommentNew extends AppCompatActivity {
         ((ImageButton) findViewById(R.id.image_button_check)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+            }
+        });
+    }
+
+    private void initComponent() {
+        text_view_rate = (TextView) findViewById(R.id.text_view_rate);
+        rating_bar = (RatingBar) findViewById(R.id.rating_bar);
+        rating_bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                text_view_rate.setText(rating_description[(int) (rating * 2)]);
                 SpringSystem springSystem = SpringSystem.create();
                 Spring spring = springSystem.createSpring();
-                spring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(seek_bar_t.getProgress(), seek_bar_f.getProgress()));
-
+                spring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(50, 3));
+                spring.setCurrentValue(1f);
                 spring.addListener(new SimpleSpringListener() {
                     @Override
                     public void onSpringUpdate(Spring spring) {
                         float value = (float) spring.getCurrentValue();
                         float scale = 1f - (value * 0.5f);
                         //rating_bar.setTranslationY(value * 40);
-                        rating_bar.setScaleY(scale);
-                        rating_bar.setScaleX(scale);
+                        text_view_rate.setScaleY(scale);
+                        text_view_rate.setScaleX(scale);
                     }
                 });
-                spring.setEndValue(1f);
-            }
-        });
-    }
-
-    private void initComponent() {
-        final TextView textView = (TextView) findViewById(R.id.textView_indicator);
-        seek_bar_t = (SeekBar) findViewById(R.id.seek_bar_t);
-        seek_bar_t.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textView.setText("T:" + seek_bar_t.getProgress() + " F:" + seek_bar_f.getProgress());
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                textView.setText("T:" + seek_bar_t.getProgress() + " F:" + seek_bar_f.getProgress());
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                textView.setText("T:" + seek_bar_t.getProgress() + " F:" + seek_bar_f.getProgress());
-
-            }
-        });
-        seek_bar_f = (SeekBar) findViewById(R.id.seek_bar_f);
-        seek_bar_f.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textView.setText("T:" + seek_bar_t.getProgress() + " F:" + seek_bar_f.getProgress());
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                textView.setText("T:" + seek_bar_t.getProgress() + " F:" + seek_bar_f.getProgress());
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                textView.setText("T:" + seek_bar_t.getProgress() + " F:" + seek_bar_f.getProgress());
-
-            }
-        });
-        rating_bar = (RatingBar) findViewById(R.id.rating_bar);
-        rating_bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                Log.e("------------", "当前的评价等级：" + rating);
-
+                spring.setEndValue(0f);
             }
         });
 
