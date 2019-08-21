@@ -38,4 +38,5 @@ dependencies {
     // Floating Action Button for Android based on Material Design specification
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'com.squareup.okhttp3:okhttp:4.0.1'
+    implementation 'com.facebook.rebound:rebound:0.3.8'
 }

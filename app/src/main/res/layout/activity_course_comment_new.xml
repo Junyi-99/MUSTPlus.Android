@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relative_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/toolbar"
+        style="@style/MyToolbar"
+        android:layout_width="match_parent"
+
+        android:layout_height="@dimen/action_bar_size"
+        android:background="@drawable/gradient"
+        android:minHeight="@dimen/action_bar_size"
+        android:padding="16dp"
+        fab:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif-medium"
+            android:singleLine="true"
+            android:text="撰写新评论"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp"
+            fab:layout_constraintBottom_toBottomOf="parent"
+            fab:layout_constraintEnd_toEndOf="parent"
+            fab:layout_constraintStart_toStartOf="parent"
+            fab:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/image_button_more"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/imageButtonMore"
+            android:tint="@color/colorWhite"
+            fab:layout_constraintBottom_toBottomOf="parent"
+            fab:layout_constraintStart_toStartOf="parent"
+            fab:layout_constraintTop_toTopOf="parent"
+            fab:srcCompat="@drawable/ic_backarrow" />
+
+
+        <ImageButton
+            android:id="@+id/image_button_check"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/imageButtonMore"
+            android:tint="@color/colorWhite"
+            fab:layout_constraintBottom_toBottomOf="parent"
+            fab:layout_constraintEnd_toEndOf="parent"
+            fab:layout_constraintTop_toTopOf="parent"
+            fab:srcCompat="@drawable/ic_check_black_24dp" />
+    </android.support.constraint.ConstraintLayout>
+
+    <RatingBar
+
+        android:id="@+id/rating_bar"
+        style="@style/Widget.AppCompat.RatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:indeterminate="false"
+        android:isIndicator="false"
+        android:max="5"
+        android:numStars="5"
+        android:rating="2.5"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:stepSize="0.5"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_16dp"
+        android:layout_marginTop="16dp"
+
+        android:textColor="#000000"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        fab:layout_constraintStart_toStartOf="parent"
+        fab:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:text="你觉得这节课如何？" />
+
+    <SeekBar
+        android:id="@+id/seek_bar_t"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:max="100"
+        android:progress="7"
+        fab:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="36dp" />
+
+    <SeekBar
+        android:id="@+id/seek_bar_f"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:max="100"
+        android:progress="30"
+        fab:layout_constraintBottom_toTopOf="@+id/seek_bar_t"
+        tools:layout_editor_absoluteX="36dp" />
+
+    <TextView
+        android:id="@+id/textView_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        fab:layout_constraintBottom_toTopOf="@+id/seek_bar_f"
+        fab:layout_constraintStart_toStartOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

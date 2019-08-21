@@ -51,16 +51,6 @@ import static android.Manifest.permission.INTERNET;
 //import com.google.android.gms.maps.GoogleMap;
 
 public class Tools {
-    public static String intakeCalculate() {
-        Calendar cal = Calendar.getInstance(); // UTC Timestamp
-        String year = String.valueOf(cal.get(Calendar.YEAR) % 2000);
-        return year + (cal.get(Calendar.MONTH) > 6 ? "09" : "02");
-    }
-
-    public static String intakeWeekCalculate() {
-        return null;
-    }
-
     public static boolean isNetworkConnected(Context ctx) {
         int permission = ctx.checkCallingOrSelfPermission(INTERNET);
         return permission == PackageManager.PERMISSION_GRANTED;

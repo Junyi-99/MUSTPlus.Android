@@ -281,4 +281,32 @@ public class APIBase implements IAPI {
         else
             return body.string();
     }
+
+    @Override
+    public String semester() throws IOException {
+        String url = APIs.BASE_URL.v() + APIs.BASIC_SEMESTER.v();
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl.Builder httpUrl = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+        Request request = new Request.Builder().url(httpUrl.build()).build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+        if (body == null)
+            throw new IOException("NULL ERROR");
+        else
+            return body.string();
+    }
+
+    @Override
+    public String week() throws IOException {
+        String url = APIs.BASE_URL.v() + APIs.BASIC_WEEK.v();
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl.Builder httpUrl = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+        Request request = new Request.Builder().url(httpUrl.build()).build();
+        Response response = client.newCall(request).execute();
+        ResponseBody body = response.body();
+        if (body == null)
+            throw new IOException("NULL ERROR");
+        else
+            return body.string();
+    }
 }

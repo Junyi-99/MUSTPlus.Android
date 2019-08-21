@@ -40,4 +40,8 @@ public interface IAPI {
     String teacher(String token, String name_zh);
 
     String timetable(String token, Integer intake, Integer week) throws IOException;
+
+    String semester() throws IOException;
+
+    String week() throws IOException;
 }

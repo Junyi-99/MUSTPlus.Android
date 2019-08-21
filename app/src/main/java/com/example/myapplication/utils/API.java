@@ -11,6 +11,8 @@ import com.example.myapplication.interfaces.IAPI;
 import com.example.myapplication.models.ModelCourse;
 import com.example.myapplication.models.ModelResponseCourseComment;
 import com.example.myapplication.models.ModelResponseNewsAll;
+import com.example.myapplication.models.ModelResponseSemester;
+import com.example.myapplication.models.ModelResponseWeek;
 
 import java.io.IOException;
 import java.util.TreeMap;
@@ -223,5 +225,57 @@ public class API implements IAPI {
         } else {
             return record;
         }
+    }
+
+    @Override
+    public String semester() throws IOException {
+        DBHelper db = new DBHelper(context);
+        String record = db.getAPIRecord(APIs.BASIC_SEMESTER);
+        Log.i("R_semester", record);
+        if (record.isEmpty() || forceUpdate) {
+            record = base.semester();
+            db.setAPIRecord(APIs.BASIC_SEMESTER, record);
+            return record;
+        } else {
+            return record;
+        }
+    }
+
+    public ModelResponseSemester semester_get() throws IOException {
+        DBHelper db = new DBHelper(context);
+        String record = db.getAPIRecordTimeLimit(APIs.BASIC_SEMESTER, 10);
+        ModelResponseSemester semester;
+        Log.i("R_semester", record);
+        if (record.isEmpty() || forceUpdate) {
+            record = base.semester();
+            semester = JSON.parseObject(record, ModelResponseSemester.class);
+            if (semester.getCode() == 0)
+                db.setAPIRecord(APIs.BASIC_SEMESTER, record);
+            return semester;
+        } else {
+            return JSON.parseObject(record, ModelResponseSemester.class);
+        }
+    }
+
+    public ModelResponseWeek week_get() throws IOException {
+        DBHelper db = new DBHelper(context);
+        String record = db.getAPIRecordTimeLimit(APIs.BASIC_WEEK, 1);
+        ModelResponseWeek week;
+        Log.i("R_week", record);
+        if (record.isEmpty() || forceUpdate) {
+            record = base.week();
+            week = JSON.parseObject(record, ModelResponseWeek.class);
+            if (week.getCode() == 0)
+                db.setAPIRecord(APIs.BASIC_WEEK, record);
+            return week;
+        } else {
+            return JSON.parseObject(record, ModelResponseWeek.class);
+        }
+    }
+
+    @Deprecated
+    @Override
+    public String week() throws IOException {
+        return null;
     }
 }

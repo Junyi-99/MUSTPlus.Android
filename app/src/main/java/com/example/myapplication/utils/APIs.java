@@ -20,8 +20,9 @@ public enum APIs {
     NEWS_ANNOUNCEMENTS(405, "announcements"),
     NEWS_DOCUMENTS(406, "documents"),
     TEACHER(500, "teacher"),
-    TIMETABLE(600, "timetable");
-
+    TIMETABLE(600, "timetable"),
+    BASIC_SEMESTER(700, "basic/semester"),
+    BASIC_WEEK(701, "basic/week");
     private int index;
     private String value;
 

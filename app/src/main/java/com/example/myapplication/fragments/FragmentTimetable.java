@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -25,10 +26,14 @@ import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.activities.ActivityCourseDetails;
 import com.example.myapplication.activities.ActivityLogin;
+import com.example.myapplication.models.ModelResponseSemester;
+import com.example.myapplication.models.ModelResponseWeek;
 import com.example.myapplication.models.ModelTimetable;
 import com.example.myapplication.models.ModelTimetableCell;
+import com.example.myapplication.utils.API;
 import com.example.myapplication.utils.APIs;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +42,8 @@ import java.util.Calendar;
 
 public class FragmentTimetable extends LazyLoadFragment {
     private final ArrayList<Animator> animators = new ArrayList<Animator>();
+    private ModelResponseWeek week;
+    private ModelResponseSemester semester;
     private String timetable_raw = "";
     private View root;
     private ViewGroup this_container;
@@ -176,6 +183,33 @@ public class FragmentTimetable extends LazyLoadFragment {
                 text_view_saturday.setBackgroundResource(R.color.grey_20);
                 break;
         }
+
+        final TextView toolbar_title = (TextView) view.findViewById(R.id.toolbar_title);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    API api = new API(getContext());
+                    semester = api.semester_get();
+                    week = api.week_get();
+                    FragmentActivity activity = getActivity();
+                    if (activity != null && semester != null && week != null) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                toolbar_title.setText(
+                                        "学期 " + semester.getSemester() +
+                                                " 第 " + week.getWeek() +
+                                                " 周");
+                            }
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
     }
 
     @Override
@@ -261,6 +295,8 @@ public class FragmentTimetable extends LazyLoadFragment {
         RelativeLayout relativeLayout = (RelativeLayout) root.findViewById(R.id.relativeLayoutInnerContent);
         DBHelper db = new DBHelper(getContext());
         timetable_raw = db.getAPIRecord(APIs.TIMETABLE);
+
+
         calculateLayout(timetable_raw, this_container, vi, relativeLayout);
         animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
     }

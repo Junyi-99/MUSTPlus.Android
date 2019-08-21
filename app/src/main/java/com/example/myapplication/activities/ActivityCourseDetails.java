@@ -23,6 +23,7 @@ import com.example.myapplication.models.ModelResponseCourseComment;
 import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.models.ModelTeacher;
 import com.example.myapplication.utils.API;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,6 +71,13 @@ public class ActivityCourseDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ActivityCourseDetails.super.onBackPressed();
+            }
+        });
+        ((FloatingActionButton) findViewById(R.id.floating_action_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityCourseDetails.this, ActivityCourseCommentNew.class);
+                startActivity(intent);
             }
         });
     }
