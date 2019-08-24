@@ -50,7 +50,14 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
             OriginalViewHolder v = (OriginalViewHolder) holder;
 
             v.comment_content.setText(m.getContent());
-            v.comment_user.setText(m.getStudent_id());
+
+            // 有昵称显示昵称，没有昵称显示姓名
+            if (m.getNickname() == null || m.getNickname().isEmpty()) {
+                v.comment_user.setText(m.getName_zh());
+            } else {
+                v.comment_user.setText(m.getNickname());
+            }
+
             v.comment_publish_time.setText(m.getPublish_time());
             v.comment_thumbs_up.setText(String.valueOf(m.getThumbs_up()));
             v.rating_bar.setRating(m.getRank().floatValue());

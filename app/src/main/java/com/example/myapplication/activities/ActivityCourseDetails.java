@@ -2,6 +2,7 @@ package com.example.myapplication.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
@@ -54,6 +56,15 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.e("REQ_RES_CODE", requestCode + ", " + resultCode);
+        if (requestCode == 0 && resultCode == 666) {
+            Toast.makeText(getApplicationContext(), "评论成功", Toast.LENGTH_SHORT).show();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         // call the super class onCreate to complete the creation of activity like
         // the view hierarchy
@@ -77,16 +88,18 @@ public class ActivityCourseDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ActivityCourseDetails.this, ActivityCourseCommentNew.class);
-                startActivity(intent);
+                intent.putExtra("course_id", course_id);
+                startActivityForResult(intent, 0);
             }
         });
     }
 
     // 评论系统无本地缓存
-    private void refreshCourseComment() {
+    private void refreshCourseComment(boolean force_update) {
         try {
             DBHelper helper = new DBHelper(getApplicationContext());
             API api = new API(getApplicationContext());
+            api.setForceUpdate(force_update);
             final ModelResponseCourseComment responseCourseComment;
             final ModelResponseLogin login = helper.getLoginRecord();
             if (login != null) {
@@ -177,7 +190,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
                 @Override
                 public void run() {
                     refreshCourse(true);
-                    refreshCourseComment();
+                    refreshCourseComment(true);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -244,6 +257,8 @@ public class ActivityCourseDetails extends AppCompatActivity {
         ModelCourseComment comment = new ModelCourseComment(
                 0,
                 "Junyi",
+                "Junyi",
+                "1709853D-I011-0021",
                 96,
                 0,
                 4.5,
@@ -283,6 +298,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
             @Override
             public void run() {
                 refreshCourse(false);
+                refreshCourseComment(false);
             }
         }).start();
     }

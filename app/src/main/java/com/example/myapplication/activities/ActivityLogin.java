@@ -30,6 +30,7 @@ import com.example.myapplication.utils.Tools;
 import java.io.IOException;
 
 public class ActivityLogin extends AppCompatActivity {
+    public static boolean active = false;
     Button button_login;
     EditText edit_text_captcha;
     EditText edit_text_password;
@@ -166,11 +167,18 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    @Override
     protected void onStop() {
         if (!flagLoginSuccessful) {
             System.exit(0);
         }
         super.onStop();
+        active = false;
     }
 
     private void login() {

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -29,6 +30,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterNewsListSectioned;
 import com.example.myapplication.models.ModelNews;
 import com.example.myapplication.models.ModelNewsImage;
+import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.models.ModelResponseNewsAll;
 import com.example.myapplication.utils.API;
 import com.example.myapplication.utils.Tools;
@@ -38,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FragmentNewsAll extends LazyLoadFragment {
+public class FragmentNewsAll extends Fragment {
     private static int[] array_image_place = {
             R.drawable.image_1,
             R.drawable.image_2,
@@ -79,19 +81,21 @@ public class FragmentNewsAll extends LazyLoadFragment {
             DBHelper helper = new DBHelper(getContext());
             API api = new API(getContext());
             api.setForceUpdate(force);
-
-            modelResponseNewsAll = api.news_all_get(helper.getLoginRecord().getToken(), 0, 20);
-            if (modelResponseNewsAll != null && modelResponseNewsAll.getCode() == 0) {
-                modelNewsItems.clear();
-                modelNewsItems.addAll(modelResponseNewsAll.getNews_list());
+            ModelResponseLogin login = helper.getLoginRecord();
+            if (login != null) {
+                modelResponseNewsAll = api.news_all_get(helper.getLoginRecord().getToken(), 0, 20);
+                if (modelResponseNewsAll != null && modelResponseNewsAll.getCode() == 0) {
+                    modelNewsItems.clear();
+                    modelNewsItems.addAll(modelResponseNewsAll.getNews_list());
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
             }
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.notifyDataSetChanged();
-                }
-            });
             if (!force) { // 为啥这样写原理请见 ActivityCourseDetails 类似部分
                 swipe_refresh_layout.setRefreshing(false);
                 isRefreshing = false;
@@ -140,7 +144,7 @@ public class FragmentNewsAll extends LazyLoadFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        Log.d("Fragment ModelNews All", "onCreateView");
         this_view = inflater.inflate(R.layout.fragment_news_all, container, false);
 
         swipe_refresh_layout = (SwipeRefreshLayout) this_view.findViewById(R.id.swipe_refresh_layout);
@@ -152,7 +156,23 @@ public class FragmentNewsAll extends LazyLoadFragment {
         });
 
         initComponent();
-        Log.d("Fragment ModelNews All", "onCreateView");
+
+        swipe_refresh_layout.setRefreshing(true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                refreshNewsAll(false);
+                FragmentActivity activity = getActivity();
+                if (activity != null)
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipe_refresh_layout.setRefreshing(false);
+                            isRefreshing = false;
+                        }
+                    });
+            }
+        }).start();
         return this_view;
     }
 
@@ -331,35 +351,6 @@ public class FragmentNewsAll extends LazyLoadFragment {
     public void onDestroy() {
         if (runnable != null) handler.removeCallbacks(runnable);
         super.onDestroy();
-    }
-
-    @Override
-    protected void onFirstVisible() {
-        super.onFirstVisible();
-        Log.e("FragmentNewsAll", "onFirstVisible");
-        swipe_refresh_layout.setRefreshing(true);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                refreshNewsAll(false);
-                FragmentActivity activity = getActivity();
-                if (activity != null)
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipe_refresh_layout.setRefreshing(false);
-                            isRefreshing = false;
-                        }
-                    });
-            }
-        }).start();
-    }
-
-    @Override
-    protected void onVisibilityChange(boolean isVisible) {
-        super.onVisibilityChange(isVisible);
-        Log.e("NewsAll", "onVisiblityChange " + isVisible);
-
     }
 
     private static class AdapterImageSlider extends PagerAdapter {

@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -71,6 +70,8 @@ public class FragmentTimetable extends LazyLoadFragment {
 
     private void calculateLayout(String timetableRaw, ViewGroup container, LayoutInflater inflater, RelativeLayout relativeLayout) {
         timetable_cell_list.clear();
+        animators.clear();
+        relativeLayout.removeAllViews();
 
         ModelTimetable modelTimetable = JSON.parseObject(timetableRaw, ModelTimetable.class);
         if (modelTimetable == null)
@@ -118,7 +119,6 @@ public class FragmentTimetable extends LazyLoadFragment {
             params.width = (int) getResources().getDimension(R.dimen.timetable_time_cell_width);
             params.height = (int) (getResources().getDimension(R.dimen.timetable_time_label_height) * cell.duration());
 
-            Log.e("CalculateMargins", "" + marginLeft + ", " + marginTop);
             String title = cell.getCourse_name_zh() + "\n@" + cell.getClassroom();
 
             b.setLayoutParams(params);
@@ -270,6 +270,7 @@ public class FragmentTimetable extends LazyLoadFragment {
                             case R.id.action_logout:
                                 DBHelper db = new DBHelper(getContext());
                                 db.setLogout();
+
                                 break;
                             case R.id.action_refresh:
                                 break;

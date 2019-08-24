@@ -2,6 +2,8 @@ package com.example.myapplication.models;
 
 public class ModelCourseComment {
     private Integer comment_id;
+    private String nickname;
+    private String name_zh;
     private String student_id;
     private Integer thumbs_up;
     private Integer thumbs_down;
@@ -13,14 +15,32 @@ public class ModelCourseComment {
 
     }
 
-    public ModelCourseComment(Integer comment_id, String student_id, Integer thumbs_up, Integer thumbs_down, Double rank, String content, String publish_time) {
+    public ModelCourseComment(Integer comment_id, String nickname, String name_zh, String student_id, Integer thumbs_up, Integer thumbs_down, Double rank, String content, String publish_time) {
         this.comment_id = comment_id;
         this.student_id = student_id;
+        this.nickname = nickname;
+        this.name_zh = name_zh;
         this.thumbs_up = thumbs_up;
         this.thumbs_down = thumbs_down;
         this.rank = rank;
         this.content = content;
         this.publish_time = publish_time;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getName_zh() {
+        return name_zh;
+    }
+
+    public void setName_zh(String name_zh) {
+        this.name_zh = name_zh;
     }
 
     public Integer getComment_id() {
