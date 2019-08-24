@@ -10,21 +10,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.alibaba.fastjson.JSON;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.activities.ActivityCourseDetails;
-import com.example.myapplication.activities.ActivityLogin;
 import com.example.myapplication.models.ModelResponseSemester;
 import com.example.myapplication.models.ModelResponseWeek;
 import com.example.myapplication.models.ModelTimetable;
@@ -39,16 +33,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
+/**
+ * @author Junyi
+ */
 public class FragmentTimetable extends LazyLoadFragment {
     private final ArrayList<Animator> animators = new ArrayList<Animator>();
     private ModelResponseWeek week;
     private ModelResponseSemester semester;
-    private String timetable_raw = "";
+    private String timetableRaw = "";
     private View root;
-    private ViewGroup this_container;
-    private ArrayList<TextView> timetable_cell_list = new ArrayList<TextView>();
-    private ImageButton image_button_more;
-    private boolean animated = false; // 是否已经播放过动画
+    private ViewGroup thisContainer;
+    private ArrayList<TextView> timetableCellList = new ArrayList<TextView>();
+    private ImageButton imageButtonMore;
+    /**
+     * 是否已经播放过动画
+     */
+    private boolean animated = false;
 
 
     private int convertDpToPx(int dp) {
@@ -56,31 +56,31 @@ public class FragmentTimetable extends LazyLoadFragment {
     }
 
     private void animate() {
-        if (!animated && !timetable_raw.isEmpty()) {
+        if (!animated && !timetableRaw.isEmpty()) {
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(this.animators);
             animatorSet.start();
             animated = true;
         } else {
-            for (TextView button : timetable_cell_list) {
+            for (TextView button : timetableCellList) {
                 button.setAlpha(1.f);
             }
         }
     }
 
     private void calculateLayout(String timetableRaw, ViewGroup container, LayoutInflater inflater, RelativeLayout relativeLayout) {
-        timetable_cell_list.clear();
+        timetableCellList.clear();
         animators.clear();
         relativeLayout.removeAllViews();
 
         ModelTimetable modelTimetable = JSON.parseObject(timetableRaw, ModelTimetable.class);
-        if (modelTimetable == null)
+        if (modelTimetable == null) {
             return;
+        }
 
         int delay = 0;
 
         for (final ModelTimetableCell cell : modelTimetable.getTimetable()) {
-            //final Button b = (Button) inflater.inflate(R.layout.timetable_course_cell, container, false);
             final TextView b = (TextView) inflater.inflate(R.layout.timetable_course_cell_new, container, false);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -125,11 +125,11 @@ public class FragmentTimetable extends LazyLoadFragment {
             b.setText(title);
             b.setAlpha(0.f);
 
-            timetable_cell_list.add(b);
+            timetableCellList.add(b);
             Log.d("单元格", title);
         }
 
-        for (TextView b : timetable_cell_list) {
+        for (TextView b : timetableCellList) {
             relativeLayout.addView(b);
         }
     }
@@ -150,48 +150,48 @@ public class FragmentTimetable extends LazyLoadFragment {
 
     private void updateTableHeaders(final View view) {
         String[] days = getCurrentWeekDays();
-        TextView text_view_monday = (TextView) view.findViewById(R.id.text_view_monday);
-        TextView text_view_tuesday = (TextView) view.findViewById(R.id.text_view_tuesday);
-        TextView text_view_wednesday = (TextView) view.findViewById(R.id.text_view_wednesday);
-        TextView text_view_thursday = (TextView) view.findViewById(R.id.text_view_thursday);
-        TextView text_view_friday = (TextView) view.findViewById(R.id.text_view_friday);
-        TextView text_view_saturday = (TextView) view.findViewById(R.id.text_view_saturday);
-        TextView text_view_sunday = (TextView) view.findViewById(R.id.text_view_sunday);
-        text_view_monday.setText("周一\n" + days[0]);
-        text_view_tuesday.setText("周二\n" + days[1]);
-        text_view_wednesday.setText("周三\n" + days[2]);
-        text_view_thursday.setText("周四\n" + days[3]);
-        text_view_friday.setText("周五\n" + days[4]);
-        text_view_saturday.setText("周六\n" + days[5]);
-        text_view_sunday.setText("周日\n" + days[6]);
+        TextView textViewMonday = view.findViewById(R.id.text_view_monday);
+        TextView textViewTuesday = view.findViewById(R.id.text_view_tuesday);
+        TextView textViewWednesday = view.findViewById(R.id.text_view_wednesday);
+        TextView textViewThursday = view.findViewById(R.id.text_view_thursday);
+        TextView textViewFriday = view.findViewById(R.id.text_view_friday);
+        TextView textViewSaturday = view.findViewById(R.id.text_view_saturday);
+        TextView textViewSunday = view.findViewById(R.id.text_view_sunday);
+        textViewMonday.setText("周一\n" + days[0]);
+        textViewTuesday.setText("周二\n" + days[1]);
+        textViewWednesday.setText("周三\n" + days[2]);
+        textViewThursday.setText("周四\n" + days[3]);
+        textViewFriday.setText("周五\n" + days[4]);
+        textViewSaturday.setText("周六\n" + days[5]);
+        textViewSunday.setText("周日\n" + days[6]);
 
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         switch (day) {
-            case Calendar.SUNDAY:
-                text_view_sunday.setBackgroundResource(R.color.timetable_column_active);
+            default: // default is sunday
+                textViewSunday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.MONDAY:
-                text_view_monday.setBackgroundResource(R.color.timetable_column_active);
+                textViewMonday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.TUESDAY:
-                text_view_tuesday.setBackgroundResource(R.color.timetable_column_active);
+                textViewTuesday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.WEDNESDAY:
-                text_view_wednesday.setBackgroundResource(R.color.timetable_column_active);
+                textViewWednesday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.THURSDAY:
-                text_view_thursday.setBackgroundResource(R.color.timetable_column_active);
+                textViewThursday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.FRIDAY:
-                text_view_friday.setBackgroundResource(R.color.timetable_column_active);
+                textViewFriday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.SATURDAY:
-                text_view_saturday.setBackgroundResource(R.color.timetable_column_active);
+                textViewSaturday.setBackgroundResource(R.color.timetable_column_active);
                 break;
         }
 
-        final TextView toolbar_title = (TextView) view.findViewById(R.id.toolbar_title);
+        final TextView toolbarTitle = view.findViewById(R.id.toolbar_title);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -204,7 +204,7 @@ public class FragmentTimetable extends LazyLoadFragment {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                toolbar_title.setText(
+                                toolbarTitle.setText(
                                         "学期 " + semester.getSemester() +
                                                 " 第 " + week.getWeek() +
                                                 " 周");
@@ -246,16 +246,16 @@ public class FragmentTimetable extends LazyLoadFragment {
 
         Log.d("FragmentTimetable", "onCreateView");
         root = inflater.inflate(R.layout.fragment_timetable, container, false);
-        this_container = container;
-        ((ImageButton) root.findViewById(R.id.image_button_select_week)).setOnClickListener(new View.OnClickListener() {
+        thisContainer = container;
+        root.findViewById(R.id.image_button_select_week).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ActivityLogin.class);
-                startActivity(intent);
+                //Intent intent = new Intent(getActivity(), ActivityLogin.class);
+                //startActivity(intent);
             }
         });
-        image_button_more = (ImageButton) root.findViewById(R.id.image_button_more);
-        image_button_more.setOnClickListener(new View.OnClickListener() {
+        imageButtonMore = root.findViewById(R.id.image_button_more);
+        imageButtonMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(getContext(), v);
@@ -265,6 +265,8 @@ public class FragmentTimetable extends LazyLoadFragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
+                            default:
+                                break;
                             case R.id.action_export:
                                 break;
                             case R.id.action_logout:
@@ -300,12 +302,12 @@ public class FragmentTimetable extends LazyLoadFragment {
         Log.e("FragmentTimetable", "onResume");
         Log.e("FragmentTimetable", "onFirstVisible");
         LayoutInflater vi = LayoutInflater.from(getContext());
-        RelativeLayout relativeLayout = (RelativeLayout) root.findViewById(R.id.relativeLayoutInnerContent);
+        RelativeLayout relativeLayout = root.findViewById(R.id.relativeLayoutInnerContent);
         DBHelper db = new DBHelper(getContext());
-        timetable_raw = db.getAPIRecord(APIs.TIMETABLE);
+        timetableRaw = db.getAPIRecord(APIs.TIMETABLE);
 
 
-        calculateLayout(timetable_raw, this_container, vi, relativeLayout);
+        calculateLayout(timetableRaw, thisContainer, vi, relativeLayout);
         animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
     }
 

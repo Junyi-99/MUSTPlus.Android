@@ -21,17 +21,16 @@
         <TextView
 
             android:id="@+id/toolbar_title"
-            android:textSize="20sp"
-            fab:layout_constraintBottom_toBottomOf="parent"
-            fab:layout_constraintEnd_toEndOf="parent"
-            fab:layout_constraintStart_toStartOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:fontFamily="sans-serif-medium"
             android:singleLine="true"
-            android:text="Title"
             android:textColor="@color/text_tint_light"
+            android:textSize="20sp"
+            fab:layout_constraintBottom_toBottomOf="parent"
+            fab:layout_constraintEnd_toEndOf="parent"
+            fab:layout_constraintStart_toStartOf="parent"
             fab:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton

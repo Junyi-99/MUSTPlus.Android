@@ -41,9 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private long setAPIRecord(APIs api, String value, long time) {
         ContentValues values = new ContentValues();
-
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NAME_API_COURSE, "id=? AND api=?", new String[]{String.valueOf(api.i()), api.v()});
 
         values.put("id", api.i());
         values.put("api", api.v());

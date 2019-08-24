@@ -99,13 +99,17 @@ public class API implements IAPI {
 
     @Nullable
     public ModelResponseCourseComment course_comment_get(String token, Integer course_id) throws IOException {
-        Log.i("R_course_comment_get", "Get Record");
-        DBHelper db = new DBHelper(context);
-        String record = db.getCourseCommentRecord(course_id, 7);
-        if (record.isEmpty() || forceUpdate)
-            record = base.course_comment(token, course_id, APIOperation.GET, null, null, null);
         try {
-            Log.i("R_course_comment_get", record);
+            Log.i("R_course_comment_get", "Get Record");
+            DBHelper db = new DBHelper(context);
+            String record = db.getCourseCommentRecord(course_id, 7);
+            if (record.isEmpty() || forceUpdate) {
+                record = base.course_comment(token, course_id, APIOperation.GET, null, null, null);
+                ModelResponseCourseComment comment = JSON.parseObject(record, ModelResponseCourseComment.class);
+                if (comment.getCode() == 0) {
+                    db.setCourseCommentRecord(course_id, record);
+                }
+            }
             return JSON.parseObject(record, ModelResponseCourseComment.class);
         } catch (JSONException e) {
             return null;

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SQLAndroidSettings">
+    <option name="databases">
+      <map>
+        <entry key="88_C:\Users\hji20\Desktop\MUSTPlus Development\MUSTPlus.Android\AndroidSqlEditorDatabases\">
+          <value>
+            <list>
+              <option value="emulator-5554" />
+              <option value="/databases/test_db" />
+              <option value="88" />
+              <option value="88" />
+              <option value="false" />
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="packageNameByDirectory">
+      <map>
+        <entry key="C:\Users\hji20\Desktop\MUSTPlus Development\MUSTPlus.Android\AndroidSqlEditorDatabases\" value="com.example.myapplication" />
+      </map>
+    </option>
+    <option name="storageVersion" value="2" />
+  </component>
+</project>
