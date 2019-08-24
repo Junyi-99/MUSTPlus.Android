@@ -1,5 +1,7 @@
 package com.example.myapplication.utils;
 
+import android.support.annotation.Nullable;
+
 import com.example.myapplication.interfaces.IAPI;
 
 import java.io.IOException;
@@ -147,25 +149,42 @@ public class APIBase implements IAPI {
 
 
     @Override
-    public String course_comment(String token, Integer course_id, APIOperation operation) throws IOException {
+    public String course_comment(String token, Integer course_id, APIOperation operation, @Nullable Double rank, @Nullable String content, @Nullable Integer comment_id) throws IOException {
         String url = APIs.BASE_URL.v() + APIs.COURSE_.v() + course_id + APIs.COURSE_COMMENT.v();
         OkHttpClient client = new OkHttpClient();
+        Request request;
+        Response response;
+        ResponseBody responseBody;
         switch (operation) {
-            case GET:
+            default: // default is GET
                 HttpUrl.Builder httpUrl = boxing(url, new TreeMap<String, String>(), token);
-                Request request = new Request.Builder().url(httpUrl.build()).build();
-                Response response = client.newCall(request).execute();
-                ResponseBody body = response.body();
-                if (body == null)
-                    throw new IOException("NULL ERROR");
-                else
-                    return body.string();
+                request = new Request.Builder().url(httpUrl.build()).build();
+                break;
             case POST:
+                if (rank == null || content == null) {
+                    throw new IOException("NULL RANK OR CONTENT ERROR");
+                }
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("rank", rank.toString())
+                        .add("content", content)
+                        .build();
+                request = new Request.Builder().url(url).post(requestBody).build();
                 break;
             case DELETE:
+                if (comment_id == null) {
+                    throw new IOException("NULL COMMENT_ID ERROR");
+                }
+                url = url + "?id=" + comment_id;
+                request = new Request.Builder().url(url).delete().build();
                 break;
         }
-        throw new IOException("NULL ERROR");
+
+        response = client.newCall(request).execute();
+        responseBody = response.body();
+        if (responseBody == null)
+            throw new IOException("NULL ERROR");
+        else
+            return responseBody.string();
     }
 
     @Override

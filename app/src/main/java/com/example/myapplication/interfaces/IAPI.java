@@ -1,5 +1,7 @@
 package com.example.myapplication.interfaces;
 
+import android.support.annotation.Nullable;
+
 import com.example.myapplication.utils.APIOperation;
 
 import java.io.IOException;
@@ -19,7 +21,7 @@ public interface IAPI {
 
     String course(String token, Integer course_id) throws IOException;
 
-    String course_comment(String token, Integer course_id, APIOperation operation) throws IOException;
+    String course_comment(String token, Integer course_id, APIOperation operation, @Nullable Double rank, @Nullable String content, @Nullable Integer comment_id) throws IOException;
 
     String course_comment_thumbs_up(String token, Integer course_id, APIOperation operation);
 

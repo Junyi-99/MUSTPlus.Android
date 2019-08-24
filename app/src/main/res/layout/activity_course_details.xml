@@ -31,12 +31,12 @@
             android:fontFamily="sans-serif-medium"
             android:singleLine="true"
             android:text="Title"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/text_tint_light"
             fab:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/image_button_more"
-            android:tint="@color/colorWhite"
+            android:tint="@color/icon_tint_light"
             fab:layout_constraintBottom_toBottomOf="parent"
             fab:layout_constraintStart_toStartOf="parent"
             fab:layout_constraintTop_toTopOf="parent"
@@ -223,7 +223,7 @@
                     android:layout_marginBottom="@dimen/spacing_16dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/robotomedium"
-                    android:text="课程评价"
+                    android:text="课程评价（仅供参考，请以实际上课为准）"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 

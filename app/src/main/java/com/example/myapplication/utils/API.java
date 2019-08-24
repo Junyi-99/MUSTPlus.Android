@@ -102,8 +102,34 @@ public class API implements IAPI {
         Log.i("R_course_comment_get", "Get Record");
         try {
             Log.i("R_course_comment_get", "Request New Data");
-            String raw = base.course_comment(token, course_id, APIOperation.GET);
+            String raw = base.course_comment(token, course_id, APIOperation.GET, null, null, null);
             Log.i("R_course_comment_get", raw);
+            return JSON.parseObject(raw, ModelResponseCourseComment.class);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    @Nullable
+    public ModelResponseCourseComment course_comment_post(String token, Integer course_id, Double rank, String content) throws IOException {
+        Log.i("R_course_comment_post", "Get Record");
+        try {
+            Log.i("R_course_comment_post", "Request New Data");
+            String raw = base.course_comment(token, course_id, APIOperation.POST, rank, content, null);
+            Log.i("R_course_comment_post", raw);
+            return JSON.parseObject(raw, ModelResponseCourseComment.class);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    @Nullable
+    public ModelResponseCourseComment course_comment_delete(String token, Integer course_id, Integer comment_id) throws IOException {
+        Log.i("R_course_comment_delete", "Get Record");
+        try {
+            Log.i("R_course_comment_delete", "Request New Data");
+            String raw = base.course_comment(token, course_id, APIOperation.DELETE, null, null, comment_id);
+            Log.i("R_course_comment_delete", raw);
             return JSON.parseObject(raw, ModelResponseCourseComment.class);
         } catch (JSONException e) {
             return null;
@@ -112,7 +138,7 @@ public class API implements IAPI {
 
     @Deprecated
     @Override
-    public String course_comment(String token, Integer course_id, APIOperation operation) {
+    public String course_comment(String token, Integer course_id, APIOperation operation, @Nullable Double rank, @Nullable String content, @Nullable Integer comment_id) {
         return null;
     }
 

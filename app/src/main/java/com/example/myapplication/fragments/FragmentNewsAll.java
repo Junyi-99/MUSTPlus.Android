@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
@@ -110,8 +111,14 @@ public class FragmentNewsAll extends LazyLoadFragment {
                 @Override
                 public void run() {
                     refreshNewsAll(true);
-                    swipe_refresh_layout.setRefreshing(false);
-                    isRefreshing = false;
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipe_refresh_layout.setRefreshing(false);
+                            isRefreshing = false;
+                        }
+                    });
                 }
             }).start();
         }
@@ -335,8 +342,15 @@ public class FragmentNewsAll extends LazyLoadFragment {
             @Override
             public void run() {
                 refreshNewsAll(false);
-                swipe_refresh_layout.setRefreshing(false);
-                isRefreshing = false;
+                FragmentActivity activity = getActivity();
+                if (activity != null)
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipe_refresh_layout.setRefreshing(false);
+                            isRefreshing = false;
+                        }
+                    });
             }
         }).start();
     }

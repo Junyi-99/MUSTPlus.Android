@@ -102,18 +102,25 @@ public class FragmentTimetable extends LazyLoadFragment {
             animators.add(animator);
             delay += 100;
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+            // These supply parameters to the parent of this view specifying how it should be arranged.
+            // 也就是说，在 Android 5.0 (API 21) 时，所有 Button 重叠在一起是因为
+            // 之前使用的是 LinearLayout.LayoutParams，所以出现了问题
+            // 在 Android 9.0 版本使用 LinearLayout.LayoutParams 就没问题
+            // 个人推测是因为高版本的 Android 增加了兼容性
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
             );
+            int marginLeft = (int) getResources().getDimension(R.dimen.timetable_header_width) * cell.getCellDayPosition() + convertDpToPx(2);
+            int marginTop = (int) (getResources().getDimension(R.dimen.timetable_time_label_height) * cell.getCellLinePosition());
+            params.setMargins(marginLeft, marginTop, 0, 0);
 
             params.width = (int) getResources().getDimension(R.dimen.timetable_time_cell_width);
             params.height = (int) (getResources().getDimension(R.dimen.timetable_time_label_height) * cell.duration());
-            int marginLeft = (int) getResources().getDimension(R.dimen.timetable_header_width) * cell.getCellDayPosition() + convertDpToPx(2);
-            int marginTop = (int) (getResources().getDimension(R.dimen.timetable_time_label_height) * cell.getCellLinePosition());
 
-            params.setMargins(marginLeft, marginTop, 0, 0);
+            Log.e("CalculateMargins", "" + marginLeft + ", " + marginTop);
             String title = cell.getCourse_name_zh() + "\n@" + cell.getClassroom();
+
             b.setLayoutParams(params);
             b.setText(title);
             b.setAlpha(0.f);
@@ -162,25 +169,25 @@ public class FragmentTimetable extends LazyLoadFragment {
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         switch (day) {
             case Calendar.SUNDAY:
-                text_view_sunday.setBackgroundResource(R.color.grey_20);
+                text_view_sunday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.MONDAY:
-                text_view_monday.setBackgroundResource(R.color.grey_20);
+                text_view_monday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.TUESDAY:
-                text_view_tuesday.setBackgroundResource(R.color.grey_20);
+                text_view_tuesday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.WEDNESDAY:
-                text_view_wednesday.setBackgroundResource(R.color.grey_20);
+                text_view_wednesday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.THURSDAY:
-                text_view_thursday.setBackgroundResource(R.color.grey_20);
+                text_view_thursday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.FRIDAY:
-                text_view_friday.setBackgroundResource(R.color.grey_20);
+                text_view_friday.setBackgroundResource(R.color.timetable_column_active);
                 break;
             case Calendar.SATURDAY:
-                text_view_saturday.setBackgroundResource(R.color.grey_20);
+                text_view_saturday.setBackgroundResource(R.color.timetable_column_active);
                 break;
         }
 

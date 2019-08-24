@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorWhite">#f2f2f2</color>
+    <color name="colorWhite">#fafafa</color>
     <color name="colorWhitePressed">#bdbdbd</color>
     <color name="colorMBlueLight">#839EF9</color>
     <color name="colorMBlue">#4978FF</color>
     <color name="colorMBlueDark">#676E82</color>
-    <color name="colorMBlueTimetableColumn">#F5F7FF</color>
-    <color name="colorMBlueTimetableColumnActive">#E3E9FF</color>
 
-    <color name="backgroundColorLight">#e6e6e6</color>
+    <color name="timetable_column">#f2f2f2</color>
+    <color name="timetable_column_active">#cccccc</color>
+    <color name="icon_tint_light">#fafafa</color>
+    <color name="icon_tint_dark">#fafafa</color>
+    <color name="icon_tint_grey">#9e9e9e</color>
+    <color name="text_tint_light">#fafafa</color>
+    <color name="text_tint_dark">#fafafa</color>
+    <color name="text_tint_grey">#9e9e9e</color>
+
     <!--
         Material Design Blue
     -->

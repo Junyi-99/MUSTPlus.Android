@@ -3,6 +3,7 @@ package com.example.myapplication.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -105,8 +106,15 @@ public class FragmentNewsUniversal extends LazyLoadFragment {
                 @Override
                 public void run() {
                     refreshNews(true);
-                    swipe_refresh_layout.setRefreshing(false);
-                    isRefreshing = false;
+                    FragmentActivity activity = getActivity();
+                    if (activity != null)
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipe_refresh_layout.setRefreshing(false);
+                                isRefreshing = false;
+                            }
+                        });
                 }
             }).start();
         }
@@ -160,8 +168,15 @@ public class FragmentNewsUniversal extends LazyLoadFragment {
             @Override
             public void run() {
                 refreshNews(false);
-                swipe_refresh_layout.setRefreshing(false);
-                isRefreshing = false;
+                FragmentActivity activity = getActivity();
+                if (activity != null)
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipe_refresh_layout.setRefreshing(false);
+                            isRefreshing = false;
+                        }
+                    });
             }
         }).start();
     }

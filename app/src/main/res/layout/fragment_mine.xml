@@ -103,7 +103,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="wrap_content"
-                android:tint="@color/blue_grey_500"
+                android:tint="@color/icon_tint_grey"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -152,7 +152,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="wrap_content"
-                android:tint="@color/blue_grey_500"
+                android:tint="@color/icon_tint_grey"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -190,7 +190,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="wrap_content"
-                android:tint="@color/blue_grey_500"
+                android:tint="@color/icon_tint_grey"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

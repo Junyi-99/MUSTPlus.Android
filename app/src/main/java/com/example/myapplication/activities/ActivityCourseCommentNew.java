@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.utils.API;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
@@ -17,9 +19,8 @@ import com.facebook.rebound.SpringSystem;
 
 public class ActivityCourseCommentNew extends AppCompatActivity {
     TextView text_view_rate;
-    SeekBar seek_bar_t;
-    SeekBar seek_bar_f;
     RatingBar rating_bar;
+    EditText edit_text_content;
 
     // 对应的描述文本
     private String[] rating_description = {
@@ -61,18 +62,32 @@ public class ActivityCourseCommentNew extends AppCompatActivity {
         ((ImageButton) findViewById(R.id.image_button_check)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String text = edit_text_content.getText().toString();
+                if(text.trim().isEmpty()){
+
+                }
+                else if (text.length()>4096){
+
+                }
+                //API api = new API(getApplicationContext());
+
 
             }
         });
     }
 
     private void initComponent() {
+        edit_text_content = (EditText) findViewById(R.id.edit_text_content);
         text_view_rate = (TextView) findViewById(R.id.text_view_rate);
         rating_bar = (RatingBar) findViewById(R.id.rating_bar);
+
         rating_bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+
                 text_view_rate.setText(rating_description[(int) (rating * 2)]);
+
+
                 SpringSystem springSystem = SpringSystem.create();
                 Spring spring = springSystem.createSpring();
                 spring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(50, 3));
