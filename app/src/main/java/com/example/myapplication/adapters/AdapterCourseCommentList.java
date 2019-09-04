@@ -14,11 +14,17 @@ import com.example.myapplication.models.ModelCourseComment;
 
 import java.util.List;
 
+/**
+ * @author Junyi
+ */
 public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    // 两种显示模式
-    // None: 显示空评论之提示layout
-    // NotNone: 正常评论内容layout
+    /**
+     * 显示空评论之提示Layout
+     */
     private final int None = 0;
+    /**
+     * 正常评论内容layout
+     */
     private final int NotNone = 1;
 
     private List<ModelCourseComment> items;
@@ -41,7 +47,12 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
         return new OriginalViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    /**
+     * Replace the contents of a view (invoked by the layout manager)
+     *
+     * @param holder   。
+     * @param position 。
+     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (!items.isEmpty()) {
@@ -49,19 +60,19 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
             ModelCourseComment m = items.get(position);
             OriginalViewHolder v = (OriginalViewHolder) holder;
 
-            v.comment_content.setText(m.getContent());
+            v.commentContent.setText(m.getContent());
 
             // 有昵称显示昵称，没有昵称显示姓名
             if (m.getNickname() == null || m.getNickname().isEmpty()) {
-                v.comment_user.setText(m.getName_zh());
+                v.commentUser.setText(m.getName_zh());
             } else {
-                v.comment_user.setText(m.getNickname());
+                v.commentUser.setText(m.getNickname());
             }
 
-            v.comment_publish_time.setText(m.getPublish_time());
-            v.comment_thumbs_up.setText(String.valueOf(m.getThumbs_up()));
-            v.rating_bar.setRating(m.getRank().floatValue());
-            v.thumbs_up.setOnClickListener(new View.OnClickListener() {
+            v.commentPublishTime.setText(m.getPublish_time());
+            v.commentThumbsUp.setText(String.valueOf(m.getThumbs_up()));
+            v.ratingBar.setRating(m.getRank().floatValue());
+            v.thumbsUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
@@ -69,8 +80,8 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
                     }
                 }
             });
-            v.comment_thumbs_down.setText(String.valueOf(m.getThumbs_down()));
-            v.thumbs_down.setOnClickListener(new View.OnClickListener() {
+            v.commentThumbsDown.setText(String.valueOf(m.getThumbs_down()));
+            v.thumbsDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
@@ -78,7 +89,7 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
                     }
                 }
             });
-            v.relative_parent.setOnClickListener(new View.OnClickListener() {
+            v.relativeParent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
@@ -92,8 +103,9 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemCount() {
-        if (items.isEmpty())
+        if (items.isEmpty()) {
             return 1;
+        }
         return items.size();
     }
 
@@ -112,34 +124,41 @@ public class AdapterCourseCommentList extends RecyclerView.Adapter<RecyclerView.
     }
 
     public interface OnItemClickListener {
+        /**
+         * 当 item 被 click
+         *
+         * @param view     父View
+         * @param obj      被点击的对象
+         * @param position 位置
+         */
         void onItemClick(View view, ModelCourseComment obj, int position);
     }
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
 
-        TextView comment_content;
-        TextView comment_user;
-        TextView comment_publish_time;
-        TextView comment_thumbs_up;
-        TextView comment_thumbs_down;
-        ImageButton thumbs_up;
-        ImageButton thumbs_down;
-        View relative_parent;
+        TextView commentContent;
+        TextView commentUser;
+        TextView commentPublishTime;
+        TextView commentThumbsUp;
+        TextView commentThumbsDown;
+        ImageButton thumbsUp;
+        ImageButton thumbsDown;
+        View relativeParent;
 
-        RatingBar rating_bar;
+        RatingBar ratingBar;
 
 
         public OriginalViewHolder(View v) {
             super(v);
-            comment_content = (TextView) v.findViewById(R.id.comment_content);
-            comment_user = (TextView) v.findViewById(R.id.comment_user);
-            comment_publish_time = (TextView) v.findViewById(R.id.comment_publish_time);
-            comment_thumbs_up = (TextView) v.findViewById(R.id.comment_thumbs_up);
-            comment_thumbs_down = (TextView) v.findViewById(R.id.comment_thumbs_down);
-            thumbs_up = (ImageButton) v.findViewById(R.id.thumbs_up);
-            thumbs_down = (ImageButton) v.findViewById(R.id.thumbs_down);
-            relative_parent = (View) v.findViewById(R.id.relative_parent);
-            rating_bar = (RatingBar) v.findViewById(R.id.rating_bar);
+            commentContent = (TextView) v.findViewById(R.id.comment_content);
+            commentUser = (TextView) v.findViewById(R.id.comment_user);
+            commentPublishTime = (TextView) v.findViewById(R.id.comment_publish_time);
+            commentThumbsUp = (TextView) v.findViewById(R.id.comment_thumbs_up);
+            commentThumbsDown = (TextView) v.findViewById(R.id.comment_thumbs_down);
+            thumbsUp = (ImageButton) v.findViewById(R.id.thumbs_up);
+            thumbsDown = (ImageButton) v.findViewById(R.id.thumbs_down);
+            relativeParent = (View) v.findViewById(R.id.relative_parent);
+            ratingBar = (RatingBar) v.findViewById(R.id.rating_bar);
         }
     }
 }

@@ -10,15 +10,22 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.alibaba.fastjson.JSON;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.activities.ActivityCourseDetails;
+import com.example.myapplication.activities.ActivitySettings;
 import com.example.myapplication.models.ModelResponseSemester;
 import com.example.myapplication.models.ModelResponseWeek;
 import com.example.myapplication.models.ModelTimetable;
@@ -28,6 +35,7 @@ import com.example.myapplication.utils.APIs;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,7 +44,7 @@ import java.util.Calendar;
 /**
  * @author Junyi
  */
-public class FragmentTimetable extends LazyLoadFragment {
+public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
     private final ArrayList<Animator> animators = new ArrayList<Animator>();
     private ModelResponseWeek week;
     private ModelResponseSemester semester;
@@ -68,7 +76,7 @@ public class FragmentTimetable extends LazyLoadFragment {
         }
     }
 
-    private void calculateLayout(String timetableRaw, ViewGroup container, LayoutInflater inflater, RelativeLayout relativeLayout) {
+    private void calculateLayout(String timetableRaw, ViewGroup container, LayoutInflater inflater, RelativeLayout relativeLayout) throws ParseException {
         timetableCellList.clear();
         animators.clear();
         relativeLayout.removeAllViews();
@@ -78,9 +86,37 @@ public class FragmentTimetable extends LazyLoadFragment {
             return;
         }
 
+
+        Calendar calendar = Calendar.getInstance();
+
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        calendar.setTime(new SimpleDateFormat("MM-dd").parse(month + "-" + day));
+
+        Long dateNowMillis = calendar.getTimeInMillis();
+
         int delay = 0;
 
         for (final ModelTimetableCell cell : modelTimetable.getTimetable()) {
+            calendar.setTime(new SimpleDateFormat("MM-dd").parse(cell.getDate_begin()));
+            Long dateBeginMillis = calendar.getTimeInMillis();
+            calendar.setTime(new SimpleDateFormat("MM-dd").parse(cell.getDate_end()));
+            Long dateEndMillis = calendar.getTimeInMillis();
+
+            if (dateEndMillis > dateBeginMillis) {
+                if (dateNowMillis < dateBeginMillis || dateNowMillis > dateEndMillis) {
+                    // 如果在区间外
+                    continue;
+                }
+            } else {
+                if (dateNowMillis > dateBeginMillis || dateNowMillis < dateEndMillis) {
+                    // 如果在区间外
+                    continue;
+                }
+            }
+
+
             final TextView b = (TextView) inflater.inflate(R.layout.timetable_course_cell_new, container, false);
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -276,6 +312,10 @@ public class FragmentTimetable extends LazyLoadFragment {
                                 break;
                             case R.id.action_refresh:
                                 break;
+                            case R.id.action_settings:
+                                Intent intent = new Intent(getActivity(), ActivitySettings.class);
+                                startActivity(intent);
+                                break;
                         }
                         return false;
                     }
@@ -307,7 +347,12 @@ public class FragmentTimetable extends LazyLoadFragment {
         timetableRaw = db.getAPIRecord(APIs.TIMETABLE);
 
 
-        calculateLayout(timetableRaw, thisContainer, vi, relativeLayout);
+        try {
+            calculateLayout(timetableRaw, thisContainer, vi, relativeLayout);
+        } catch (ParseException e) {
+            Toast.makeText(getContext(), "错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
         animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
     }
 

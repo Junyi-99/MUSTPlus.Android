@@ -39,7 +39,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * @author Junyi
+ */
 public class FragmentNewsAll extends Fragment {
     private static int[] array_image_place = {
             R.drawable.image_1,
@@ -57,24 +59,28 @@ public class FragmentNewsAll extends Fragment {
             "可持續發展研究所",
             "N211",
     };
-    ArrayList<ModelNews> modelNewsItems;
-    ModelResponseNewsAll modelResponseNewsAll;
-    TypedArray drw_arr;
-    private View this_view;
-    private ViewPager view_pager;
-    private LinearLayout layout_dots;
+    private ArrayList<ModelNews> modelNewsItems;
+    private ModelResponseNewsAll modelResponseNewsAll;
+    TypedArray drwArr;
+    private View thisView;
+    private ViewPager viewPager;
+    private LinearLayout layoutDots;
     private AdapterImageSlider adapterImageSlider;
-    private RecyclerView recycler_view;
-    private NestedScrollView nested_scroll_view;
+    private RecyclerView recyclerView;
+    private NestedScrollView nestedScrollView;
     private AdapterNewsListSectioned mAdapter;
-    private SwipeRefreshLayout swipe_refresh_layout;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private Runnable runnable = null;
     private Handler handler = new Handler();
-    private TextView slider_image_title;
-    private TextView slider_image_brief;
-    private boolean isRefreshing = false;//是否刷新中
+    private TextView sliderImageTitle;
+    private TextView sliderImageBrief;
+    private boolean isRefreshing = false;
 
-    // 第一次更新 News
+    /**
+     * 第一次更新 News
+     *
+     * @param force 是否强制更新
+     */
     public void refreshNewsAll(final boolean force) {
         Log.e("RefreshNewsAll", "" + force);
         try {
@@ -96,8 +102,9 @@ public class FragmentNewsAll extends Fragment {
                 });
             }
 
-            if (!force) { // 为啥这样写原理请见 ActivityCourseDetails 类似部分
-                swipe_refresh_layout.setRefreshing(false);
+            // 为啥这样写原理请见 ActivityCourseDetails 类似部分
+            if (!force) {
+                swipeRefreshLayout.setRefreshing(false);
                 isRefreshing = false;
             }
         } catch (IOException e) {
@@ -108,7 +115,7 @@ public class FragmentNewsAll extends Fragment {
 
     public void swipeRefreshLayoutOnRefresh() {
         //检查是否处于刷新状态
-        Log.d("API onRefresh", String.valueOf(swipe_refresh_layout.isRefreshing()) + " " + String.valueOf(isRefreshing));
+        Log.d("API onRefresh", String.valueOf(swipeRefreshLayout.isRefreshing()) + " " + String.valueOf(isRefreshing));
         if (!isRefreshing) {
             isRefreshing = true;
             new Thread(new Runnable() {
@@ -119,7 +126,7 @@ public class FragmentNewsAll extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            swipe_refresh_layout.setRefreshing(false);
+                            swipeRefreshLayout.setRefreshing(false);
                             isRefreshing = false;
                         }
                     });
@@ -145,10 +152,10 @@ public class FragmentNewsAll extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Fragment ModelNews All", "onCreateView");
-        this_view = inflater.inflate(R.layout.fragment_news_all, container, false);
+        thisView = inflater.inflate(R.layout.fragment_news_all, container, false);
 
-        swipe_refresh_layout = (SwipeRefreshLayout) this_view.findViewById(R.id.swipe_refresh_layout);
-        swipe_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout = (SwipeRefreshLayout) thisView.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayoutOnRefresh();
@@ -157,23 +164,24 @@ public class FragmentNewsAll extends Fragment {
 
         initComponent();
 
-        swipe_refresh_layout.setRefreshing(true);
+        swipeRefreshLayout.setRefreshing(true);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 refreshNewsAll(false);
                 FragmentActivity activity = getActivity();
-                if (activity != null)
+                if (activity != null) {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            swipe_refresh_layout.setRefreshing(false);
+                            swipeRefreshLayout.setRefreshing(false);
                             isRefreshing = false;
                         }
                     });
+                }
             }
         }).start();
-        return this_view;
+        return thisView;
     }
 
     @Override
@@ -197,72 +205,59 @@ public class FragmentNewsAll extends Fragment {
     }
 
     private void initComponent() {
-
-        /*
-         * ModelNews List
-         * */
-
         modelNewsItems = new ArrayList<ModelNews>();
         modelNewsItems.add(new ModelNews("MUST+提示", "这里是你所在学院的新闻，下拉即可刷新新闻列表", "2019-06-21", true, "", R.drawable.image_junyi));
-
-        mAdapter = new AdapterNewsListSectioned(this_view.getContext(), modelNewsItems);
+        mAdapter = new AdapterNewsListSectioned(thisView.getContext(), modelNewsItems);
         mAdapter.setOnItemClickListener(new AdapterNewsListSectioned.OnItemClickListener() {
             @Override
             public void onItemClick(View view, ModelNews obj, int position) {
-                Snackbar.make(this_view, "Item " + obj.getTitle() + " clicked", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(thisView, "Item " + obj.getTitle() + " clicked", Snackbar.LENGTH_SHORT).show();
             }
         });
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this_view.getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(thisView.getContext());
         layoutManager.setSmoothScrollbarEnabled(true);
-        recycler_view = (RecyclerView) this_view.findViewById(R.id.recyclerViewNewsList);
-        recycler_view.setLayoutManager(layoutManager);
-        recycler_view.setHasFixedSize(true);
-        recycler_view.setNestedScrollingEnabled(false);
-        recycler_view.setAdapter(mAdapter);
-        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView = (RecyclerView) thisView.findViewById(R.id.recyclerViewNewsList);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                NestedScrollView scroller = (NestedScrollView) this_view.findViewById(R.id.nested_scroll_view);
-
+                NestedScrollView scroller = (NestedScrollView) thisView.findViewById(R.id.nested_scroll_view);
                 if (scroller != null) {
-
                     scroller.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                         @Override
-                        public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                            if (scrollY > oldScrollY) {
+                        public void onScrollChange(NestedScrollView v, int scrollx, int scrolly, int oldscrollx, int oldscrolly) {
+                            if (scrolly > oldscrolly) {
                                 Log.i("recyclerView", "Scroll DOWN");
                             }
-                            if (scrollY < oldScrollY) {
+                            if (scrolly < oldscrolly) {
                                 Log.i("recyclerView", "Scroll UP");
                             }
-
-                            if (scrollY == 0) {
+                            if (scrolly == 0) {
                                 Log.i("recyclerView", "TOP SCROLL");
                             }
-
-                            if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                            if (scrolly == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                                 Log.i("recyclerView", "BOTTOM SCROLL");
-                                Snackbar.make(this_view, "触底，这里是加载更多刷新操作", Snackbar.LENGTH_SHORT).show();
-
+                                Snackbar.make(thisView, "触底，这里是加载更多刷新操作", Snackbar.LENGTH_SHORT).show();
                             }
                         }
                     });
                 }
-
             }
         });
 
+        // findView之后放到变量里，防止下次再find一次，优化性能
+        sliderImageTitle = ((TextView) thisView.findViewById(R.id.title));
+        sliderImageBrief = ((TextView) thisView.findViewById(R.id.brief));
+        layoutDots = (LinearLayout) thisView.findViewById(R.id.layout_dots);
+        viewPager = (ViewPager) thisView.findViewById(R.id.pager);
 
-        slider_image_title = ((TextView) this_view.findViewById(R.id.title)); // findView之后放到变量里，防止下次再find一次，优化性能
-        slider_image_brief = ((TextView) this_view.findViewById(R.id.brief));
-        layout_dots = (LinearLayout) this_view.findViewById(R.id.layout_dots);
-        view_pager = (ViewPager) this_view.findViewById(R.id.pager);
-
+        // 轮播图片部分
         adapterImageSlider = new AdapterImageSlider(this.getActivity(), new ArrayList<ModelNewsImage>());
-
         final List<ModelNewsImage> items = new ArrayList<>();
         for (int i = 0; i < array_image_place.length; i++) {
             ModelNewsImage obj = new ModelNewsImage();
@@ -275,72 +270,80 @@ public class FragmentNewsAll extends Fragment {
         }
 
         adapterImageSlider.setItems(items);
-        view_pager.setAdapter(adapterImageSlider);
+        viewPager.setAdapter(adapterImageSlider);
 
         // displaying selected image first
-        view_pager.setCurrentItem(0);
-        addBottomDots(layout_dots, adapterImageSlider.getCount(), 0);
+        viewPager.setCurrentItem(0);
+        addBottomDots(layoutDots, adapterImageSlider.getCount(), 0);
 
+        sliderImageTitle.setText(items.get(0).name);
+        sliderImageBrief.setText(items.get(0).brief);
 
-        slider_image_title.setText(items.get(0).name);
-        slider_image_brief.setText(items.get(0).brief);
-
-        view_pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int pos, float positionOffset, int positionOffsetPixels) {
             }
 
             @Override
             public void onPageSelected(int pos) {
-                slider_image_title.setText(items.get(pos).name);
-                slider_image_brief.setText(items.get(pos).brief);
-                addBottomDots(layout_dots, adapterImageSlider.getCount(), pos);
+                sliderImageTitle.setText(items.get(pos).name);
+                sliderImageBrief.setText(items.get(pos).brief);
+                addBottomDots(layoutDots, adapterImageSlider.getCount(), pos);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
-
-
         // 因为没有切换 fragment，adapter 不会调用 setUserVisibleHint
         startAutoSlider(adapterImageSlider.getCount());
-
-
     }
 
-    // 给 Slider ModelNewsImage 添加下面的导航圆点
-    private void addBottomDots(LinearLayout layout_dots, int size, int current) {
+    /**
+     * 给 Slider ModelNewsImage 添加下面的导航圆点
+     *
+     * @param layoutDots .
+     * @param size       .
+     * @param current    .
+     */
+    private void addBottomDots(LinearLayout layoutDots, int size, int current) {
         ImageView[] dots = new ImageView[size];
 
-        layout_dots.removeAllViews();
+        layoutDots.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
             dots[i] = new ImageView(this.getContext());
-            int width_height = 15;
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(width_height, width_height));
+            int widthHeight = 15;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(widthHeight, widthHeight));
             params.setMargins(10, 10, 10, 10);
             dots[i].setLayoutParams(params);
 
-            if (i == current)
+            if (i == current) {
                 dots[current].setImageResource(R.drawable.shape_circle);
-            else
+            } else {
                 dots[i].setImageResource(R.drawable.shape_circle_outline);
+            }
 
-            layout_dots.addView(dots[i]);
+            layoutDots.addView(dots[i]);
         }
 
     }
 
-    // 自动滚动图片 view_pager 设置 currentItem 之后会触发 onPageSelected，
-    // 所以下面的文字也会切换
+    /**
+     * 自动滚动图片 view_pager 设置 currentItem 之后会触发 onPageSelected，
+     * 所以下面的文字也会切换
+     *
+     * @param count .
+     */
     private void startAutoSlider(final int count) {
         runnable = new Runnable() {
             @Override
             public void run() {
-                int pos = view_pager.getCurrentItem();
+                int pos = viewPager.getCurrentItem();
                 pos = pos + 1;
-                if (pos >= count) pos = 0;
-                view_pager.setCurrentItem(pos);
+                if (pos >= count) {
+                    pos = 0;
+                }
+                viewPager.setCurrentItem(pos);
                 handler.postDelayed(runnable, 3000);
             }
         };
@@ -349,7 +352,9 @@ public class FragmentNewsAll extends Fragment {
 
     @Override
     public void onDestroy() {
-        if (runnable != null) handler.removeCallbacks(runnable);
+        if (runnable != null) {
+            handler.removeCallbacks(runnable);
+        }
         super.onDestroy();
     }
 
@@ -396,9 +401,9 @@ public class FragmentNewsAll extends Fragment {
             View v = inflater.inflate(R.layout.item_slider_image, container, false);
 
             ImageView image = (ImageView) v.findViewById(R.id.icon);
-            RelativeLayout lyt_parent = (RelativeLayout) v.findViewById(R.id.lyt_parent);
+            RelativeLayout lytParent = (RelativeLayout) v.findViewById(R.id.lyt_parent);
             Tools.displayImageOriginal(act, image, o.image);
-            lyt_parent.setOnClickListener(new View.OnClickListener() {
+            lytParent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
                     if (onItemClickListener != null) {
@@ -419,6 +424,12 @@ public class FragmentNewsAll extends Fragment {
         }
 
         private interface OnItemClickListener {
+            /**
+             * 当 item 被 click
+             *
+             * @param view 父View
+             * @param obj  被点击的对象
+             */
             void onItemClick(View view, ModelNewsImage obj);
         }
 

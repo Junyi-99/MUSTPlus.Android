@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 
-public class FragmentNews extends LazyLoadFragment {
+public class FragmentNewsAbstract extends AbstractLazyLoadFragment {
     boolean visible = false;
 
     @Override
@@ -59,7 +59,7 @@ public class FragmentNews extends LazyLoadFragment {
             if (position == 0)
                 return new FragmentNewsAll();
             // 这里的position跟FragmentNewsUniversal的position是对应的
-            return FragmentNewsUniversal.newInstance(position);
+            return FragmentNewsUniversalAbstract.newInstance(position);
         }
 
 

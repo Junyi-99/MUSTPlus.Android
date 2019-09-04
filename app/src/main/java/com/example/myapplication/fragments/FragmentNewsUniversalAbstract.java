@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FragmentNewsUniversal extends LazyLoadFragment {
+public class FragmentNewsUniversalAbstract extends AbstractLazyLoadFragment {
     private static final String ARG_NEWS_TYPE = "news_type";// 0: faculty, 1: announcement, 2: files
 
     List<ModelNews> modelNewsItems = new ArrayList<ModelNews>();
@@ -35,10 +35,10 @@ public class FragmentNewsUniversal extends LazyLoadFragment {
     private AdapterNewsListSectioned adapter_news_list_sectioned;
     private SwipeRefreshLayout swipe_refresh_layout;
 
-    public static FragmentNewsUniversal newInstance(int newsType) {
+    public static FragmentNewsUniversalAbstract newInstance(int newsType) {
         if (newsType < 1 || newsType > 3)
             newsType = 0;
-        FragmentNewsUniversal fragment = new FragmentNewsUniversal();
+        FragmentNewsUniversalAbstract fragment = new FragmentNewsUniversalAbstract();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_NEWS_TYPE, newsType);
         fragment.setArguments(bundle);
@@ -65,7 +65,6 @@ public class FragmentNewsUniversal extends LazyLoadFragment {
             Log.e("NewsType", String.valueOf(type));
             switch (type) {
                 default:
-                    //model_response_news_all = api.news_faculty(helper.getLoginRecord().getToken(), 0, 20);
                     //TODO: FACULTY
                     modelNewsItems.clear();
                     modelNewsItems.add(new ModelNews("MUST+提示", "这里是你所在学院的新闻，下拉即可刷新新闻列表", "2019-06-21", true, "", R.drawable.image_junyi));

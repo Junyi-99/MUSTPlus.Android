@@ -30,6 +30,9 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * @author Junyi
+ */
 public class ActivityCourseDetails extends AppCompatActivity {
     private boolean isRefreshing = false;
     private int courseId;
@@ -174,7 +177,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
                     });
                     // TODO: 可以给老师信息列表加个动画
                 } else {
-                    // 获取失败，请看错误代码
+                    /* 获取失败，请看错误代码*/
                 }
 
 
@@ -258,10 +261,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
         recyclerViewTeacherList.setAdapter(adapterTeacherList);
         recyclerViewCourseComment.setAdapter(adapterCourseCommentList);
-        //adapterFtpList.setAdapter(adapterFtpList);
 
-
-        // on item list clicked
         adapterTeacherList.setOnItemClickListener(new AdapterTeacherList.OnItemClickListener() {
             @Override
             public void onItemClick(View view, ModelTeacher obj, int position) {

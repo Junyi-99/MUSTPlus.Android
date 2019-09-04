@@ -39,28 +39,28 @@ public class API implements IAPI {
     //TODO： Error Handler 用来处理登录信息失效的状态，并且从数据库里抹去登录信息
 
     @Override
-    public String calc_sign(TreeMap<String, String> get_data, TreeMap<String, String> post_data) {
-        return base.calc_sign(get_data, post_data);
+    public String calcSign(TreeMap<String, String> get_data, TreeMap<String, String> post_data) {
+        return base.calcSign(get_data, post_data);
     }
 
     @Override
-    public String auth_hash() throws IOException {
-        return base.auth_hash();
+    public String authHash() throws IOException {
+        return base.authHash();
     }
 
     @Override
-    public String auth_login(String pubkey, String username, String password, String token, String cookies, String captcha) throws IOException {
+    public String authLogin(String pubkey, String username, String password, String token, String cookies, String captcha) throws IOException {
         DBHelper db = new DBHelper(context);
         String record = db.getAPIRecord(APIs.AUTH_LOGIN);
         if (record.isEmpty() || forceUpdate) {
-            return base.auth_login(pubkey, username, password, token, cookies, captcha);
+            return base.authLogin(pubkey, username, password, token, cookies, captcha);
         } else {
             return record;
         }
     }
 
     @Override
-    public String auth_logout(String token) {
+    public String authLogout(String token) {
         return null;
     }
 
@@ -104,7 +104,7 @@ public class API implements IAPI {
             DBHelper db = new DBHelper(context);
             String record = db.getCourseCommentRecord(course_id, 7);
             if (record.isEmpty() || forceUpdate) {
-                record = base.course_comment(token, course_id, APIOperation.GET, null, null, null);
+                record = base.courseComment(token, course_id, APIOperation.GET, null, null, null);
                 ModelResponseCourseComment comment = JSON.parseObject(record, ModelResponseCourseComment.class);
                 if (comment.getCode() == 0) {
                     db.setCourseCommentRecord(course_id, record);
@@ -121,7 +121,7 @@ public class API implements IAPI {
         Log.i("R_course_comment_post", "Get Record");
         try {
             Log.i("R_course_comment_post", "Request New Data");
-            String raw = base.course_comment(token, course_id, APIOperation.POST, rank, content, null);
+            String raw = base.courseComment(token, course_id, APIOperation.POST, rank, content, null);
             Log.i("R_course_comment_post", raw);
             return JSON.parseObject(raw, ModelResponseCourseComment.class);
         } catch (JSONException e) {
@@ -134,7 +134,7 @@ public class API implements IAPI {
         Log.i("R_course_comment_delete", "Get Record");
         try {
             Log.i("R_course_comment_delete", "Request New Data");
-            String raw = base.course_comment(token, course_id, APIOperation.DELETE, null, null, comment_id);
+            String raw = base.courseComment(token, course_id, APIOperation.DELETE, null, null, comment_id);
             Log.i("R_course_comment_delete", raw);
             return JSON.parseObject(raw, ModelResponseCourseComment.class);
         } catch (JSONException e) {
@@ -144,22 +144,22 @@ public class API implements IAPI {
 
     @Deprecated
     @Override
-    public String course_comment(String token, Integer course_id, APIOperation operation, @Nullable Double rank, @Nullable String content, @Nullable Integer comment_id) {
+    public String courseComment(String token, Integer course_id, APIOperation operation, @Nullable Double rank, @Nullable String content, @Nullable Integer comment_id) {
         return null;
     }
 
     @Override
-    public String course_comment_thumbs_up(String token, Integer course_id, APIOperation operation) {
+    public String courseCommentThumbsUp(String token, Integer course_id, APIOperation operation) {
         return null;
     }
 
     @Override
-    public String course_comment_thumbs_down(String token, Integer course_id, APIOperation operation) {
+    public String courseCommentThumbsDown(String token, Integer course_id, APIOperation operation) {
         return null;
     }
 
     @Override
-    public String course_ftp(String token, Integer course_id, APIOperation operation) {
+    public String courseFtp(String token, Integer course_id, APIOperation operation) {
         return null;
     }
 
@@ -168,7 +168,7 @@ public class API implements IAPI {
         Log.i("R_news_announcement_get", "Get Record");
         try {
             Log.i("R_news_announcement_get", "Request New Data");
-            String raw = base.news_announcements(token, from, count);
+            String raw = base.newsAnnouncements(token, from, count);
             Log.i("R_news_announcement_get", raw);
             return JSON.parseObject(raw, ModelResponseNewsAll.class);
         } catch (JSONException e) {
@@ -179,14 +179,14 @@ public class API implements IAPI {
 
     @Deprecated
     @Override
-    public String news_announcements(String token, Integer from, Integer count) throws IOException {
+    public String newsAnnouncements(String token, Integer from, Integer count) throws IOException {
         return null;
     }
 
     @Nullable
     public ModelResponseNewsAll news_documents_get(String token, Integer from, Integer count) throws IOException {
         try {
-            return JSON.parseObject(base.news_documents(token, from, count), ModelResponseNewsAll.class);
+            return JSON.parseObject(base.newsDocuments(token, from, count), ModelResponseNewsAll.class);
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -195,7 +195,7 @@ public class API implements IAPI {
 
     @Deprecated
     @Override
-    public String news_documents(String token, Integer from, Integer count) throws IOException {
+    public String newsDocuments(String token, Integer from, Integer count) throws IOException {
         return null;
     }
 
@@ -207,7 +207,7 @@ public class API implements IAPI {
             Log.i("R_news_all_get", "Get Record");
             if (record == null || forceUpdate) {
                 Log.i("R_news_all_get", "Request New Data");
-                String raw = base.news_all(token, from, count);
+                String raw = base.newsAll(token, from, count);
                 Log.i("R_news_all_get", raw);
                 ModelResponseNewsAll news = JSON.parseObject(raw, ModelResponseNewsAll.class);
 
@@ -228,17 +228,17 @@ public class API implements IAPI {
 
     @Deprecated
     @Override
-    public String news_all(String token, Integer from, Integer count) throws IOException {
+    public String newsAll(String token, Integer from, Integer count) throws IOException {
         return null;
     }
 
     @Override
-    public String news_faculty(String token, String faculty_name_zh, Integer from, Integer count) {
+    public String newsFaculty(String token, String faculty_name_zh, Integer from, Integer count) {
         return null;
     }
 
     @Override
-    public String news_department(String token, String department_name_zh, Integer from, Integer count) {
+    public String newsDepartment(String token, String department_name_zh, Integer from, Integer count) {
         return null;
     }
 

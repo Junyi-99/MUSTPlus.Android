@@ -333,8 +333,7 @@
                     android:layout_width="@dimen/timetable_container_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/timetable_time_label_width"
-                    android:layout_marginTop="@dimen/timetable_header_height"
-                    android:gravity="top|left">
+                    android:layout_marginTop="@dimen/timetable_header_height">
 
                     <!--  <include
                         android:id="@+id/course1"
@@ -349,126 +348,126 @@
                     <TextView
                         android:id="@+id/timeDivider8"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="68dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider9"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="136dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider10"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="204dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider11"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="272dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider12"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="340dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider13"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="408dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider14"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="476dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider15"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="544dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider16"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="612dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider17"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="680dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider18"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="748dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider19"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="816dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider20"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="884dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/timeDivider21"
                         android:layout_width="476dp"
-                        android:layout_height="1dp"
+                        android:layout_height="2dp"
                         android:layout_marginTop="952dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/timetable_column"
                         android:text=""
                         android:visibility="visible" />
 

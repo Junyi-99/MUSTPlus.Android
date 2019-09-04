@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 
-public class FragmentMine extends LazyLoadFragment {
+public class FragmentMineAbstract extends AbstractLazyLoadFragment {
 
 
     @Override

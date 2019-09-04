@@ -14,10 +14,10 @@ import com.example.myapplication.models.ModelFtp;
 
 import java.util.List;
 
+/**
+ * @author Junyi
+ */
 public class AdapterFtpList extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    // 两种显示模式
-    // None: 显示空评论之提示layout
-    // NotNone: 正常评论内容layout
     private final int None = 0;
     private final int NotNone = 1;
 
@@ -44,38 +44,42 @@ public class AdapterFtpList extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView comment_content;
-        public TextView comment_user;
-        public TextView comment_publish_time;
-        public TextView comment_thumbs_up;
-        public TextView comment_thumbs_down;
-        public ImageButton thumbs_up;
-        public ImageButton thumbs_down;
-        public View relative_parent;
+        public TextView commentContent;
+        public TextView commentUser;
+        public TextView commentPublishTime;
+        public TextView commentThumbsUp;
+        public TextView commentThumbsDown;
+        public ImageButton thumbsUp;
+        public ImageButton thumbsDown;
+        public View relativeParent;
 
-        public ImageView image_view_star1;
-        public ImageView image_view_star2;
-        public ImageView image_view_star3;
-        public ImageView image_view_star4;
-        public ImageView image_view_star5;
+        public ImageView imageViewStar1;
+        public ImageView imageViewStar2;
+        public ImageView imageViewStar3;
+        public ImageView imageViewStar4;
+        public ImageView imageViewStar5;
 
 
         public OriginalViewHolder(View v) {
             super(v);
-            comment_content = (TextView) v.findViewById(R.id.comment_content);
-            comment_user = (TextView) v.findViewById(R.id.comment_user);
-            comment_publish_time = (TextView) v.findViewById(R.id.comment_publish_time);
-            comment_thumbs_up = (TextView) v.findViewById(R.id.comment_thumbs_up);
-            comment_thumbs_down = (TextView) v.findViewById(R.id.comment_thumbs_down);
-            thumbs_up = (ImageButton) v.findViewById(R.id.thumbs_up);
-            thumbs_down = (ImageButton) v.findViewById(R.id.thumbs_down);
-            relative_parent = (View) v.findViewById(R.id.relative_parent);
+            commentContent = (TextView) v.findViewById(R.id.comment_content);
+            commentUser = (TextView) v.findViewById(R.id.comment_user);
+            commentPublishTime = (TextView) v.findViewById(R.id.comment_publish_time);
+            commentThumbsUp = (TextView) v.findViewById(R.id.comment_thumbs_up);
+            commentThumbsDown = (TextView) v.findViewById(R.id.comment_thumbs_down);
+            thumbsUp = (ImageButton) v.findViewById(R.id.thumbs_up);
+            thumbsDown = (ImageButton) v.findViewById(R.id.thumbs_down);
+            relativeParent = (View) v.findViewById(R.id.relative_parent);
 
         }
     }
 
 
-    // Replace the contents of a view (invoked by the layout manager)
+    /**
+     * Replace the contents of a view (invoked by the layout manager)
+     * @param holder .
+     * @param position .
+     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (!items.isEmpty()) {
@@ -84,10 +88,7 @@ public class AdapterFtpList extends RecyclerView.Adapter<RecyclerView.ViewHolder
             OriginalViewHolder v = (OriginalViewHolder) holder;
 
 
-
-
-
-            v.thumbs_up.setOnClickListener(new View.OnClickListener() {
+            v.thumbsUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
@@ -96,7 +97,7 @@ public class AdapterFtpList extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
 
-            v.thumbs_down.setOnClickListener(new View.OnClickListener() {
+            v.thumbsDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
@@ -104,7 +105,7 @@ public class AdapterFtpList extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
             });
-            v.relative_parent.setOnClickListener(new View.OnClickListener() {
+            v.relativeParent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
@@ -118,8 +119,9 @@ public class AdapterFtpList extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        if (items.isEmpty())
+        if (items.isEmpty()) {
             return 1;
+        }
         return items.size();
     }
 
@@ -134,6 +136,13 @@ public class AdapterFtpList extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public interface OnItemClickListener {
+        /**
+         * 当 item 被 click
+         *
+         * @param view     父View
+         * @param obj      被点击的对象
+         * @param position 位置
+         */
         void onItemClick(View view, ModelFtp obj, int position);
     }
 

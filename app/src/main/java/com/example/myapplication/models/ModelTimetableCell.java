@@ -2,6 +2,7 @@ package com.example.myapplication.models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -28,6 +29,28 @@ public class ModelTimetableCell {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
     }
 
+    public int getMonth_begin() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date_begin);
+        return cal.get(Calendar.MONTH);
+    }
+
+    public int getDay_begin() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date_begin);
+        return cal.get(Calendar.DAY_OF_MONTH);
+    }
+    public int getMonth_end() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date_end);
+        return cal.get(Calendar.MONTH);
+    }
+
+    public int getDay_end() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date_end);
+        return cal.get(Calendar.DAY_OF_MONTH);
+    }
     public double duration() {
         return (time_end.getTime() - time_begin.getTime()) * MS_TO_HOURS;
     }

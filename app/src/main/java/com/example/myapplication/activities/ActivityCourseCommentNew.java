@@ -22,6 +22,9 @@ import com.facebook.rebound.SpringSystem;
 
 import java.io.IOException;
 
+/**
+ * @author Junyi
+ */
 public class ActivityCourseCommentNew extends AppCompatActivity {
     TextView textViewRate;
     RatingBar ratingBar;

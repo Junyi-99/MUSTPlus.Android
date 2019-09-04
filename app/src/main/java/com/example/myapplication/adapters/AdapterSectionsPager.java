@@ -8,10 +8,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.myapplication.R;
-import com.example.myapplication.fragments.FragmentMine;
-import com.example.myapplication.fragments.FragmentMoments;
-import com.example.myapplication.fragments.FragmentNews;
-import com.example.myapplication.fragments.FragmentTimetable;
+import com.example.myapplication.fragments.FragmentMineAbstract;
+import com.example.myapplication.fragments.FragmentMomentsAbstract;
+import com.example.myapplication.fragments.FragmentNewsAbstract;
+import com.example.myapplication.fragments.FragmentTimetableAbstract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +38,13 @@ public class AdapterSectionsPager extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             default:
-                return new FragmentTimetable();
+                return new FragmentTimetableAbstract();
             case 1:
-                return new FragmentNews();
+                return new FragmentNewsAbstract();
             case 2:
-                return new FragmentMoments();
+                return new FragmentMomentsAbstract();
             case 3:
-                return new FragmentMine();
+                return new FragmentMineAbstract();
         }
     }
 

@@ -100,6 +100,11 @@ public class AdapterTeacherList extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public interface OnItemClickListener {
+        /**
+         * 当 item 被 click
+         * @param view 父View
+         * @param obj 被点击的对象
+         */
         void onItemClick(View view, ModelTeacher obj, int position);
     }
 

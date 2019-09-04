@@ -14,20 +14,23 @@ import com.alibaba.fastjson.JSON;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterSectionsPager;
-import com.example.myapplication.fragments.FragmentMine;
-import com.example.myapplication.fragments.FragmentMoments;
-import com.example.myapplication.fragments.FragmentNews;
-import com.example.myapplication.fragments.FragmentTimetable;
+import com.example.myapplication.fragments.FragmentMineAbstract;
+import com.example.myapplication.fragments.FragmentMomentsAbstract;
+import com.example.myapplication.fragments.FragmentNewsAbstract;
+import com.example.myapplication.fragments.FragmentTimetableAbstract;
 import com.example.myapplication.models.ModelResponse;
 import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.utils.APIs;
 
+/**
+ * @author Junyi
+ */
 public class ActivityMain extends AppCompatActivity {
     private TextView mTextMessage;
-    private FragmentTimetable fragmentTimetable;
-    private FragmentNews fragmentNews;
-    private FragmentMoments fragmentMoments;
-    private FragmentMine fragmentMine;
+    private FragmentTimetableAbstract fragmentTimetable;
+    private FragmentNewsAbstract fragmentNews;
+    private FragmentMomentsAbstract fragmentMoments;
+    private FragmentMineAbstract fragmentMine;
 
     private ViewPager viewPager;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

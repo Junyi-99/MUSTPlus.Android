@@ -82,7 +82,6 @@ public class AdapterNewsListSectioned extends RecyclerView.Adapter<RecyclerView.
             }
         });
 
-        //Log.d("Position", position + " " + lastPosition);
         if (position > lastPosition) {
             ItemAnimation.animate(view.itemView, on_attach ? position : -1, ItemAnimation.FADE_IN);
             lastPosition = position;
@@ -113,6 +112,11 @@ public class AdapterNewsListSectioned extends RecyclerView.Adapter<RecyclerView.
     }
 
     public interface OnItemClickListener {
+        /**
+         * 当 item 被 click
+         * @param view 父View
+         * @param obj 被点击的对象
+         */
         void onItemClick(View view, ModelNews obj, int position);
     }
 

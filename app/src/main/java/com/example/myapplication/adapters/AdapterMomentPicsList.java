@@ -109,6 +109,11 @@ public class AdapterMomentPicsList extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public interface OnItemClickListener {
+        /**
+         * 当 item 被 click
+         * @param view 父View
+         * @param obj 被点击的对象
+         */
         void onItemClick(View view, ModelMomentPicture obj, int position);
     }
 

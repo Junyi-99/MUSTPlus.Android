@@ -11,33 +11,33 @@ import java.util.TreeMap;
 public interface IAPI {
     String AUTH_SECRET = "flw4\\-t94!09tesldfgio30";
 
-    String calc_sign(TreeMap<String, String> get_data, TreeMap<String, String> post_data);
+    String calcSign(TreeMap<String, String> get_data, TreeMap<String, String> post_data);
 
-    String auth_hash() throws IOException;
+    String authHash() throws IOException;
 
-    String auth_login(String pubkey, String username, String password, String token, String cookies, String captcha) throws IOException;
+    String authLogin(String pubkey, String username, String password, String token, String cookies, String captcha) throws IOException;
 
-    String auth_logout(String token);
+    String authLogout(String token);
 
     String course(String token, Integer course_id) throws IOException;
 
-    String course_comment(String token, Integer course_id, APIOperation operation, @Nullable Double rank, @Nullable String content, @Nullable Integer comment_id) throws IOException;
+    String courseComment(String token, Integer course_id, APIOperation operation, @Nullable Double rank, @Nullable String content, @Nullable Integer comment_id) throws IOException;
 
-    String course_comment_thumbs_up(String token, Integer course_id, APIOperation operation);
+    String courseCommentThumbsUp(String token, Integer course_id, APIOperation operation);
 
-    String course_comment_thumbs_down(String token, Integer course_id, APIOperation operation);
+    String courseCommentThumbsDown(String token, Integer course_id, APIOperation operation);
 
-    String course_ftp(String token, Integer course_id, APIOperation operation);
+    String courseFtp(String token, Integer course_id, APIOperation operation);
 
-    String news_all(String token, Integer from, Integer count) throws IOException;
+    String newsAll(String token, Integer from, Integer count) throws IOException;
 
-    String news_announcements(String token, Integer from, Integer count) throws IOException;
+    String newsAnnouncements(String token, Integer from, Integer count) throws IOException;
 
-    String news_documents(String token, Integer from, Integer count) throws IOException;
+    String newsDocuments(String token, Integer from, Integer count) throws IOException;
 
-    String news_faculty(String token, String faculty_name_zh, Integer from, Integer count);
+    String newsFaculty(String token, String faculty_name_zh, Integer from, Integer count);
 
-    String news_department(String token, String department_name_zh, Integer from, Integer count);
+    String newsDepartment(String token, String department_name_zh, Integer from, Integer count);
 
     String teacher(String token, String name_zh);
 

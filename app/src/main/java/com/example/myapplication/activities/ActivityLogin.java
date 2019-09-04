@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelAuthHash;
@@ -29,6 +30,9 @@ import com.example.myapplication.utils.Tools;
 
 import java.io.IOException;
 
+/**
+ * @author Junyi
+ */
 public class ActivityLogin extends AppCompatActivity {
     public static boolean active = false;
     Button button_login;
@@ -215,7 +219,8 @@ public class ActivityLogin extends AppCompatActivity {
                                     case STATUS_CAPTCHA_INITIALIZED:
                                         setHintText("正在请求登录");
                                         API api = new API(getApplicationContext());
-                                        result = api.auth_login(modelAuthHash.getKey(),
+                                        api.setForceUpdate(true);
+                                        result = api.authLogin(modelAuthHash.getKey(),
                                                 edit_text_username.getText().toString(),
                                                 edit_text_password.getText().toString(),
                                                 modelAuthHash.getToken(),
@@ -271,6 +276,8 @@ public class ActivityLogin extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                             showError(e.getMessage());
+                            setHintText(R.string.login_hint_text);
+                            stopLogin();
                         }
                     }
                 }
@@ -282,12 +289,13 @@ public class ActivityLogin extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                String result = null;
+                API api = new API(getApplicationContext());
+                DBHelper db = new DBHelper(getApplicationContext());
                 try {
-                    API api = new API(getApplicationContext());
-                    String result = null;
                     result = api.timetable(modelResponseLogin.getToken(), 1909, 0);
                     ModelResponse response = JSON.parseObject(result, ModelResponse.class);
-                    DBHelper db = new DBHelper(getApplicationContext());
+
                     if (response.getCode() == 0) {
                         // 成功
                         long ret = db.setAPIRecord(APIs.TIMETABLE, result);
@@ -308,9 +316,11 @@ public class ActivityLogin extends AppCompatActivity {
                     }
 
                     Log.d("TIMETABLEE", result);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                } catch (IOException | InterruptedException e) {
+                    db.removeRecord(APIs.TIMETABLE);
+                    stopLogin();
+                    setHintText(R.string.login_hint_text);
+                    showError(e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -324,7 +334,7 @@ public class ActivityLogin extends AppCompatActivity {
                     public void run() {
                         try {
                             API api = new API(getApplicationContext());
-                            String result = api.auth_hash();
+                            String result = api.authHash();
                             updateCaptcha(result);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -340,15 +350,28 @@ public class ActivityLogin extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                modelAuthHash = JSON.parseObject(result, ModelAuthHash.class);
-                if (modelAuthHash == null) {
+                try {
+                    modelAuthHash = JSON.parseObject(result, ModelAuthHash.class);
+                    if (modelAuthHash == null) {
+                        Toast.makeText(getApplicationContext(), "解析验证码失败", Toast.LENGTH_SHORT).show();
+
+                    } else if (modelAuthHash.getCode() != 0) {
+                        Toast.makeText(getApplicationContext(), "错误：" + modelAuthHash.getMsg(), Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        Log.e("GetHash", modelAuthHash.getCookies());
+                        Log.e("GetHash", modelAuthHash.getToken());
+
+
+                        byte[] decodedString = Base64.decode(modelAuthHash.getCaptcha(), Base64.DEFAULT);
+                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        image_view_captcha.setImageBitmap(decodedByte);
+                    }
+                    stopRefreshCaptchaAnimation();
+                } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "解析验证码失败", Toast.LENGTH_SHORT).show();
-                    return;
+                    stopRefreshCaptchaAnimation();
                 }
-                byte[] decodedString = Base64.decode(modelAuthHash.getCaptcha(), Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                image_view_captcha.setImageBitmap(decodedByte);
-                stopRefreshCaptchaAnimation();
             }
         });
     }

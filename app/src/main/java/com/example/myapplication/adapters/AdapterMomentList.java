@@ -91,7 +91,6 @@ public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHol
             ModelResponseMoment m = items.get(position);
             AdapterMomentList.OriginalViewHolder v = (AdapterMomentList.OriginalViewHolder) holder;
 
-            //v.image_view_avatar.setImageResource();
             v.text_view_nickname.setText(m.getNickname());
             v.text_view_content.setText(m.getContent());
             v.text_view_publish_time.setText(m.getPublish_time());
@@ -106,8 +105,6 @@ public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHol
             );
             // TODO: 动态添加数据
             modelMomentPictureArrayList.add(modelMomentPicture);
-            //modelMomentPictureArrayList.add(modelMomentPicture);
-
 
             AdapterMomentPicsList adapterMomentPicsList = new AdapterMomentPicsList(
                     ctx,
@@ -131,6 +128,11 @@ public class AdapterMomentList extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public interface OnItemClickListener {
+        /**
+         * 当 item 被 click
+         * @param view 父View
+         * @param obj 被点击的对象
+         */
         void onItemClick(View view, ModelResponseMoment obj, int position);
     }
 }

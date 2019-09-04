@@ -1,6 +1,7 @@
 package com.example.myapplication.utils;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.example.myapplication.interfaces.IAPI;
 
@@ -86,7 +87,7 @@ public class APIBase implements IAPI {
         }
         get_params.put("token", token);
         get_params.put("time", String.valueOf(System.currentTimeMillis() / 1000));
-        get_params.put("sign", calc_sign(get_params, post_params));
+        get_params.put("sign", calcSign(get_params, post_params));
         for (Map.Entry<String, String> entry : get_params.entrySet()) {
             httpUrl.addQueryParameter(entry.getKey(), entry.getValue());
         }
@@ -100,7 +101,7 @@ public class APIBase implements IAPI {
     }
 
     @Override
-    public String calc_sign(TreeMap<String, String> get_data, TreeMap<String, String> post_data) {
+    public String calcSign(TreeMap<String, String> get_data, TreeMap<String, String> post_data) {
         StringBuilder get = new StringBuilder();
         if (get_data != null) {
             for (Map.Entry<String, String> entry : get_data.entrySet()) {
@@ -121,7 +122,7 @@ public class APIBase implements IAPI {
     }
 
     @Override
-    public String auth_hash() throws IOException {
+    public String authHash() throws IOException {
         String url = APIs.BASE_URL.v() + APIs.AUTH_HASH.v();
 
         OkHttpClient client = new OkHttpClient();
@@ -137,10 +138,14 @@ public class APIBase implements IAPI {
     }
 
     @Override
-    public String auth_login(String pubkey, String username, String password, String token, String cookies, String captcha) throws IOException {
+    public String authLogin(String pubkey, String username, String password, String token, String cookies, String captcha) throws IOException {
         try {
             String url = APIs.BASE_URL.v() + APIs.AUTH_LOGIN.v();
-
+            Log.e("AUTHLOGIN",username);
+            Log.e("AUTHLOGIN",password);
+            Log.e("AUTHLOGIN",token);
+            Log.e("AUTHLOGIN",cookies);
+            Log.e("AUTHLOGIN",captcha);
             OkHttpClient client = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
                     .add("username", RSAUtils.encrypt(username))
@@ -174,7 +179,7 @@ public class APIBase implements IAPI {
     }
 
     @Override
-    public String auth_logout(String token) {
+    public String authLogout(String token) {
         return null;
     }
 
@@ -186,7 +191,7 @@ public class APIBase implements IAPI {
 
 
     @Override
-    public String course_comment(String token, Integer course_id, APIOperation operation, @Nullable Double rank, @Nullable String content, @Nullable Integer comment_id) throws IOException {
+    public String courseComment(String token, Integer course_id, APIOperation operation, @Nullable Double rank, @Nullable String content, @Nullable Integer comment_id) throws IOException {
         String url = APIs.BASE_URL.v() + APIs.COURSE_.v() + course_id + APIs.COURSE_COMMENT.v();
         TreeMap<String, String> get_params = new TreeMap<>();
         TreeMap<String, String> post_params = new TreeMap<>();
@@ -211,22 +216,22 @@ public class APIBase implements IAPI {
     }
 
     @Override
-    public String course_comment_thumbs_up(String token, Integer course_id, APIOperation operation) {
+    public String courseCommentThumbsUp(String token, Integer course_id, APIOperation operation) {
         return null;
     }
 
     @Override
-    public String course_comment_thumbs_down(String token, Integer course_id, APIOperation operation) {
+    public String courseCommentThumbsDown(String token, Integer course_id, APIOperation operation) {
         return null;
     }
 
     @Override
-    public String course_ftp(String token, Integer course_id, APIOperation operation) {
+    public String courseFtp(String token, Integer course_id, APIOperation operation) {
         return null;
     }
 
     @Override
-    public String news_all(String token, Integer from, Integer count) throws IOException {
+    public String newsAll(String token, Integer from, Integer count) throws IOException {
         String url = APIs.BASE_URL.v() + APIs.NEWS_.v() + APIs.NEWS_ALL.v();
         TreeMap<String, String> params = new TreeMap<>();
         params.put("from", String.valueOf(from));
@@ -235,7 +240,7 @@ public class APIBase implements IAPI {
     }
 
     @Override
-    public String news_announcements(String token, Integer from, Integer count) throws IOException {
+    public String newsAnnouncements(String token, Integer from, Integer count) throws IOException {
         String url = APIs.BASE_URL.v() + APIs.NEWS_.v() + APIs.NEWS_ANNOUNCEMENTS.v();
         TreeMap<String, String> params = new TreeMap<>();
         params.put("from", String.valueOf(from));
@@ -244,7 +249,7 @@ public class APIBase implements IAPI {
     }
 
     @Override
-    public String news_documents(String token, Integer from, Integer count) throws IOException {
+    public String newsDocuments(String token, Integer from, Integer count) throws IOException {
         String url = APIs.BASE_URL.v() + APIs.NEWS_.v() + APIs.NEWS_DOCUMENTS.v();
         TreeMap<String, String> params = new TreeMap<>();
         params.put("from", String.valueOf(from));
@@ -253,12 +258,12 @@ public class APIBase implements IAPI {
     }
 
     @Override
-    public String news_faculty(String token, String faculty_name_zh, Integer from, Integer count) {
+    public String newsFaculty(String token, String faculty_name_zh, Integer from, Integer count) {
         return null;
     }
 
     @Override
-    public String news_department(String token, String department_name_zh, Integer from, Integer count) {
+    public String newsDepartment(String token, String department_name_zh, Integer from, Integer count) {
         return null;
     }
 

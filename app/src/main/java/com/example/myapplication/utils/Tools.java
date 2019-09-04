@@ -45,11 +45,6 @@ import java.util.Date;
 
 import static android.Manifest.permission.INTERNET;
 
-//import com.bumptech.glide.Glide;
-//import com.bumptech.glide.load.engine.DiskCacheStrategy;
-//import com.bumptech.glide.request.target.BitmapImageViewTarget;
-//import com.google.android.gms.maps.GoogleMap;
-
 public class Tools {
     public static boolean isNetworkConnected(Context ctx) {
         int permission = ctx.checkCallingOrSelfPermission(INTERNET);
