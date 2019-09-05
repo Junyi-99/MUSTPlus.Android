@@ -89,20 +89,23 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
 
         Calendar calendar = Calendar.getInstance();
 
-        int month = calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-
+        Log.e("Monehandday", month + " " + day);
         calendar.setTime(new SimpleDateFormat("MM-dd").parse(month + "-" + day));
-
         Long dateNowMillis = calendar.getTimeInMillis();
-
+        Log.e("TimetdateNowMillis", dateNowMillis + "");
         int delay = 0;
 
         for (final ModelTimetableCell cell : modelTimetable.getTimetable()) {
             calendar.setTime(new SimpleDateFormat("MM-dd").parse(cell.getDate_begin()));
             Long dateBeginMillis = calendar.getTimeInMillis();
+            Log.e("TimetdateBeginMillis", dateBeginMillis + "");
+
             calendar.setTime(new SimpleDateFormat("MM-dd").parse(cell.getDate_end()));
             Long dateEndMillis = calendar.getTimeInMillis();
+            Log.e("TimetdateEndMillis", dateBeginMillis + "");
+
 
             if (dateEndMillis > dateBeginMillis) {
                 if (dateNowMillis < dateBeginMillis || dateNowMillis > dateEndMillis) {
@@ -162,7 +165,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
             b.setAlpha(0.f);
 
             timetableCellList.add(b);
-            Log.d("单元格", title);
+            //Log.d("单元格", title);
         }
 
         for (TextView b : timetableCellList) {

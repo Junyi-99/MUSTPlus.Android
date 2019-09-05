@@ -1,5 +1,7 @@
 package com.example.myapplication.models;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,14 +21,15 @@ public class ModelTimetableCell {
     private Date date_begin;
     private Date date_end;
     private int course_id;
-    private SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm", Locale.US);
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd", Locale.US);
-    private SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM月dd日", Locale.US);
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm", Locale.CHINA);
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd", Locale.CHINA);
+    private SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM月dd日", Locale.CHINA);
     private double MS_TO_HOURS = (0.00000027777777777777777777777);
 
     public ModelTimetableCell() {
-        timeFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        // 这里不能写 GMT+8 ，写了的话会少8个小时
+        timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
     public int getMonth_begin() {
@@ -40,6 +43,7 @@ public class ModelTimetableCell {
         cal.setTime(date_begin);
         return cal.get(Calendar.DAY_OF_MONTH);
     }
+
     public int getMonth_end() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date_end);
@@ -51,6 +55,7 @@ public class ModelTimetableCell {
         cal.setTime(date_end);
         return cal.get(Calendar.DAY_OF_MONTH);
     }
+
     public double duration() {
         return (time_end.getTime() - time_begin.getTime()) * MS_TO_HOURS;
     }
@@ -62,7 +67,8 @@ public class ModelTimetableCell {
 
     // 获取应该在哪一行 8点到22点，对应 [0, 14] 行
     public double getCellLinePosition() {
-        return time_begin.getTime() * MS_TO_HOURS;
+        // 28800000 表示 8 小时，因为时间从 8 点开始
+        return (time_begin.getTime() - 28800000) * MS_TO_HOURS;
     }
 
     public int getDay() {
@@ -150,6 +156,7 @@ public class ModelTimetableCell {
     }
 
     public String getSchedule() {
+        Log.e("ModelTimetableCell", date_begin.toString());
         return dateFormat2.format(date_begin) + "-" + dateFormat2.format(date_end) + " " +
                 getTime_begin() + " - " + getTime_end() + "@" + getClassroom();
     }
