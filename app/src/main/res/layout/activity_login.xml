@@ -47,11 +47,11 @@
                     android:layout_marginBottom="@dimen/spacing_xlarge"
                     android:text="登录以继续"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                    android:textColor="@color/green_500"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/edit_text_username"
+                    android:id="@+id/editTextUsername"
                     style="@style/LoginEditText.Username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

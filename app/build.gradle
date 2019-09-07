@@ -16,6 +16,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -39,4 +40,5 @@ dependencies {
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     implementation 'com.squareup.okhttp3:okhttp:4.0.1'
     implementation 'com.facebook.rebound:rebound:0.3.8'
+
 }

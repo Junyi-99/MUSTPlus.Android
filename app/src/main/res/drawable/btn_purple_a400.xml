@@ -5,7 +5,7 @@
         <layer-list>
             <item android:bottom="4dp" android:left="4dp" android:right="4dp" android:top="4dp">
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/purple_A700" />
+                    <solid android:color="@color/colorPrimaryDark" />
                     <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp" />
                     <size android:width="110dp" android:height="40dp" />
                 </shape>
@@ -18,7 +18,7 @@
         <layer-list>
             <item android:bottom="4dp" android:left="4dp" android:right="4dp" android:top="4dp">
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/purple_A700" />
+                    <solid android:color="@color/colorPrimary" />
                     <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp" />
                     <size android:width="110dp" android:height="40dp" />
                 </shape>
@@ -28,16 +28,14 @@
     </item>
 
     <item>
-
         <layer-list>
             <item android:bottom="4dp" android:left="4dp" android:right="4dp" android:top="4dp">
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/purple_A400" />
+                    <solid android:color="@color/colorPrimary" />
                     <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp" />
                     <size android:width="110dp" android:height="40dp" />
                 </shape>
             </item>
         </layer-list>
-
     </item>
 </selector>

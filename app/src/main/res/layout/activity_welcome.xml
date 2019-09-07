@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:id="@+id/constraintVeiewWelcome"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context=".activities.ActivityMain">
+
+    <Button
+        android:id="@+id/buttonSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/textViewTermsOfUse"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/btn_purple_a400"
+        android:fontFamily="@font/productsans_bold"
+        android:text="@string/sign_in"
+        android:textAlignment="center"
+        android:textColor="@color/colorFontPrimary" />
+
+    <EditText
+        android:id="@+id/editTextUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewLOGO"
+        android:layout_alignStart="@id/buttonSignIn"
+        android:layout_alignEnd="@id/buttonSignIn"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#eaeaea"
+        android:drawableStart="@drawable/ic_baseline_person"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:fontFamily="@font/productsans_thin"
+        android:hint="@string/your_student_card_number"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/colorFontDark"
+        android:visibility="visible" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextUsername"
+        android:layout_alignStart="@id/editTextUsername"
+        android:layout_alignEnd="@id/editTextUsername"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#eaeaea"
+        android:drawableStart="@drawable/ic_baseline_lock"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:fontFamily="@font/productsans_thin"
+        android:hint="@string/password"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/colorFontDark"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_alignStart="@+id/editTextPassword"
+        android:layout_alignEnd="@+id/editTextPassword"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editTextCaptcha"
+            android:layout_width="128dp"
+            android:layout_height="match_parent"
+
+            android:backgroundTint="#eaeaea"
+            android:drawableStart="@drawable/ic_baseline_verified_user"
+            android:drawablePadding="8dp"
+            android:ems="10"
+            android:fontFamily="@font/productsans_thin"
+            android:hint="@string/captcha"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/colorFontDark"
+            android:visibility="visible" />
+
+
+        <ImageView
+            android:id="@+id/imageViewCaptcha"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/refresh_captcha"
+            android:padding="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image_captcha" />
+
+        <ImageButton
+            android:id="@+id/imageButtonRefresh"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/display_captcha"
+            app:srcCompat="@drawable/ic_baseline_refresh" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewTermsOfUse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/productsans_medium"
+        android:text="@string/terms_of_use"
+        android:textAlignment="center"
+        android:textColor="@color/colorFontGrey"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/textViewHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayout"
+        android:layout_alignStart="@id/editTextPassword"
+        android:text="@string/login_hint"
+        android:textColor="@color/colorFontGrey"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/textViewLOGO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/productsans_bold"
+        android:text="@string/must"
+        android:textAlignment="center"
+        android:textColor="@color/colorFont"
+        android:textSize="48sp" />
+</RelativeLayout>

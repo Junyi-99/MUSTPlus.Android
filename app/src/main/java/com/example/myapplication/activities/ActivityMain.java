@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
-import com.example.myapplication.adapters.AdapterSectionsPager;
 import com.example.myapplication.fragments.FragmentMineAbstract;
 import com.example.myapplication.fragments.FragmentMomentsAbstract;
 import com.example.myapplication.fragments.FragmentNewsAbstract;
@@ -68,6 +67,9 @@ public class ActivityMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = new Intent(this, ActivityWelcome.class);
+        startActivity(intent);
+/* //临时注释
         checkTimetableStatus();
 
         BottomNavigationView navView = findViewById(R.id.navigation);
@@ -77,7 +79,7 @@ public class ActivityMain extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapterSectionsPager);
         viewPager.setOffscreenPageLimit(4); // 有效改善用户体验
-        mTextMessage = findViewById(R.id.message);
+        mTextMessage = findViewById(R.id.message);*/
     }
 
     @Override

@@ -82,6 +82,15 @@
         and consent to having your personal data, behavior transferred and processed outside EU.
     </string>
     <string name="todayschangcan">今日常餐</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="your_student_card_number">Your Student Card Number</string>
+    <string name="password">Password</string>
+    <string name="must">MUST +</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="login_hint">* 学生卡号为全大写带横线格式 \n   密码为选课系统登录密码</string>
+    <string name="captcha">Captcha</string>
+    <string name="display_captcha">Display Captcha</string>
+    <string name="refresh_captcha">Refresh Captcha</string>
 
 
 </resources>

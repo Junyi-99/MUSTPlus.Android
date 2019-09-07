@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/colorBackground">
+
+    <EditText
+        android:id="@+id/editTextUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_marginTop="@dimen/spacing_8dp"
+        android:ems="10"
+        android:hint="学生卡卡号"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextUsername"
+        android:layout_alignStart="@+id/editTextUsername"
+        android:layout_marginTop="@dimen/spacing_8dp"
+        android:ems="10"
+        android:hint="选课系统登陆密码"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/editTextCaptcha"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_alignStart="@+id/editTextPassword"
+        android:layout_marginTop="@dimen/spacing_8dp"
+        android:hint="验证码" />
+
+    <ImageButton
+        android:id="@+id/imageButtonRefresh"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignTop="@+id/imageViewCaptcha"
+        android:layout_gravity="center"
+        android:layout_toEndOf="@+id/imageViewCaptcha"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:srcCompat="@drawable/ic_baseline_refresh" />
+
+    <ImageView
+        android:id="@+id/imageViewCaptcha"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/editTextCaptcha"
+        android:layout_gravity="center"
+        android:layout_toEndOf="@+id/editTextCaptcha"
+        android:padding="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_captcha" />
+
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_below="@+id/editTextCaptcha"
+        android:background="@drawable/btn_rounded_primary"
+        android:elevation="16dp"
+        android:text="LOG IN"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_alignStart="@+id/textView1"
+        android:fontFamily="@font/productsans_black"
+        android:text="Let's begin the new journey"
+        android:textColor="@color/text_tint_grey"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/productsans_black"
+        android:text="Welcome"
+        android:textColor="@color/colorPrimary"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/textViewLoginHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonLogin"
+        android:fontFamily="@font/robotomedium"
+        android:text="@string/login_hint_text"
+        android:textColor="@color/blue_grey_300"
+        android:textSize="12sp" />
+
+
+    <!--  <View
+          android:layout_width="match_parent"
+          android:layout_height="220dp"
+          android:background="@color/colorPrimary" />
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_centerInParent="true"
+          android:orientation="vertical"
+          android:padding="24dp">
+
+          <android.support.v7.widget.CardView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="@dimen/spacing_middle"
+              android:visibility="visible"
+              app:cardCornerRadius="24dp"
+              app:cardElevation="4dp">
+
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:padding="@dimen/spacing_mlarge">
+
+                  <EditText
+                      android:id="@+id/edit_text_username"
+                      style="@style/LoginEditText.Username"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:hint="学生号 XXXXXXXX-XXXX-XXXX"
+                      android:text="1809853D-B211-0078" />
+
+                  <View
+                      android:layout_width="0dp"
+                      android:layout_height="@dimen/spacing_mlarge" />
+
+                  <EditText
+                      android:id="@+id/edit_text_password"
+                      style="@style/LoginEditText.Password"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:hint="密码 (COES登录密码)" />
+
+                  <View
+                      android:layout_width="0dp"
+                      android:layout_height="@dimen/spacing_mlarge" />
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+
+                      android:orientation="horizontal">
+
+                      <EditText
+                          android:id="@+id/edit_text_captcha"
+                          style="@style/LoginEditText.Captcha"
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:hint="验证码" />
+
+                      <ImageView
+                          android:id="@+id/image_view_captcha"
+                          android:layout_width="120dp"
+                          android:layout_height="40dp"
+                          android:layout_gravity="center"
+                          android:padding="8dp"
+                          android:scaleType="centerCrop"
+                          android:src="@drawable/image_captcha" />
+
+                      <ImageButton
+                          android:id="@+id/image_button_refresh"
+                          android:layout_width="28dp"
+                          android:layout_height="28dp"
+                          android:layout_gravity="center"
+                          android:background="?attr/selectableItemBackgroundBorderless"
+                          app:srcCompat="@drawable/ic_baseline_refresh" />
+                  </LinearLayout>
+
+                  <View
+                      android:layout_width="0dp"
+                      android:layout_height="@dimen/spacing_mlarge" />
+
+                  <Button
+                      android:id="@+id/button_login"
+                      android:layout_width="match_parent"
+                      android:layout_height="55dp"
+                      android:layout_marginLeft="-4dp"
+                      android:layout_marginRight="-4dp"
+                      android:background="@drawable/btn_rounded_primary"
+                      android:text="登 录"
+                      android:textAllCaps="false"
+                      android:textColor="@android:color/white"
+                      android:textStyle="bold" />
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/spacing_large"
+                      android:layout_marginBottom="@dimen/spacing_medium"
+                      android:gravity="center"
+                      android:orientation="horizontal">
+
+                      <TextView
+                          android:id="@+id/text_view_login_hint"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:fontFamily="@font/robotomedium"
+                          android:text="@string/login_hint_text"
+                          android:textColor="@color/blue_grey_300"
+                          android:textSize="12sp" />
+                  </LinearLayout>
+
+              </LinearLayout>
+          </android.support.v7.widget.CardView>
+
+      </LinearLayout>-->
+
+</RelativeLayout>
