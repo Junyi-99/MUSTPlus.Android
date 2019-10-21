@@ -59,7 +59,7 @@ public class FragmentNewsAbstract extends AbstractLazyLoadFragment {
             if (position == 0)
                 return new FragmentNewsAll();
             // 这里的position跟FragmentNewsUniversal的position是对应的
-            return FragmentNewsUniversalAbstract.newInstance(position);
+            return LazyFragmentNewsUniversal.newInstance(position);
         }
 
 

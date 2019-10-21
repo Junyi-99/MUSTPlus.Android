@@ -81,7 +81,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
     private void initButtons() {
         // 返回按钮
-        ((ImageButton) findViewById(R.id.image_button_more)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.imageButtonBack)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityCourseDetails.super.onBackPressed();
@@ -99,6 +99,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
     /**
      * 评论系统无本地缓存
+     *
      * @param forceUpdate 是否强制刷新
      */
     private void refreshCourseComment(boolean forceUpdate) {
@@ -247,8 +248,8 @@ public class ActivityCourseDetails extends AppCompatActivity {
         recyclerViewCourseComment.setNestedScrollingEnabled(false);
 
         ModelCourseComment comment = new ModelCourseComment(
-                0,"Junyi","Junyi","1709853D-I011-0021",96,
-                0,4.5,"下拉即可刷新课程信息和评价","2019/8/8"
+                0, "Junyi", "Junyi", "1709853D-I011-0021", 96,
+                0, 4.5, "下拉即可刷新课程信息和评价", "2019/8/8"
         );
         for (int i = 0; i < 1; i++) {
             modelCourseCommentArrayList.add(comment);

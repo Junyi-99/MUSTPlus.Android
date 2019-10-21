@@ -24,8 +24,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@font/productsans_medium"
             android:singleLine="true"
+            android:text="课程信息"
             android:textColor="@color/text_tint_light"
             android:textSize="20sp"
             fab:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +35,7 @@
             fab:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/image_button_more"
+            android:id="@+id/imageButtonBack"
             android:tint="@color/icon_tint_light"
             fab:layout_constraintBottom_toBottomOf="parent"
             fab:layout_constraintStart_toStartOf="parent"
@@ -94,75 +95,76 @@
 
                             <TextView
                                 android:id="@+id/course_title"
-                                android:textStyle="bold"
-                                fab:layout_constraintStart_toStartOf="parent"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_margin="@dimen/spacing_8dp"
-                                android:fontFamily="@font/robotomedium"
-                                android:text="计算机组成原理"
+                                android:fontFamily="@font/productsans_medium"
+                                android:text="CO101 计算机组成原理"
                                 android:textColor="#DE000000"
                                 android:textSize="24sp"
+                                android:textStyle="bold"
+                                fab:layout_constraintStart_toStartOf="parent"
                                 fab:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/course_schedule"
-                                android:textSize="14sp"
-                                fab:layout_constraintStart_toStartOf="parent"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_margin="@dimen/spacing_8dp"
-                                android:fontFamily="@font/robotomedium"
-                                android:text="09月03日-12月16日 10:00 - 12:40 @C507"
+                                android:fontFamily="@font/productsans_medium"
+                                android:text="09月03日-12月16日 10:00 - 12:40 \n@C507"
                                 android:textColor="#99000000"
-                                fab:layout_constraintTop_toBottomOf="@id/course_title" />
+                                android:textSize="14sp"
+                                fab:layout_constraintStart_toStartOf="parent"
+                                fab:layout_constraintTop_toBottomOf="@id/course_title"
+                                fab:lineHeight="16dp" />
 
                             <TextView
                                 android:id="@+id/course_code"
-                                android:textSize="14sp"
-                                fab:layout_constraintStart_toStartOf="parent"
                                 android:layout_width="130dp"
                                 android:layout_height="match_parent"
                                 android:layout_margin="@dimen/spacing_8dp"
-                                android:fontFamily="@font/robotomedium"
+                                android:fontFamily="@font/productsans_medium"
                                 android:text="编号：..."
                                 android:textColor="#61000000"
+                                android:textSize="14sp"
+                                fab:layout_constraintStart_toStartOf="parent"
                                 fab:layout_constraintTop_toBottomOf="@id/course_schedule" />
 
                             <TextView
                                 android:id="@+id/course_class"
-                                android:textSize="14sp"
-                                fab:layout_constraintStart_toStartOf="parent"
                                 android:layout_width="130dp"
                                 android:layout_height="match_parent"
                                 android:layout_margin="@dimen/spacing_8dp"
-                                android:fontFamily="@font/robotomedium"
+                                android:fontFamily="@font/productsans_medium"
                                 android:text="班级：..."
                                 android:textColor="#61000000"
+                                android:textSize="14sp"
+                                fab:layout_constraintStart_toStartOf="parent"
                                 fab:layout_constraintTop_toBottomOf="@id/course_code" />
 
                             <TextView
                                 android:id="@+id/course_faculty"
-                                android:textSize="14sp"
-                                fab:layout_constraintStart_toEndOf="@id/course_class"
                                 android:layout_width="130dp"
                                 android:layout_height="match_parent"
                                 android:layout_margin="@dimen/spacing_8dp"
-                                android:fontFamily="@font/robotomedium"
+                                android:fontFamily="@font/productsans_medium"
                                 android:text="评分：..."
                                 android:textColor="#61000000"
+                                android:textSize="14sp"
+                                fab:layout_constraintStart_toEndOf="@id/course_class"
                                 fab:layout_constraintTop_toBottomOf="@id/course_credit" />
 
                             <TextView
                                 android:id="@+id/course_credit"
-                                android:textSize="14sp"
-                                fab:layout_constraintStart_toEndOf="@id/course_code"
                                 android:layout_width="130dp"
                                 android:layout_height="match_parent"
                                 android:layout_margin="@dimen/spacing_8dp"
-                                android:fontFamily="@font/robotomedium"
+                                android:fontFamily="@font/productsans_medium"
                                 android:text="学分：..."
                                 android:textColor="#61000000"
+                                android:textSize="14sp"
+                                fab:layout_constraintStart_toEndOf="@id/course_code"
                                 fab:layout_constraintTop_toBottomOf="@id/course_schedule" />
 
                         </android.support.constraint.ConstraintLayout>
@@ -180,7 +182,7 @@
                     android:layout_marginTop="@dimen/spacing_16dp"
                     android:layout_marginBottom="@dimen/spacing_16dp"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/robotomedium"
+                    android:fontFamily="@font/productsans_medium"
                     android:text="任课教师"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -221,7 +223,7 @@
                     android:layout_marginTop="@dimen/spacing_16dp"
                     android:layout_marginBottom="@dimen/spacing_16dp"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/robotomedium"
+                    android:fontFamily="@font/productsans_medium"
                     android:text="课程评价（仅供参考，请以实际上课为准）"
                     android:textSize="16sp"
                     android:textStyle="bold" />

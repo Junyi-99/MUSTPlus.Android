@@ -3,13 +3,13 @@ package com.example.myapplication.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
@@ -59,9 +60,10 @@ public class FragmentNewsAll extends Fragment {
             "可持續發展研究所",
             "N211",
     };
+    public boolean activate = false;
+    TypedArray drwArr;
     private ArrayList<ModelNews> modelNewsItems;
     private ModelResponseNewsAll modelResponseNewsAll;
-    TypedArray drwArr;
     private View thisView;
     private ViewPager viewPager;
     private LinearLayout layoutDots;
@@ -76,64 +78,6 @@ public class FragmentNewsAll extends Fragment {
     private TextView sliderImageBrief;
     private boolean isRefreshing = false;
 
-    /**
-     * 第一次更新 News
-     *
-     * @param force 是否强制更新
-     */
-    public void refreshNewsAll(final boolean force) {
-        Log.e("RefreshNewsAll", "" + force);
-        try {
-            DBHelper helper = new DBHelper(getContext());
-            API api = new API(getContext());
-            api.setForceUpdate(force);
-            ModelResponseLogin login = helper.getLoginRecord();
-            if (login != null) {
-                modelResponseNewsAll = api.news_all_get(helper.getLoginRecord().getToken(), 0, 20);
-                if (modelResponseNewsAll != null && modelResponseNewsAll.getCode() == 0) {
-                    modelNewsItems.clear();
-                    modelNewsItems.addAll(modelResponseNewsAll.getNews_list());
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-
-            // 为啥这样写原理请见 ActivityCourseDetails 类似部分
-            if (!force) {
-                swipeRefreshLayout.setRefreshing(false);
-                isRefreshing = false;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void swipeRefreshLayoutOnRefresh() {
-        //检查是否处于刷新状态
-        Log.d("API onRefresh", String.valueOf(swipeRefreshLayout.isRefreshing()) + " " + String.valueOf(isRefreshing));
-        if (!isRefreshing) {
-            isRefreshing = true;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    refreshNewsAll(true);
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                            isRefreshing = false;
-                        }
-                    });
-                }
-            }).start();
-        }
-    }
 
 
     @Override
@@ -158,29 +102,13 @@ public class FragmentNewsAll extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayoutOnRefresh();
+                new TaskNewsRefresh(true).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
 
         initComponent();
 
-        swipeRefreshLayout.setRefreshing(true);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                refreshNewsAll(false);
-                FragmentActivity activity = getActivity();
-                if (activity != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                            isRefreshing = false;
-                        }
-                    });
-                }
-            }
-        }).start();
+        new TaskNewsRefresh(false).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         return thisView;
     }
 
@@ -231,7 +159,7 @@ public class FragmentNewsAll extends Fragment {
                     scroller.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                         @Override
                         public void onScrollChange(NestedScrollView v, int scrollx, int scrolly, int oldscrollx, int oldscrolly) {
-                            if (scrolly > oldscrolly) {
+                           /* if (scrolly > oldscrolly) {
                                 Log.i("recyclerView", "Scroll DOWN");
                             }
                             if (scrolly < oldscrolly) {
@@ -239,9 +167,9 @@ public class FragmentNewsAll extends Fragment {
                             }
                             if (scrolly == 0) {
                                 Log.i("recyclerView", "TOP SCROLL");
-                            }
+                            }*/
                             if (scrolly == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                                Log.i("recyclerView", "BOTTOM SCROLL");
+                                Log.e("recyclerView", "BOTTOM SCROLL,加载更多");
                                 Snackbar.make(thisView, "触底，这里是加载更多刷新操作", Snackbar.LENGTH_SHORT).show();
                             }
                         }
@@ -433,5 +361,67 @@ public class FragmentNewsAll extends Fragment {
             void onItemClick(View view, ModelNewsImage obj);
         }
 
+    }
+
+    private class TaskNewsRefresh extends AsyncTask<Void, String, String> {
+        private boolean forceUpdate;
+        private TaskNewsRefresh(boolean forceUpdate) {
+            this.forceUpdate = forceUpdate;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            swipeRefreshLayout.setRefreshing(true);
+            isRefreshing = true;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!s.isEmpty()) {
+                Toast.makeText(getContext(), "错误：" + s, Toast.LENGTH_SHORT).show();
+            }
+            mAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+            isRefreshing = false;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            swipeRefreshLayout.setRefreshing(false);
+            isRefreshing = false;
+        }
+
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                DBHelper helper = new DBHelper(getContext());
+                ModelResponseLogin login = helper.getLoginRecord();
+
+                if (login != null) {
+                    API api = new API(getContext());
+                    api.setForceUpdate(forceUpdate);
+                    modelResponseNewsAll = api.news_all_get(login.getToken(), 0, 20);
+                    if (modelResponseNewsAll != null && modelResponseNewsAll.getCode() == 0) {
+                        modelNewsItems.clear();
+                        modelNewsItems.addAll(modelResponseNewsAll.getNews_list());
+                    }
+                } else {
+                    return "您还未登录，请登录后重试";
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return e.getMessage();
+            }
+            return "";
+        }
     }
 }

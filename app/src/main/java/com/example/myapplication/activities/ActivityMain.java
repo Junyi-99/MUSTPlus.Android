@@ -1,7 +1,6 @@
 package com.example.myapplication.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,16 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
-import com.example.myapplication.fragments.FragmentMineAbstract;
+import com.example.myapplication.adapters.AdapterSectionsPager;
+import com.example.myapplication.fragments.LazyFragmentMine;
 import com.example.myapplication.fragments.FragmentMomentsAbstract;
 import com.example.myapplication.fragments.FragmentNewsAbstract;
 import com.example.myapplication.fragments.FragmentTimetableAbstract;
-import com.example.myapplication.models.ModelResponse;
-import com.example.myapplication.models.ModelResponseLogin;
-import com.example.myapplication.utils.APIs;
 
 /**
  * @author Junyi
@@ -29,7 +24,7 @@ public class ActivityMain extends AppCompatActivity {
     private FragmentTimetableAbstract fragmentTimetable;
     private FragmentNewsAbstract fragmentNews;
     private FragmentMomentsAbstract fragmentMoments;
-    private FragmentMineAbstract fragmentMine;
+    private LazyFragmentMine fragmentMine;
 
     private ViewPager viewPager;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -65,12 +60,9 @@ public class ActivityMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, ActivityWelcome.class);
-        startActivity(intent);
-/* //临时注释
-        checkTimetableStatus();
+
+        setContentView(R.layout.activity_main);
 
         BottomNavigationView navView = findViewById(R.id.navigation);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -79,38 +71,11 @@ public class ActivityMain extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapterSectionsPager);
         viewPager.setOffscreenPageLimit(4); // 有效改善用户体验
-        mTextMessage = findViewById(R.id.message);*/
+        mTextMessage = findViewById(R.id.message);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-    }
-
-
-    private void checkTimetableStatus() {
-        DBHelper db = new DBHelper(getApplicationContext());
-        String timetable = db.getAPIRecord(APIs.TIMETABLE);
-        ModelResponseLogin login = db.getLoginRecord();
-        if (login == null && !ActivityLogin.active) {
-            Intent intent = new Intent(this, ActivityLogin.class);
-            startActivity(intent);
-        }
-        // 预感到这里是一个很蠢的写法，因为response不是0的数据不会被存在数据库里，
-        // 所以下面的 if response.getCode() != 0
-        // 是没有必要的
-        // 但是我懒得改
-        else if (timetable.isEmpty()) {
-            Intent intent = new Intent(this, ActivityLogin.class);
-            startActivity(intent);
-        } else {
-            ModelResponse response = JSON.parseObject(timetable, ModelResponse.class);
-            if (response.getCode() != 0) {
-                // 无课表数据，跳转到登录页面
-                Intent intent = new Intent(this, ActivityLogin.class);
-                startActivity(intent);
-            }
-        }
     }
 }

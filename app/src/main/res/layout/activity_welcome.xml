@@ -9,6 +9,20 @@
     android:background="@color/colorBackground"
     tools:context=".activities.ActivityMain">
 
+    <ImageButton
+        android:id="@+id/imageButtonHelp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/display_captcha"
+        android:tint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_help_outline_black_24dp" />
+
     <Button
         android:id="@+id/buttonSignIn"
         android:layout_width="wrap_content"
@@ -43,6 +57,7 @@
         android:inputType="textPersonName"
         android:maxLines="1"
         android:singleLine="true"
+        android:text="1809853D-B211-0078"
         android:textColor="@color/colorFontDark"
         android:visibility="visible" />
 
@@ -64,6 +79,7 @@
         android:inputType="textPassword"
         android:maxLines="1"
         android:singleLine="true"
+        android:text="18808403"
         android:textColor="@color/colorFontDark"
         android:visibility="visible" />
 
@@ -89,7 +105,8 @@
             android:fontFamily="@font/productsans_thin"
             android:hint="@string/captcha"
             android:importantForAutofill="no"
-            android:inputType="textPassword"
+            android:inputType="number"
+            android:maxLength="4"
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@color/colorFontDark"

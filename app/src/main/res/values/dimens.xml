@@ -18,11 +18,11 @@
     </dimen>
 
     <dimen name="timetable_header_width">66dp</dimen>
-    <dimen name="timetable_header_height">41dp</dimen>
+    <dimen name="timetable_column_header_height">36dp</dimen>
     <dimen name="timetable_time_cell_width">64dp</dimen> <!-- 64 = timetable_header_width - 2 -->
     <dimen name="timetable_time_cell_font_size">12sp</dimen>
-    <dimen name="timetable_time_label_width">29dp</dimen>
-    <dimen name="timetable_time_label_height">68dp</dimen>
+    <dimen name="timetable_time_row_header_width">29dp</dimen> <!-- 左边的时间宽度 -->
+    <dimen name="timetable_time_row_header_height">48dp</dimen><!-- default: 68dp -->
 
     <dimen name="action_bar_size">56dp</dimen>
 
@@ -52,4 +52,5 @@
     <dimen name="corner_radius_large">16dp</dimen>
     <dimen name="corner_radius_xlarge">24dp</dimen>
     <dimen name="corner_radius_xxlarge">32dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

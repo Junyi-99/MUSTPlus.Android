@@ -115,7 +115,7 @@ public class ActivityCourseCommentNew extends AppCompatActivity {
 
     private void initButtons() {
         // 返回按钮
-        ((ImageButton) findViewById(R.id.image_button_more)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.imageButtonBack)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO: 询问是否退出再退出

@@ -91,6 +91,15 @@
     <string name="captcha">Captcha</string>
     <string name="display_captcha">Display Captcha</string>
     <string name="refresh_captcha">Refresh Captcha</string>
+    <string name="intake_week">学期 %d 第 %d 周</string>
+    <string name="monday">周一</string>
+    <string name="tuesday">周二</string>
+    <string name="wednesday">周三</string>
+    <string name="thursday">周四</string>
+    <string name="friday">周五</string>
+    <string name="saturday">周六</string>
+    <string name="sunday">周日</string>
+    <string name="title_activity_bus_zhuhai">珠海公交</string>
 
 
 </resources>

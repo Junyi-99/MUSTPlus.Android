@@ -3,11 +3,10 @@ package com.example.myapplication.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,9 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,12 +27,17 @@ import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.activities.ActivityCourseDetails;
 import com.example.myapplication.activities.ActivitySettings;
+import com.example.myapplication.activities.ActivityWelcome;
 import com.example.myapplication.models.ModelResponseSemester;
 import com.example.myapplication.models.ModelResponseWeek;
 import com.example.myapplication.models.ModelTimetable;
 import com.example.myapplication.models.ModelTimetableCell;
 import com.example.myapplication.utils.API;
 import com.example.myapplication.utils.APIs;
+import com.facebook.rebound.SimpleSpringListener;
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringConfig;
+import com.facebook.rebound.SpringSystem;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -39,6 +45,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -46,18 +54,34 @@ import java.util.Calendar;
  */
 public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
     private final ArrayList<Animator> animators = new ArrayList<Animator>();
+    int[] colourfulCell = {
+            R.drawable.layout_bg_timetable_cell_blue,
+            R.drawable.layout_bg_timetable_cell_green,
+            R.drawable.layout_bg_timetable_cell_orange,
+            R.drawable.layout_bg_timetable_cell_pink,
+            R.drawable.layout_bg_timetable_cell_purple,
+            R.drawable.layout_bg_timetable_cell_red,
+            R.drawable.layout_bg_timetable_cell_teal,
+            R.drawable.layout_bg_timetable_cell_yellow
+    };
     private ModelResponseWeek week;
     private ModelResponseSemester semester;
     private String timetableRaw = "";
     private View root;
+    private View timeIndicator;
     private ViewGroup thisContainer;
     private ArrayList<TextView> timetableCellList = new ArrayList<TextView>();
     private ImageButton imageButtonMore;
+    private ImageButton imageButtonSelectWeek;
+    private ScrollView scrollViewVertical;
+    private RelativeLayout relativeLayoutInnerContent;
+    private Button button;
     /**
      * 是否已经播放过动画
      */
     private boolean animated = false;
-
+    private int scrollViewScrollingY = 0; // 上一次scrolling到哪里（这个变量为了中断 Spring 动画）
+    private boolean scrollViewScrollingBreak = false;
 
     private int convertDpToPx(int dp) {
         return Math.round(dp * (getResources().getDisplayMetrics().density));
@@ -68,6 +92,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(this.animators);
             animatorSet.start();
+
             animated = true;
         } else {
             for (TextView button : timetableCellList) {
@@ -76,10 +101,11 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         }
     }
 
-    private void calculateLayout(String timetableRaw, ViewGroup container, LayoutInflater inflater, RelativeLayout relativeLayout) throws ParseException {
+    private void calculateLayout(String timetableRaw) throws ParseException {
         timetableCellList.clear();
         animators.clear();
-        relativeLayout.removeAllViews();
+        //relativeLayoutInnerContent.removeAllViews();
+
 
         ModelTimetable modelTimetable = JSON.parseObject(timetableRaw, ModelTimetable.class);
         if (modelTimetable == null) {
@@ -87,25 +113,32 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         }
 
 
+        // 这里用 Map 来保证每一个 course_code 对应一个颜色
+        Map<String, Integer> courseColor = new HashMap<String, Integer>();
+        int colourfulCellIndex = 0;
+        for (final ModelTimetableCell cell : modelTimetable.getTimetable()) {
+            if (!courseColor.containsKey(cell.getCourse_code())) {
+                courseColor.put(cell.getCourse_code(), colourfulCell[colourfulCellIndex % colourfulCell.length]);
+                colourfulCellIndex++;
+            }
+        }
+
+
         Calendar calendar = Calendar.getInstance();
 
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        Log.e("Monehandday", month + " " + day);
+
         calendar.setTime(new SimpleDateFormat("MM-dd").parse(month + "-" + day));
         Long dateNowMillis = calendar.getTimeInMillis();
-        Log.e("TimetdateNowMillis", dateNowMillis + "");
-        int delay = 0;
 
+
+        int animationDelay = 0;
         for (final ModelTimetableCell cell : modelTimetable.getTimetable()) {
             calendar.setTime(new SimpleDateFormat("MM-dd").parse(cell.getDate_begin()));
             Long dateBeginMillis = calendar.getTimeInMillis();
-            Log.e("TimetdateBeginMillis", dateBeginMillis + "");
-
             calendar.setTime(new SimpleDateFormat("MM-dd").parse(cell.getDate_end()));
             Long dateEndMillis = calendar.getTimeInMillis();
-            Log.e("TimetdateEndMillis", dateBeginMillis + "");
-
 
             if (dateEndMillis > dateBeginMillis) {
                 if (dateNowMillis < dateBeginMillis || dateNowMillis > dateEndMillis) {
@@ -119,8 +152,15 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
                 }
             }
 
+            final TextView b = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.timetable_course_cell_new, thisContainer, false);
 
-            final TextView b = (TextView) inflater.inflate(R.layout.timetable_course_cell_new, container, false);
+            // 取出 Map 中的元素，每一个 course_code 对应一种颜色
+            // 防止空指针异常
+            Integer resId = courseColor.get(cell.getCourse_code());
+            if (resId != null) {
+                b.setBackgroundResource(resId);
+            }
+
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -138,9 +178,9 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
             });
 
             Animator animator = ObjectAnimator.ofFloat(b, "alpha", 0.f, 0.5f, 1.f);
-            animator.setDuration(500).setStartDelay(delay);
+            animator.setDuration(500).setStartDelay(animationDelay);
             animators.add(animator);
-            delay += 100;
+            animationDelay += 100;
 
             // These supply parameters to the parent of this view specifying how it should be arranged.
             // 也就是说，在 Android 5.0 (API 21) 时，所有 Button 重叠在一起是因为
@@ -152,24 +192,30 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
             int marginLeft = (int) getResources().getDimension(R.dimen.timetable_header_width) * cell.getCellDayPosition() + convertDpToPx(2);
-            int marginTop = (int) (getResources().getDimension(R.dimen.timetable_time_label_height) * cell.getCellLinePosition());
+            int marginTop = (int) (getResources().getDimension(R.dimen.timetable_time_row_header_height) * cell.getCellLinePosition());
             params.setMargins(marginLeft, marginTop, 0, 0);
 
             params.width = (int) getResources().getDimension(R.dimen.timetable_time_cell_width);
-            params.height = (int) (getResources().getDimension(R.dimen.timetable_time_label_height) * cell.duration());
+            params.height = (int) (getResources().getDimension(R.dimen.timetable_time_row_header_height) * cell.duration());
 
-            String title = cell.getCourse_name_zh() + "\n@" + cell.getClassroom();
+
+            //String title = cell.getCourse_code() + "\n@" + cell.getClassroom() + "\n" + cell.getTeacher();
+
+            // 1小时45分钟
+            // 计算机组成原理\n@C402\n于建德
+            // TRADITIONAL\n@C402\n于建德
+            String title = cell.getCourse_name_zh() + "\n@" + cell.getClassroom() + "\n" + cell.getTeacher();
+
 
             b.setLayoutParams(params);
             b.setText(title);
             b.setAlpha(0.f);
 
             timetableCellList.add(b);
-            //Log.d("单元格", title);
         }
 
         for (TextView b : timetableCellList) {
-            relativeLayout.addView(b);
+            relativeLayoutInnerContent.addView(b);
         }
     }
 
@@ -186,8 +232,8 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         return days;
     }
 
-
     private void updateTableHeaders(final View view) {
+        // 更新表头（顶部）
         String[] days = getCurrentWeekDays();
         TextView textViewMonday = view.findViewById(R.id.text_view_monday);
         TextView textViewTuesday = view.findViewById(R.id.text_view_tuesday);
@@ -196,13 +242,13 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         TextView textViewFriday = view.findViewById(R.id.text_view_friday);
         TextView textViewSaturday = view.findViewById(R.id.text_view_saturday);
         TextView textViewSunday = view.findViewById(R.id.text_view_sunday);
-        textViewMonday.setText("周一\n" + days[0]);
-        textViewTuesday.setText("周二\n" + days[1]);
-        textViewWednesday.setText("周三\n" + days[2]);
-        textViewThursday.setText("周四\n" + days[3]);
-        textViewFriday.setText("周五\n" + days[4]);
-        textViewSaturday.setText("周六\n" + days[5]);
-        textViewSunday.setText("周日\n" + days[6]);
+        textViewMonday.setText(String.format("%s\n%s", getString(R.string.monday), days[0]));
+        textViewTuesday.setText(String.format("%s\n%s", getString(R.string.tuesday), days[1]));
+        textViewWednesday.setText(String.format("%s\n%s", getString(R.string.wednesday), days[2]));
+        textViewThursday.setText(String.format("%s\n%s", getString(R.string.thursday), days[3]));
+        textViewFriday.setText(String.format("%s\n%s", getString(R.string.friday), days[4]));
+        textViewSaturday.setText(String.format("%s\n%s", getString(R.string.saturday), days[5]));
+        textViewSunday.setText(String.format("%s\n%s", getString(R.string.sunday), days[6]));
 
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
@@ -230,6 +276,27 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
                 break;
         }
 
+        // 更新表头（左侧）
+        int width = (int) getResources().getDimension(R.dimen.timetable_header_width) * 7;
+        int height = convertDpToPx(2);
+        int rowHeaderHeight = (int) getResources().getDimension(R.dimen.timetable_time_row_header_height); // 左侧单个表头高度
+        for (int i = 1; i <= 14; i++) {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.width = width;
+            params.height = height;
+
+            int marginTop = rowHeaderHeight * i;
+            params.setMargins(0, marginTop, 0, 0);
+
+            final TextView divider = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.layout_timetable_time_divider, thisContainer, false);
+            divider.setLayoutParams(params);
+            relativeLayoutInnerContent.addView(divider);
+        }
+
+        // 更新学期和周数
         final TextView toolbarTitle = view.findViewById(R.id.toolbar_title);
         new Thread(new Runnable() {
             @Override
@@ -243,10 +310,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                toolbarTitle.setText(
-                                        "学期 " + semester.getSemester() +
-                                                " 第 " + week.getWeek() +
-                                                " 周");
+                                toolbarTitle.setText(String.format(getString(R.string.intake_week), semester.getSemester(), week.getWeek()));
                             }
                         });
                     }
@@ -259,41 +323,63 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        Log.e("FragmentTimetable", "onHiddenChanged");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.e("FragmentTimetable", "onAttach");
-
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.e("FragmentTimetable", "onCreate");
-
-    }
-
-    @Override
     public View onCreateView(
             @NonNull final LayoutInflater inflater, final ViewGroup container,
             Bundle savedInstanceState) {
-
         Log.d("FragmentTimetable", "onCreateView");
-        root = inflater.inflate(R.layout.fragment_timetable, container, false);
+
         thisContainer = container;
-        root.findViewById(R.id.image_button_select_week).setOnClickListener(new View.OnClickListener() {
+
+        root = inflater.inflate(R.layout.fragment_timetable, container, false);
+        button = root.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(getActivity(), ActivityLogin.class);
-                //startActivity(intent);
+                Spring spring = SpringSystem.create().createSpring();
+                spring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(20, 5));
+                spring.setCurrentValue(0f);
+                spring.addListener(new SimpleSpringListener() {
+                    @Override
+                    public void onSpringActivate(Spring spring) {
+                        super.onSpringActivate(spring);
+                        scrollViewScrollingBreak = false;
+                        scrollViewScrollingY = scrollViewVertical.getScrollY();
+                    }
+
+                    @Override
+                    public void onSpringUpdate(Spring spring) {
+                        Log.e("SmoothScrolling", "" + scrollViewVertical.getScrollY());
+
+                        // 允许用户中断动画
+                        if (!scrollViewScrollingBreak) {
+                            if (scrollViewVertical.getScrollY() != scrollViewScrollingY) {
+                                scrollViewScrollingBreak = true;
+                            } else {
+                                int currentScrolling = (int) spring.getCurrentValue();
+                                scrollViewVertical.scrollTo(0, currentScrolling);
+                                scrollViewScrollingY = currentScrolling;
+                            }
+                        }
+
+
+                    }
+                });
+
+                spring.setEndValue(400f);
             }
         });
-        imageButtonMore = root.findViewById(R.id.image_button_more);
+        relativeLayoutInnerContent = root.findViewById(R.id.relativeLayoutInnerContent);
+        imageButtonMore = root.findViewById(R.id.imageButtonBack);
+        imageButtonSelectWeek = root.findViewById(R.id.image_button_select_week);
+        timeIndicator = root.findViewById(R.id.timeIndicator);
+        scrollViewVertical = root.findViewById(R.id.scrollViewVertical);
+        imageButtonSelectWeek.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ActivityWelcome.class);
+                startActivity(intent);
+            }
+        });
         imageButtonMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -311,7 +397,6 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
                             case R.id.action_logout:
                                 DBHelper db = new DBHelper(getContext());
                                 db.setLogout();
-
                                 break;
                             case R.id.action_refresh:
                                 break;
@@ -329,75 +414,111 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         });
         updateTableHeaders(root);
         onFirstVisible(); // 默认首先加载课表，如果没这句话就懒加载不了了
-        return root;
-    }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.e("FragmentTimetable", "onViewCreated");
+        new TaskUpdateTime().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e("FragmentTimetable", "onResume");
-        Log.e("FragmentTimetable", "onFirstVisible");
-        LayoutInflater vi = LayoutInflater.from(getContext());
-        RelativeLayout relativeLayout = root.findViewById(R.id.relativeLayoutInnerContent);
         DBHelper db = new DBHelper(getContext());
         timetableRaw = db.getAPIRecord(APIs.TIMETABLE);
-
-
         try {
-            calculateLayout(timetableRaw, thisContainer, vi, relativeLayout);
+            calculateLayout(timetableRaw);
         } catch (ParseException e) {
             Toast.makeText(getContext(), "错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
         animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
+
+
+        return root;
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.e("FragmentTimetable", "onPause");
-
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == 1) {
+            try {
+                calculateLayout(timetableRaw);
+            } catch (ParseException e) {
+                Toast.makeText(getContext(), "错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
+        }
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.e("FragmentTimetable", "onStop");
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.e("FragmentTimetable", "onDestroyView");
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e("FragmentTimetable", "onDestroy");
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.e("FragmentTimetable", "onDetach");
-
-    }
-
 
     @Override
     protected void onFirstVisible() {
         super.onFirstVisible();
 
+    }
+
+    private class TaskUpdateTime extends AsyncTask<Void, RelativeLayout.LayoutParams, String> {
+        private double MS_TO_HOURS = (0.00000027777777777777777777777);
+        private int width;
+        private int height;
+        private int rowHeaderHeight;
+        private int columnHeaderHeight;
+        private RelativeLayout.LayoutParams params;
+
+        @Override
+        protected void onPreExecute() {
+            width = (int) getResources().getDimension(R.dimen.timetable_time_cell_width);
+            height = convertDpToPx(2);
+            rowHeaderHeight = (int) getResources().getDimension(R.dimen.timetable_time_row_header_height);
+            columnHeaderHeight = (int) getResources().getDimension(R.dimen.timetable_column_header_height);
+            params = (RelativeLayout.LayoutParams) timeIndicator.getLayoutParams();
+            params.width = width;
+            params.height = height;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("ThreadRT", "finished");
+        }
+
+        @Override
+        protected void onProgressUpdate(RelativeLayout.LayoutParams... values) {
+            super.onProgressUpdate(values);
+            // 28800000 表示 8 小时，因为时间从 8 点开始
+            Calendar calendar = Calendar.getInstance();
+
+            // 这里返回的是GMT时间，已经减去8小时了，所以后面setMargins的时候就不用减八小时
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+            Log.e("Nowtime", "" + hour + " " + minute);
+            if (hour <= 13 && hour >= 8) {
+                int marginTop = hour * rowHeaderHeight + columnHeaderHeight + (int) (minute / 60.0 * rowHeaderHeight);
+                params.setMargins(0, marginTop, 0, 0);
+            } else {
+                int marginTop = columnHeaderHeight;
+                params.setMargins(0, marginTop, 0, 0);
+            }
+            timeIndicator.requestLayout();
+        }
+
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            Log.e("ThreadRT", "cancelled");
+        }
+
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            while (true) {
+
+                publishProgress();
+
+                try {
+                    Log.e("TestRT", "0");
+                    Thread.sleep(1000 * 5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return "";
+                }
+            }
+
+        }
     }
 }

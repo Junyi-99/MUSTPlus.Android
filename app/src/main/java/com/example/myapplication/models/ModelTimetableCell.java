@@ -32,6 +32,13 @@ public class ModelTimetableCell {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
+    // 获取开始时间（小时）
+    public int getHourBegin() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time_begin);
+        return cal.get(Calendar.HOUR);
+    }
+
     public int getMonth_begin() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date_begin);
@@ -65,7 +72,7 @@ public class ModelTimetableCell {
         return day - 1;
     }
 
-    // 获取应该在哪一行 8点到22点，对应 [0, 14] 行
+    // 获取应该在哪一行 8点到22点，对应 [0, 13] 行
     public double getCellLinePosition() {
         // 28800000 表示 8 小时，因为时间从 8 点开始
         return (time_begin.getTime() - 28800000) * MS_TO_HOURS;
@@ -104,6 +111,8 @@ public class ModelTimetableCell {
     }
 
     public String getCourse_code() {
+        if (course_code.isEmpty())
+            return "";
         return course_code;
     }
 
@@ -112,6 +121,7 @@ public class ModelTimetableCell {
     }
 
     public String getCourse_name_zh() {
+
         return course_name_zh;
     }
 
@@ -128,6 +138,12 @@ public class ModelTimetableCell {
     }
 
     public String getClassroom() {
+        if (classroom == null)
+            return "";
+        int p = classroom.indexOf("（");
+        if (p != -1) {
+            classroom = classroom.substring(0, p);
+        }
         return classroom;
     }
 
@@ -158,7 +174,7 @@ public class ModelTimetableCell {
     public String getSchedule() {
         Log.e("ModelTimetableCell", date_begin.toString());
         return dateFormat2.format(date_begin) + "-" + dateFormat2.format(date_end) + " " +
-                getTime_begin() + " - " + getTime_end() + "@" + getClassroom();
+                getTime_begin() + " - " + getTime_end() + "\n@" + getClassroom();
     }
 
     public String getDate_end() {

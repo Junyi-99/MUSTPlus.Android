@@ -124,12 +124,12 @@ public class APIBase implements IAPI {
     @Override
     public String authHash() throws IOException {
         String url = APIs.BASE_URL.v() + APIs.AUTH_HASH.v();
-
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
 
         Response response = client.newCall(request).execute();//发送请求
         ResponseBody body = response.body();
+        //TODO: 已知Exception: 接收 response.body() 時，如果網絡異常，會中途中斷，產生Exception導致程序崩潰
 
         if (body == null)
             throw new IOException("NULL ERROR");

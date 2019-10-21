@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,21 +25,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FragmentNewsUniversalAbstract extends AbstractLazyLoadFragment {
+public class LazyFragmentNewsUniversal extends AbstractLazyLoadFragment {
     private static final String ARG_NEWS_TYPE = "news_type";// 0: faculty, 1: announcement, 2: files
 
     List<ModelNews> modelNewsItems = new ArrayList<ModelNews>();
     ModelResponseNewsAll model_response_news_all;
     private boolean isRefreshing = false;//是否刷新中
-    private View this_view;
+    private View thisView;
     private RecyclerView recycler_view;
     private AdapterNewsListSectioned adapter_news_list_sectioned;
     private SwipeRefreshLayout swipe_refresh_layout;
 
-    public static FragmentNewsUniversalAbstract newInstance(int newsType) {
+    public static LazyFragmentNewsUniversal newInstance(int newsType) {
         if (newsType < 1 || newsType > 3)
             newsType = 0;
-        FragmentNewsUniversalAbstract fragment = new FragmentNewsUniversalAbstract();
+        LazyFragmentNewsUniversal fragment = new LazyFragmentNewsUniversal();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_NEWS_TYPE, newsType);
         fragment.setArguments(bundle);
@@ -85,6 +86,7 @@ public class FragmentNewsUniversalAbstract extends AbstractLazyLoadFragment {
                     break;
             }
 
+            //TODO: 这里会报NullPointerException
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -124,8 +126,8 @@ public class FragmentNewsUniversalAbstract extends AbstractLazyLoadFragment {
     // 当用户看到这个页面的时候，再去加载数据
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this_view = inflater.inflate(R.layout.fragment_news_universal, container, false);
-        swipe_refresh_layout = (SwipeRefreshLayout) this_view.findViewById(R.id.swipe_refresh_layout);
+        thisView = inflater.inflate(R.layout.fragment_news_universal, container, false);
+        swipe_refresh_layout = (SwipeRefreshLayout) thisView.findViewById(R.id.swipe_refresh_layout);
         swipe_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -133,29 +135,56 @@ public class FragmentNewsUniversalAbstract extends AbstractLazyLoadFragment {
             }
         });
 
-        adapter_news_list_sectioned = new AdapterNewsListSectioned(this_view.getContext(), modelNewsItems);
+        adapter_news_list_sectioned = new AdapterNewsListSectioned(thisView.getContext(), modelNewsItems);
         adapter_news_list_sectioned.setOnItemClickListener(new AdapterNewsListSectioned.OnItemClickListener() {
             @Override
             public void onItemClick(View view, ModelNews obj, int position) {
-                Snackbar.make(this_view, "Item " + obj.getTitle() + " clicked", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(thisView, "Item " + obj.getTitle() + " clicked", Snackbar.LENGTH_SHORT).show();
             }
         });
 
-        recycler_view = (RecyclerView) this_view.findViewById(R.id.recycler_view);
-        recycler_view.setLayoutManager(new LinearLayoutManager(this_view.getContext()));
+        recycler_view = (RecyclerView) thisView.findViewById(R.id.recycler_view);
+        recycler_view.setLayoutManager(new LinearLayoutManager(thisView.getContext()));
         recycler_view.setHasFixedSize(true);
         recycler_view.setAdapter(adapter_news_list_sectioned);
         recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (!recyclerView.canScrollVertically(1)) {
-                    Snackbar.make(this_view, "触底，这里是加载更多刷新操作", Snackbar.LENGTH_SHORT).show();
+                NestedScrollView scroller = (NestedScrollView) thisView.findViewById(R.id.nested_scroll_view);
+                if (scroller != null) {
+                    scroller.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                        @Override
+                        public void onScrollChange(NestedScrollView v, int scrollx, int scrolly, int oldscrollx, int oldscrolly) {
+                           /* if (scrolly > oldscrolly) {
+                                Log.i("recyclerView", "Scroll DOWN");
+                            }
+                            if (scrolly < oldscrolly) {
+                                Log.i("recyclerView", "Scroll UP");
+                            }
+                            if (scrolly == 0) {
+                                Log.i("recyclerView", "TOP SCROLL");
+                            }*/
+                            if (scrolly == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                                Log.e("recyclerView", "BOTTOM SCROLL,刷子你");
+                                Snackbar.make(thisView, "触底，这里是加载更多刷新操作", Snackbar.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
+               /* if (!recyclerView.canScrollVertically(1) && isVisible()) {
+                    Log.e("FragmentNewsUnivertract", "刷子你");
+                    Snackbar.make(thisView, "触底，这里是加载更多刷新操作", Snackbar.LENGTH_SHORT).show();
+                }*/
             }
         });
         Log.d("Fragment ModelNews All", "onCreateView");
-        return this_view;
+        return thisView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override

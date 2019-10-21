@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.myapplication.R;
-import com.example.myapplication.fragments.FragmentMineAbstract;
+import com.example.myapplication.fragments.LazyFragmentMine;
 import com.example.myapplication.fragments.FragmentMomentsAbstract;
 import com.example.myapplication.fragments.FragmentNewsAbstract;
 import com.example.myapplication.fragments.FragmentTimetableAbstract;
@@ -44,7 +44,7 @@ public class AdapterSectionsPager extends FragmentPagerAdapter {
             case 2:
                 return new FragmentMomentsAbstract();
             case 3:
-                return new FragmentMineAbstract();
+                return new LazyFragmentMine();
         }
     }
 

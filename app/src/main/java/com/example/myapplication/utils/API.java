@@ -3,6 +3,7 @@ package com.example.myapplication.utils;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
@@ -259,6 +260,7 @@ public class API implements IAPI {
         }
     }
 
+    @Deprecated
     @Override
     public String semester() throws IOException {
         DBHelper db = new DBHelper(context);

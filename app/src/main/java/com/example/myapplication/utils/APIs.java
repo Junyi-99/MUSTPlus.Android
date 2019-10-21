@@ -3,7 +3,7 @@ package com.example.myapplication.utils;
 // API列表
 // 用来规定 API 的 ID 和 对应URL
 public enum APIs {
-    BASE_URL(1, "http://mp.junyi.pw:8000/"),
+    BASE_URL(1, "http://zh.junyi.pw:6002/"),
     AUTH_HASH(100, "auth/hash"),
     AUTH_LOGIN(101, "auth/login"),
     AUTH_LOGOUT(102, "auth/logout"),

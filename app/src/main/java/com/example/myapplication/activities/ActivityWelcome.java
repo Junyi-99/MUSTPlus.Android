@@ -3,13 +3,17 @@ package com.example.myapplication.activities;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.TooltipCompat;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
@@ -29,6 +33,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelAuthHash;
+import com.example.myapplication.models.ModelResponse;
 import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.utils.API;
 import com.example.myapplication.utils.APIs;
@@ -42,6 +47,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ActivityWelcome extends AppCompatActivity {
+    public static boolean active = false;
     private final ArrayList<Animator> animators = new ArrayList<Animator>();
     Animator animator;
     Button buttonSignIn;
@@ -49,6 +55,7 @@ public class ActivityWelcome extends AppCompatActivity {
     EditText editTextPassword;
     EditText editTextCaptcha;
     ImageButton imageButtonRefresh;
+    ImageButton imageButtonHelp;
     ImageView imageViewCaptcha;
     LinearLayout linearLayout;
     TextView textViewHint;
@@ -57,15 +64,6 @@ public class ActivityWelcome extends AppCompatActivity {
     ModelResponseLogin modelResponseLogin;
     // LOGO 的 params
     RelativeLayout.LayoutParams params;
-
-    protected void showErrorInThread(final String msg, final boolean longLength) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "错误：" + msg, longLength ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     public Animation shake() {
         Animation translateAnimation = new TranslateAnimation(0, 10, 0, 0);
@@ -105,7 +103,35 @@ public class ActivityWelcome extends AppCompatActivity {
         animators.add(animator);
     }
 
-    protected void animationShowWidgets() {
+    protected void prepareOnClickListener() {
+        imageButtonRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // The anonymous Runnable has an implicit reference to the
+                // enclosing class (e.g. your Activity or Fragment),
+                // preventing it from being garbage collected until the thread completes.
+                // Instead of creating a new thread each time you want to perform a network
+                // operation, you could use a single thread executor service too.
+
+                new RefreshCaptchaTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        });
+        buttonSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 如果动画还没播放过（editTextUsername还不可见）
+                if (editTextUsername.getVisibility() == View.GONE) {
+                    animationShowingWidgets();
+                } else {
+                    // 在執行 AsyncTask 的時候，不要用 execute() 方法，要用 executeOnExecutor()，前者會
+                    // 等之前的Task完成才繼續執行，而有一個 Task 用來實時更新時間，於是用 execute() 就永遠無法執行
+                    new LoginTask(getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+            }
+        });
+    }
+
+    protected void animationShowingWidgets() {
         final int topMargin = params.topMargin;
 
         // 按下按钮 EditText 以动画形式播放
@@ -153,31 +179,6 @@ public class ActivityWelcome extends AppCompatActivity {
         });
     }
 
-    protected void prepareOnClickListener() {
-        imageButtonRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // The anonymous Runnable has an implicit reference to the
-                // enclosing class (e.g. your Activity or Fragment),
-                // preventing it from being garbage collected until the thread completes.
-                // Instead of creating a new thread each time you want to perform a network
-                // operation, you could use a single thread executor service too.
-                new RefreshCaptchaTask().execute();
-            }
-        });
-        buttonSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 如果动画还没播放过（editTextUsername还不可见）
-                if (editTextUsername.getVisibility() == View.GONE) {
-                    animationShowWidgets();
-                } else {
-
-
-                }
-            }
-        });
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -193,6 +194,7 @@ public class ActivityWelcome extends AppCompatActivity {
         editTextCaptcha = (EditText) findViewById(R.id.editTextCaptcha);
         imageViewCaptcha = (ImageView) findViewById(R.id.imageViewCaptcha);
         imageButtonRefresh = (ImageButton) findViewById(R.id.imageButtonRefresh);
+        imageButtonHelp = (ImageButton) findViewById(R.id.imageButtonHelp);
         linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
 
         // set position
@@ -201,7 +203,17 @@ public class ActivityWelcome extends AppCompatActivity {
         textViewLOGO.setLayoutParams(params);
         prepareAnimation();
         prepareOnClickListener();
+        active = true;
+        TooltipCompat.setTooltipText(imageButtonRefresh, "刷新验证码");
+        TooltipCompat.setTooltipText(imageButtonHelp, "获取帮助");
+    }
 
+    public void setEnableStatus(boolean enable) {
+        buttonSignIn.setEnabled(enable);
+        imageButtonRefresh.setEnabled(enable);
+        editTextUsername.setEnabled(enable);
+        editTextPassword.setEnabled(enable);
+        editTextCaptcha.setEnabled(enable);
     }
 
     private class RefreshCaptchaTask extends AsyncTask<Void, Void, String> {
@@ -209,13 +221,16 @@ public class ActivityWelcome extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            // 执行任务前，我们给按钮加个动画
             animationRefreshingCaptcha(true);
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            // 执行完任务后，动画停止
             animationRefreshingCaptcha(false);
+            // 因为我们自己规定：返回空字符串表示正常
             if (s.isEmpty()) {
                 imageViewCaptcha.setImageBitmap(decodedByte);
             } else {
@@ -228,6 +243,7 @@ public class ActivityWelcome extends AppCompatActivity {
             try {
                 API api = new API(getApplicationContext());
                 String raw = api.authHash();
+
                 modelAuthHash = JSON.parseObject(raw, ModelAuthHash.class);
                 if (modelAuthHash.getCode() != 0) {
                     return modelAuthHash.getMsg();
@@ -235,6 +251,7 @@ public class ActivityWelcome extends AppCompatActivity {
                     byte[] decodedString = Base64.decode(modelAuthHash.getCaptcha(), Base64.DEFAULT);
                     decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 }
+                // 正常，返回空字符串
                 return "";
             } catch (IOException e) {
                 return e.getMessage();
@@ -243,6 +260,7 @@ public class ActivityWelcome extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+            // 如果任务被取消也是要停止动画
             animationRefreshingCaptcha(false);
         }
     }
@@ -250,7 +268,11 @@ public class ActivityWelcome extends AppCompatActivity {
     private class LoginTask extends AsyncTask<Void, String, String> {
         String studentName;
         String token;
+        Context context;
 
+        private LoginTask(Context context) {
+            this.context = context.getApplicationContext();
+        }
 
         @Override
         protected void onPreExecute() {
@@ -265,27 +287,27 @@ public class ActivityWelcome extends AppCompatActivity {
                 cancel(true);
                 return;
             }
+            if (editTextCaptcha.getText().toString().trim().isEmpty()) {
+                editTextCaptcha.startAnimation(shake());
+                cancel(true);
+                return;
+            }
             // 防止用户乱点
-            buttonSignIn.setEnabled(false);
-            imageButtonRefresh.setEnabled(false);
-            editTextUsername.setEnabled(false);
-            editTextPassword.setEnabled(false);
-            editTextCaptcha.setEnabled(false);
+            setEnableStatus(false);
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            textViewHint.setText(R.string.login_hint_text);
+
             if (s.isEmpty()) {
-                // 登陆成功，下一步更新课表
+                // 登陆成功并且课表也加载成功
+                context.startActivity(new Intent(context, ActivityMain.class));
+                finish();
             } else {
                 Toast.makeText(getApplicationContext(), "错误：" + s, Toast.LENGTH_SHORT).show();
-                buttonSignIn.setEnabled(true);
-                imageButtonRefresh.setEnabled(true);
-                editTextUsername.setEnabled(true);
-                editTextPassword.setEnabled(true);
-                editTextCaptcha.setEnabled(true);
+                textViewHint.setText(R.string.login_hint_text);
+                setEnableStatus(true);
             }
         }
 
@@ -302,16 +324,14 @@ public class ActivityWelcome extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            buttonSignIn.setEnabled(true);
-            imageButtonRefresh.setEnabled(true);
-            editTextUsername.setEnabled(true);
-            editTextPassword.setEnabled(true);
-            editTextCaptcha.setEnabled(true);
+            setEnableStatus(true);
         }
 
 
         @Override
         protected String doInBackground(Void... voids) {
+            DBHelper db = new DBHelper(getApplicationContext());
+            API api = new API(getApplicationContext());
             try {// 试一下状态机的写法
                 int status = 0;
                 final int STATUS_BEGIN = 0;
@@ -335,7 +355,7 @@ public class ActivityWelcome extends AppCompatActivity {
                             break;
                         case STATUS_CAPTCHA_INITIALIZED:
                             publishProgress("正在请求登录");
-                            API api = new API(getApplicationContext());
+
                             api.setForceUpdate(true);
                             result = api.authLogin(modelAuthHash.getKey(),
                                     editTextUsername.getText().toString(),
@@ -370,17 +390,35 @@ public class ActivityWelcome extends AppCompatActivity {
                             studentName = modelResponseLogin.getStudent_name();
                             token = modelResponseLogin.getToken();
 
-                            DBHelper db = new DBHelper(getApplicationContext());
                             db.setAPIRecord(APIs.AUTH_LOGIN, result);
 
-                            publishProgress("欢迎您，" + studentName);
-                            return "";
+                            publishProgress("欢迎您，" + studentName + "！正在为您更新课表，请稍后...");
+
+                            result = api.timetable(modelResponseLogin.getToken(), api.semester_get().getSemester(), 0);
+                            ModelResponse response = JSON.parseObject(result, ModelResponse.class);
+
+                            if (response.getCode() == 0) {
+                                db.setAPIRecord(APIs.TIMETABLE, result);
+                                publishProgress("一切准备就绪，欢迎使用MUST+！");
+                                Thread.sleep(1000);
+                                return "";
+                            } else {
+                                if (response.getCode() == -7003) { // Cookie 过期
+                                    db.removeRecord(APIs.AUTH_LOGIN);
+                                }
+                                db.removeRecord(APIs.TIMETABLE);
+                                publishProgress("0");
+                                return response.getMsg();
+                            }
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+
+            } catch (IOException | InterruptedException e) {
+                db.removeRecord(APIs.TIMETABLE);
+                publishProgress("0");
                 return e.getMessage();
             }
+
         }
     }
 }

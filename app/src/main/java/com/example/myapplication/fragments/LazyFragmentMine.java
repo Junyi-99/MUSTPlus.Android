@@ -6,11 +6,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
+import com.example.myapplication.models.ModelResponseLogin;
 
-public class FragmentMineAbstract extends AbstractLazyLoadFragment {
-
+public class LazyFragmentMine extends AbstractLazyLoadFragment {
+    private View root;
+    private TextView textViewNickname;
 
     @Override
     public void onAttach(Context context) {
@@ -76,7 +80,16 @@ public class FragmentMineAbstract extends AbstractLazyLoadFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mine, container, false);
+        root = inflater.inflate(R.layout.fragment_mine, container, false);
+        textViewNickname = root.findViewById(R.id.text_view_nickname);
+
+        DBHelper helper = new DBHelper(getContext());
+        ModelResponseLogin login = helper.getLoginRecord();
+        if (login != null) {
+            textViewNickname.setText(login.getStudent_name());
+        }
+        return root;
+
     }
 
     @Override

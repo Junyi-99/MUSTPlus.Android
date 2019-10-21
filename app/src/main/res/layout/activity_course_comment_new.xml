@@ -89,7 +89,7 @@
         fab:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/image_button_more"
+            android:id="@+id/imageButtonBack"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="?attr/selectableItemBackgroundBorderless"

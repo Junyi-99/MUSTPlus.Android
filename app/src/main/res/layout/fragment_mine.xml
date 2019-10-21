@@ -68,7 +68,7 @@
                 android:id="@+id/avatar"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/image_junyi"
+                android:src="@drawable/logo_must"
                 app:civ_border="false"
                 app:civ_shadow="true"
                 app:civ_shadow_radius="0"

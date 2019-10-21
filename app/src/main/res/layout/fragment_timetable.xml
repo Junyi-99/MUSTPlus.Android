@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
 
-            android:fontFamily="@font/robotomedium"
+            android:fontFamily="@font/productsans_regular"
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/toolbarTimetableExample"
@@ -53,7 +53,7 @@
 
 
         <ImageButton
-            android:id="@+id/image_button_more"
+            android:id="@+id/imageButtonBack"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -66,7 +66,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <ScrollView
-        android:id="@+id/verticalScrollView"
+        android:id="@+id/scrollViewVertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
@@ -86,7 +86,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/timetable_time_label_width"
+                    android:layout_marginStart="@dimen/timetable_time_row_header_width"
                     android:background="@color/timetable_column"
                     android:orientation="horizontal"
                     app:layout_column="1"
@@ -96,8 +96,8 @@
                     <TextView
                         android:id="@+id/text_view_monday"
                         android:layout_width="@dimen/timetable_header_width"
-                        android:layout_height="@dimen/timetable_header_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:layout_height="@dimen/timetable_column_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:gravity="center"
                         android:text="@string/TimetableHeaderMonday"
                         android:textSize="12sp" />
@@ -105,8 +105,8 @@
                     <TextView
                         android:id="@+id/text_view_tuesday"
                         android:layout_width="@dimen/timetable_header_width"
-                        android:layout_height="@dimen/timetable_header_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:layout_height="@dimen/timetable_column_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:gravity="center"
                         android:text="@string/TimetableHeaderTuesday"
                         android:textSize="12sp" />
@@ -114,8 +114,8 @@
                     <TextView
                         android:id="@+id/text_view_wednesday"
                         android:layout_width="@dimen/timetable_header_width"
-                        android:layout_height="@dimen/timetable_header_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:layout_height="@dimen/timetable_column_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:gravity="center"
                         android:text="@string/TimetableHeaderWednesday"
                         android:textSize="12sp" />
@@ -123,8 +123,8 @@
                     <TextView
                         android:id="@+id/text_view_thursday"
                         android:layout_width="@dimen/timetable_header_width"
-                        android:layout_height="@dimen/timetable_header_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:layout_height="@dimen/timetable_column_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:gravity="center"
                         android:text="@string/TimetableHeaderThursday"
                         android:textSize="12sp" />
@@ -132,8 +132,8 @@
                     <TextView
                         android:id="@+id/text_view_friday"
                         android:layout_width="@dimen/timetable_header_width"
-                        android:layout_height="@dimen/timetable_header_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:layout_height="@dimen/timetable_column_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:gravity="center"
                         android:text="@string/TimetableHeaderFriday"
                         android:textSize="12sp" />
@@ -141,8 +141,8 @@
                     <TextView
                         android:id="@+id/text_view_saturday"
                         android:layout_width="@dimen/timetable_header_width"
-                        android:layout_height="@dimen/timetable_header_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:layout_height="@dimen/timetable_column_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:gravity="center"
                         android:text="@string/TimetableHeaderSaturday"
                         android:textSize="12sp" />
@@ -150,8 +150,8 @@
                     <TextView
                         android:id="@+id/text_view_sunday"
                         android:layout_width="@dimen/timetable_header_width"
-                        android:layout_height="@dimen/timetable_header_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:layout_height="@dimen/timetable_column_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:gravity="center"
                         android:text="@string/TimetableHeaderSunday"
                         android:textSize="12sp" />
@@ -167,164 +167,155 @@
                     app:layout_rowSpan="15">
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
-                        android:height="@dimen/timetable_header_height"
+                        android:height="@dimen/timetable_column_header_height"
                         android:fontFamily="@font/robotomedium"
                         android:text=""
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time8"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time9"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
 
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time10"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time11"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time12"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time13"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time14"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time15"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time16"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time17"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time18"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time19"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time20"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
+                        android:layout_width="@dimen/timetable_time_row_header_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
+                        android:height="@dimen/timetable_time_row_header_height"
+                        android:fontFamily="@font/productsans_regular"
                         android:text="@string/Time21"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
-                    <TextView
-                        android:layout_width="@dimen/timetable_time_label_width"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="fill_horizontal"
-                        android:height="@dimen/timetable_time_label_height"
-                        android:fontFamily="@font/robotomedium"
-                        android:text="@string/Time22"
-                        android:textAlignment="center"
-                        android:textSize="12sp" />
                 </LinearLayout>
 
 
@@ -332,146 +323,28 @@
                     android:id="@+id/relativeLayoutInnerContent"
                     android:layout_width="@dimen/timetable_container_width"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/timetable_time_label_width"
-                    android:layout_marginTop="@dimen/timetable_header_height">
-
-                    <!--  <include
-                        android:id="@+id/course1"
-                        layout="@layout/timetable_course_cell"
-                        android:layout_width="69dp"
-                        android:layout_height="90dp"
-                        android:layout_marginStart="-2dp"
-                        android:layout_marginTop="90dp"
-
-                        tools:visibility="invisible" />-->
-
-                    <TextView
-                        android:id="@+id/timeDivider8"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="68dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider9"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="136dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider10"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="204dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider11"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="272dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider12"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="340dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider13"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="408dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider14"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="476dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider15"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="544dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider16"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="612dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider17"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="680dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider18"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="748dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider19"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="816dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider20"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="884dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/timeDivider21"
-                        android:layout_width="476dp"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="952dp"
-                        android:background="@color/timetable_column"
-                        android:text=""
-                        android:visibility="visible" />
+                    android:layout_marginStart="@dimen/timetable_time_row_header_width"
+                    android:layout_marginTop="@dimen/timetable_column_header_height">
 
                 </RelativeLayout>
+
+                <View
+                    android:id="@+id/timeIndicator"
+                    android:layout_width="60dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#F8BBD0" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/relativeLayoutInnerContent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="238dp"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="524dp"
+                    android:text="Button" />
             </RelativeLayout>
         </HorizontalScrollView>
     </ScrollView>
