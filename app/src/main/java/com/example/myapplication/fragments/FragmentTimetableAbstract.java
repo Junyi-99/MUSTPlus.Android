@@ -75,7 +75,6 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
     private ImageButton imageButtonSelectWeek;
     private ScrollView scrollViewVertical;
     private RelativeLayout relativeLayoutInnerContent;
-    private Button button;
     /**
      * 是否已经播放过动画
      */
@@ -92,6 +91,45 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(this.animators);
             animatorSet.start();
+
+            // 定位到当前时间上的课程动画
+            Spring spring = SpringSystem.create().createSpring();
+            spring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(20, 5));
+            spring.setCurrentValue((float) scrollViewVertical.getScrollY());
+            spring.addListener(new SimpleSpringListener() {
+                @Override
+                public void onSpringActivate(Spring spring) {
+                    super.onSpringActivate(spring);
+                    scrollViewScrollingBreak = false;
+                    scrollViewScrollingY = scrollViewVertical.getScrollY();
+                }
+
+                @Override
+                public void onSpringUpdate(Spring spring) {
+                    // 允许用户中断动画的写法
+                    if (!scrollViewScrollingBreak) {
+                        if (scrollViewVertical.getScrollY() != scrollViewScrollingY) {
+                            scrollViewScrollingBreak = true;
+                        } else {
+                            int currentScrolling = (int) spring.getCurrentValue();
+                            scrollViewVertical.scrollTo(0, currentScrolling);
+                            scrollViewScrollingY = currentScrolling;
+                        }
+                    }
+                }
+            });
+            int rowHeaderHeight = (int) getResources().getDimension(R.dimen.timetable_time_row_header_height);
+            int columnHeaderHeight = (int) getResources().getDimension(R.dimen.timetable_column_header_height);
+
+            Calendar calendar = Calendar.getInstance(); // 28800000 表示 8 小时，因为时间从 8 点开始
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);// 这里返回的是手机上的时间（北京时间）
+            int minute = calendar.get(Calendar.MINUTE);
+            float endValue = 0f;
+            if (hour <= 22 && hour >= 8) {
+                endValue = (hour - 8 - 6) * rowHeaderHeight + columnHeaderHeight + (int) (minute / 60.0 * rowHeaderHeight);
+            }
+            spring.setEndValue(endValue);
+            // 定位到当前时间上的课程动画
 
             animated = true;
         } else {
@@ -331,43 +369,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         thisContainer = container;
 
         root = inflater.inflate(R.layout.fragment_timetable, container, false);
-        button = root.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Spring spring = SpringSystem.create().createSpring();
-                spring.setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(20, 5));
-                spring.setCurrentValue(0f);
-                spring.addListener(new SimpleSpringListener() {
-                    @Override
-                    public void onSpringActivate(Spring spring) {
-                        super.onSpringActivate(spring);
-                        scrollViewScrollingBreak = false;
-                        scrollViewScrollingY = scrollViewVertical.getScrollY();
-                    }
 
-                    @Override
-                    public void onSpringUpdate(Spring spring) {
-                        Log.e("SmoothScrolling", "" + scrollViewVertical.getScrollY());
-
-                        // 允许用户中断动画
-                        if (!scrollViewScrollingBreak) {
-                            if (scrollViewVertical.getScrollY() != scrollViewScrollingY) {
-                                scrollViewScrollingBreak = true;
-                            } else {
-                                int currentScrolling = (int) spring.getCurrentValue();
-                                scrollViewVertical.scrollTo(0, currentScrolling);
-                                scrollViewScrollingY = currentScrolling;
-                            }
-                        }
-
-
-                    }
-                });
-
-                spring.setEndValue(400f);
-            }
-        });
         relativeLayoutInnerContent = root.findViewById(R.id.relativeLayoutInnerContent);
         imageButtonMore = root.findViewById(R.id.imageButtonBack);
         imageButtonSelectWeek = root.findViewById(R.id.image_button_select_week);
@@ -461,13 +463,13 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
 
         @Override
         protected void onPreExecute() {
-            width = (int) getResources().getDimension(R.dimen.timetable_time_cell_width);
-            height = convertDpToPx(2);
+            //width = (int) getResources().getDimension(R.dimen.timetable_time_cell_width);
+            //height = convertDpToPx(2);
             rowHeaderHeight = (int) getResources().getDimension(R.dimen.timetable_time_row_header_height);
             columnHeaderHeight = (int) getResources().getDimension(R.dimen.timetable_column_header_height);
             params = (RelativeLayout.LayoutParams) timeIndicator.getLayoutParams();
-            params.width = width;
-            params.height = height;
+            //params.width = width;
+            //params.height = height;
         }
 
         @Override
@@ -482,12 +484,12 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
             // 28800000 表示 8 小时，因为时间从 8 点开始
             Calendar calendar = Calendar.getInstance();
 
-            // 这里返回的是GMT时间，已经减去8小时了，所以后面setMargins的时候就不用减八小时
+            // 这里返回的是手机上的时间（北京时间）
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
             Log.e("Nowtime", "" + hour + " " + minute);
-            if (hour <= 13 && hour >= 8) {
-                int marginTop = hour * rowHeaderHeight + columnHeaderHeight + (int) (minute / 60.0 * rowHeaderHeight);
+            if (hour <= 22 && hour >= 8) {
+                int marginTop = (hour - 8) * rowHeaderHeight + columnHeaderHeight + (int) (minute / 60.0 * rowHeaderHeight);
                 params.setMargins(0, marginTop, 0, 0);
             } else {
                 int marginTop = columnHeaderHeight;

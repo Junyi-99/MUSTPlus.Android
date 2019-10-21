@@ -330,10 +330,10 @@
 
                 <View
                     android:id="@+id/timeIndicator"
-                    android:layout_width="60dp"
+                    android:layout_width="8dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="#F8BBD0" />
+                    android:background="#F44336" />
 
                 <Button
                     android:id="@+id/button"

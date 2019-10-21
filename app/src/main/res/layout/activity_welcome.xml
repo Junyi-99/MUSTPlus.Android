@@ -57,7 +57,7 @@
         android:inputType="textPersonName"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="1809853D-B211-0078"
+        android:text="1709853D-I011-0021"
         android:textColor="@color/colorFontDark"
         android:visibility="visible" />
 
@@ -79,7 +79,6 @@
         android:inputType="textPassword"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="18808403"
         android:textColor="@color/colorFontDark"
         android:visibility="visible" />
 
