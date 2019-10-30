@@ -79,6 +79,7 @@
         android:inputType="textPassword"
         android:maxLines="1"
         android:singleLine="true"
+        android:text="%imJYFAQ!m$pwd"
         android:textColor="@color/colorFontDark"
         android:visibility="visible" />
 

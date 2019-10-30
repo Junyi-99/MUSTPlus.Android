@@ -335,16 +335,6 @@
                     android:layout_marginTop="16dp"
                     android:background="#F44336" />
 
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/relativeLayoutInnerContent"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="238dp"
-                    android:layout_marginLeft="80dp"
-                    android:layout_marginTop="524dp"
-                    android:text="Button" />
             </RelativeLayout>
         </HorizontalScrollView>
     </ScrollView>
