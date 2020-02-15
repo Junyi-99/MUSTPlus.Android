@@ -26,14 +26,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterNewsListSectioned;
 import com.example.myapplication.models.ModelNews;
 import com.example.myapplication.models.ModelNewsImage;
 import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.models.ModelResponseNewsAll;
-import com.example.myapplication.utils.API.APIPersistence;
+import com.example.myapplication.utils.API.API;
 import com.example.myapplication.utils.Tools;
 
 import java.io.IOException;
@@ -77,7 +76,6 @@ public class FragmentNewsAll extends Fragment {
     private TextView sliderImageTitle;
     private TextView sliderImageBrief;
     private boolean isRefreshing = false;
-
 
 
     @Override
@@ -365,6 +363,7 @@ public class FragmentNewsAll extends Fragment {
 
     private class TaskNewsRefresh extends AsyncTask<Void, String, String> {
         private boolean forceUpdate;
+
         private TaskNewsRefresh(boolean forceUpdate) {
             this.forceUpdate = forceUpdate;
         }
@@ -403,12 +402,10 @@ public class FragmentNewsAll extends Fragment {
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                DBHelper helper = new DBHelper(getContext());
-                ModelResponseLogin login = helper.getLoginRecord();
+                API api = new API(getContext(), forceUpdate);
+                ModelResponseLogin login = api.loginRecord();
 
                 if (login != null) {
-                    APIPersistence api = new APIPersistence(getContext());
-                    api.setForceUpdate(forceUpdate);
                     modelResponseNewsAll = api.news_all_get(login.getToken(), 0, 20);
                     if (modelResponseNewsAll != null && modelResponseNewsAll.getCode() == 0) {
                         modelNewsItems.clear();

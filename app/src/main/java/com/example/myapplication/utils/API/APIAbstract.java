@@ -156,7 +156,7 @@ public abstract class APIAbstract implements IAPI {
             ResponseBody responseBody = response.body();
 
             if (responseBody == null)
-                throw new IOException("Cannot login, response null");
+                throw new IOException("Cannot loginRecord, response null");
             else
                 return responseBody.string();
         } catch (Exception e) {
@@ -240,7 +240,7 @@ public abstract class APIAbstract implements IAPI {
 
     @Override
     public String newsAll(String token, Integer from, Integer count) throws IOException {
-        String url = URL + APICONSTANT.NEWS_.v() + APICONSTANT.NEWS_ALL.v();
+        String url = URL + "news/all";
         TreeMap<String, String> params = new TreeMap<>();
         params.put("from", String.valueOf(from));
         params.put("count", String.valueOf(count));
@@ -249,7 +249,7 @@ public abstract class APIAbstract implements IAPI {
 
     @Override
     public String newsAnnouncements(String token, Integer from, Integer count) throws IOException {
-        String url = URL + APICONSTANT.NEWS_.v() + APICONSTANT.NEWS_ANNOUNCEMENTS.v();
+        String url = URL + "news/announcements";
         TreeMap<String, String> params = new TreeMap<>();
         params.put("from", String.valueOf(from));
         params.put("count", String.valueOf(count));
@@ -258,7 +258,7 @@ public abstract class APIAbstract implements IAPI {
 
     @Override
     public String newsDocuments(String token, Integer from, Integer count) throws IOException {
-        String url = URL + APICONSTANT.NEWS_.v() + APICONSTANT.NEWS_DOCUMENTS.v();
+        String url = URL + "news/documents";
         TreeMap<String, String> params = new TreeMap<>();
         params.put("from", String.valueOf(from));
         params.put("count", String.valueOf(count));

@@ -31,7 +31,7 @@ import com.example.myapplication.models.ModelResponseSemester;
 import com.example.myapplication.models.ModelResponseWeek;
 import com.example.myapplication.models.ModelTimetable;
 import com.example.myapplication.models.ModelTimetableCell;
-import com.example.myapplication.utils.API.APIPersistence;
+import com.example.myapplication.utils.API.API;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
@@ -138,7 +138,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
     }
 
     private void calculateLayout() throws ParseException {
-        Log.e("TimetableRawJson",timetableRawJson);
+        Log.e("TimetableRawJson", timetableRawJson);
         timetableCellList.clear();
         animators.clear();
         //relativeLayoutInnerContent.removeAllViews();
@@ -339,7 +339,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
             @Override
             public void run() {
                 try {
-                    APIPersistence api = new APIPersistence(getContext());
+                    API api = new API(getContext(), true);
                     semester = api.semester_get();
                     week = api.week_get();
                     FragmentActivity activity = getActivity();
@@ -363,8 +363,6 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
     public View onCreateView(
             @NonNull final LayoutInflater inflater, final ViewGroup container,
             Bundle savedInstanceState) {
-        Log.d("FragmentTimetable", "onCreateView");
-
         thisContainer = container;
 
         root = inflater.inflate(R.layout.fragment_timetable, container, false);
@@ -396,8 +394,8 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
                             case R.id.action_export:
                                 break;
                             case R.id.action_logout:
-                                DBHelper db = new DBHelper(getContext());
-                                db.setLogout();
+                                API api = new API(getContext(), true);
+                                api.logout(null);
                                 break;
                             case R.id.action_refresh:
                                 break;
@@ -413,22 +411,20 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
 
             }
         });
-        updateTableHeaders(root);
-        onFirstVisible(); // 默认首先加载课表，如果没这句话就懒加载不了了
 
-        new TaskUpdateTime().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        //TODO: 这里逻辑混乱了啊，耦合度增加了，应该调用API类的方法，不应该绕过API类直接调用这个DBHelper
-        DBHelper db = new DBHelper(getContext());
-        timetableRawJson = db.getAPIRecord(APICONSTANT.TIMETABLE);
         try {
+            updateTableHeaders(root);
+            onFirstVisible(); // 默认首先加载课表，如果没这句话就懒加载不了了
+            new TaskUpdateTime().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            API api = new API(getContext(), false);
+            api.timetable(null, null, null);
             calculateLayout();
         } catch (ParseException e) {
             Toast.makeText(getContext(), "错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+
         animate(); // Buttons 默认都是 invisible 的，所以调用 animate() 让他们显示出来
-
-
         return root;
     }
 

@@ -10,11 +10,10 @@ import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelResponseCourseComment;
 import com.example.myapplication.models.ModelResponseLogin;
-import com.example.myapplication.utils.API.APIPersistence;
+import com.example.myapplication.utils.API.API;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
@@ -65,6 +64,7 @@ public class ActivityCourseCommentNew extends AppCompatActivity {
 
     /**
      * 仅限在UI线程外使用（因为方法内会切换回UI线程）
+     *
      * @param enable 设置控件是否启用
      */
     private void setEnableInThread(final boolean enable) {
@@ -82,12 +82,12 @@ public class ActivityCourseCommentNew extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                DBHelper helper = new DBHelper(getApplicationContext());
-                APIPersistence api = new APIPersistence(getApplicationContext());
-                ModelResponseCourseComment comment;
-                final ModelResponseLogin login = helper.getLoginRecord();
+                API api = new API(getApplicationContext(),true);
+
+                final ModelResponseLogin login = api.loginRecord();
                 if (login != null) {
                     try {
+                        ModelResponseCourseComment comment;
                         comment = api.course_comment_post(login.getToken(), courseId, (double) ratingBar.getRating(), text);
 
                         if (comment == null) {

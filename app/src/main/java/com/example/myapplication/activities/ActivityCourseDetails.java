@@ -24,7 +24,7 @@ import com.example.myapplication.models.ModelFtp;
 import com.example.myapplication.models.ModelResponseCourseComment;
 import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.models.ModelTeacher;
-import com.example.myapplication.utils.API.APIPersistence;
+import com.example.myapplication.utils.API.API;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
@@ -104,11 +104,11 @@ public class ActivityCourseDetails extends AppCompatActivity {
      */
     private void refreshCourseComment(boolean forceUpdate) {
         try {
-            DBHelper helper = new DBHelper(getApplicationContext());
-            APIPersistence api = new APIPersistence(getApplicationContext());
-            api.setForceUpdate(forceUpdate);
+
+            API api = new API(getApplicationContext(), forceUpdate);
+
             final ModelResponseCourseComment responseCourseComment;
-            final ModelResponseLogin login = helper.getLoginRecord();
+            final ModelResponseLogin login = api.loginRecord();
             if (login != null) {
                 responseCourseComment = api.course_comment_get(login.getToken(), this.courseId);
                 if (responseCourseComment != null) {
@@ -135,9 +135,9 @@ public class ActivityCourseDetails extends AppCompatActivity {
     private void refreshCourse(final boolean forceUpdate) {
         try {
             DBHelper helper = new DBHelper(getApplicationContext());
-            APIPersistence api = new APIPersistence(getApplicationContext());
-            api.setForceUpdate(forceUpdate);
-            modelCourse = api.course(helper.getLoginRecord().getToken(), courseId, courseCode, courseClass);
+            API api = new API(getApplicationContext(), forceUpdate);
+
+            modelCourse = api.course_get(api.loginRecord().getToken(), courseId);
 
             if (modelCourse != null) {
                 if (modelCourse.getCode() == 0) {
@@ -191,7 +191,6 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
     public void swipeRefreshLayoutOnRefresh() {
         //检查是否处于刷新状态
-        Log.d("APIPersistence onRefresh", String.valueOf(swipeRefreshLayout.isRefreshing()) + " " + String.valueOf(isRefreshing));
         if (!isRefreshing) {
             isRefreshing = true;
             new Thread(new Runnable() {

@@ -18,7 +18,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterNewsListSectioned;
 import com.example.myapplication.models.ModelNews;
 import com.example.myapplication.models.ModelResponseNewsAll;
-import com.example.myapplication.utils.API.APIPersistence;
+import com.example.myapplication.utils.API.API;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,8 +59,7 @@ public class LazyFragmentNewsUniversal extends AbstractLazyLoadFragment {
     public void refreshNews(final boolean force) {
         try {
             DBHelper helper = new DBHelper(getContext());
-            APIPersistence api = new APIPersistence(getContext());
-            api.setForceUpdate(force);
+            API api = new API(getContext(), force);
 
             int type = getNewsType();
             Log.e("NewsType", String.valueOf(type));
@@ -71,14 +70,14 @@ public class LazyFragmentNewsUniversal extends AbstractLazyLoadFragment {
                     modelNewsItems.add(new ModelNews("MUST+提示", "这里是你所在学院的新闻，下拉即可刷新新闻列表", "2019-06-21", true, "", R.drawable.image_junyi));
                     break;
                 case 2:
-                    model_response_news_all = api.news_announcements_get(helper.getLoginRecord().getToken(), 0, 10);
+                    model_response_news_all = api.news_announcements_get(api.loginRecord().getToken(), 0, 10);
                     modelNewsItems.clear();
                     if (model_response_news_all != null && model_response_news_all.getCode() == 0) {
                         modelNewsItems.addAll(model_response_news_all.getNews_list());
                     }
                     break;
                 case 3:
-                    model_response_news_all = api.news_documents_get(helper.getLoginRecord().getToken(), 0, 20);
+                    model_response_news_all = api.news_documents_get(api.loginRecord().getToken(), 0, 20);
                     modelNewsItems.clear();
                     if (model_response_news_all != null && model_response_news_all.getCode() == 0) {
                         modelNewsItems.addAll(model_response_news_all.getNews_list());

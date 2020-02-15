@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelResponseLogin;
+import com.example.myapplication.utils.API.API;
 
 public class LazyFragmentMine extends AbstractLazyLoadFragment {
     private View root;
@@ -83,13 +84,12 @@ public class LazyFragmentMine extends AbstractLazyLoadFragment {
         root = inflater.inflate(R.layout.fragment_mine, container, false);
         textViewNickname = root.findViewById(R.id.text_view_nickname);
 
-        DBHelper helper = new DBHelper(getContext());
-        ModelResponseLogin login = helper.getLoginRecord();
+        API api = new API(getContext(), false);
+        ModelResponseLogin login = api.loginRecord();
         if (login != null) {
             textViewNickname.setText(login.getStudent_name());
         }
         return root;
-
     }
 
     @Override

@@ -34,7 +34,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.models.ModelAuthHash;
 import com.example.myapplication.models.ModelResponse;
 import com.example.myapplication.models.ModelResponseLogin;
-import com.example.myapplication.utils.API.APIPersistence;
+import com.example.myapplication.utils.API.API;
 import com.example.myapplication.utils.Tools;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
@@ -239,10 +239,8 @@ public class ActivityWelcome extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                APIPersistence api = new APIPersistence(getApplicationContext());
-                String raw = api.authHash();
-
-                modelAuthHash = JSON.parseObject(raw, ModelAuthHash.class);
+                API api = new API(getApplicationContext(), true);
+                modelAuthHash = api.authHash();
                 if (modelAuthHash.getCode() != 0) {
                     return modelAuthHash.getMsg();
                 } else {
@@ -331,7 +329,7 @@ public class ActivityWelcome extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
             DBHelper db = new DBHelper(getApplicationContext());
-            APIPersistence api = new APIPersistence(getApplicationContext());
+            API api = new API(getApplicationContext(), true); // 一定要强制更新，不然登陆失败有缓存
             try {// 试一下状态机的写法
                 int status = 0;
                 final int STATUS_BEGIN = 0;
@@ -343,7 +341,7 @@ public class ActivityWelcome extends AppCompatActivity {
                 final int STATUS_RESULT_IS_NOT_NULL = 6;
                 final int STATUS_RET_CODE_OK = 7;
                 final int STATUS_RET_CODE_ERROR = 8;
-                String result = null;
+
 
                 while (true) {
                     switch (status) {
@@ -356,14 +354,13 @@ public class ActivityWelcome extends AppCompatActivity {
                         case STATUS_CAPTCHA_INITIALIZED:
                             publishProgress("正在请求登录");
 
-                            api.setForceUpdate(true);
-                            result = api.authLogin(modelAuthHash.getKey(),
+                            modelResponseLogin = api.authLogin(modelAuthHash.getKey(),
                                     editTextUsername.getText().toString(),
                                     editTextPassword.getText().toString(),
                                     modelAuthHash.getToken(),
                                     modelAuthHash.getCookies(),
                                     editTextCaptcha.getText().toString());
-                            if (result.isEmpty()) {
+                            if (modelResponseLogin == null) {
                                 status = STATUS_RESULT_IS_NULL;
                             } else {
                                 status = STATUS_RESULT_IS_NOT_NULL;
@@ -371,7 +368,6 @@ public class ActivityWelcome extends AppCompatActivity {
                             break;
                         case STATUS_RESULT_IS_NOT_NULL:
                             publishProgress("正在解析数据");
-                            modelResponseLogin = JSON.parseObject(result, ModelResponseLogin.class);
                             if (modelResponseLogin.getCode() != 0)
                                 status = STATUS_RET_CODE_ERROR;
                             else  // 登陆成功，可以进行下一步操作
@@ -390,35 +386,27 @@ public class ActivityWelcome extends AppCompatActivity {
                             studentName = modelResponseLogin.getStudent_name();
                             token = modelResponseLogin.getToken();
 
-                            db.setAPIRecord(APICONSTANT.AUTH_LOGIN, result);
-
                             publishProgress("欢迎您，" + studentName + "！正在为您更新课表，请稍后...");
 
-                            result = api.timetable(modelResponseLogin.getToken(), api.semester_get().getSemester(), 0);
-                            ModelResponse response = JSON.parseObject(result, ModelResponse.class);
-
-                            if (response.getCode() == 0) {
-                                db.setAPIRecord(APICONSTANT.TIMETABLE, result);
-                                publishProgress("一切准备就绪，欢迎使用MUST+！");
-                                Thread.sleep(1000);
-                                return "";
-                            } else {
-                                if (response.getCode() == -7003) { // Cookie 过期
-                                    db.delAPIRecord(APICONSTANT.AUTH_LOGIN);
-                                }
-                                db.delAPIRecord(APICONSTANT.TIMETABLE);
-                                publishProgress("0");
-                                return response.getMsg();
+                            ModelResponse response = api.timetable(modelResponseLogin.getToken(), api.semester_get().getSemester(), 0);
+                            if (response == null) {
+                                throw new IOException("Response Decode Error");
                             }
+                            if (response.getCode() != 0) {
+                                throw new IOException(response.getMsg());
+                            }
+
+                            publishProgress("一切准备就绪，欢迎使用MUST+！");
+                            Thread.sleep(1000);
+                            return "";
                     }
                 }
 
             } catch (IOException | InterruptedException e) {
-                db.delAPIRecord(APICONSTANT.TIMETABLE);
+                api.logout(null);
                 publishProgress("0");
                 return e.getMessage();
             }
-
         }
     }
 }

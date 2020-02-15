@@ -1,17 +1,23 @@
 package com.example.myapplication.utils.API;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.example.myapplication.DBHelper;
+import com.example.myapplication.models.ModelAuthHash;
 import com.example.myapplication.models.ModelCourse;
+import com.example.myapplication.models.ModelResponse;
 import com.example.myapplication.models.ModelResponseCourseComment;
 import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.models.ModelResponseNewsAll;
 import com.example.myapplication.models.ModelResponseSemester;
 import com.example.myapplication.models.ModelResponseWeek;
+import com.example.myapplication.models.ModelTimetable;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -20,178 +26,143 @@ import java.io.IOException;
  * 更高级的抽象
  * */
 public class API {
-    public ModelResponseWeek week_get() throws IOException {
-        DBHelper db = new DBHelper(context);
-        String record = db.getAPIRecordTimeLimit(APICONSTANT.BASIC_WEEK, 1);
-        ModelResponseWeek week;
-        Log.i("R_week", record);
-        if (record.isEmpty() || forceUpdate) {
-            record = base.week();
-            week = JSON.parseObject(record, ModelResponseWeek.class);
-            if (week.getCode() == 0)
-                db.setAPIRecord(APICONSTANT.BASIC_WEEK, record);
-            return week;
-        } else {
-            return JSON.parseObject(record, ModelResponseWeek.class);
-        }
+    private boolean forceUpdate = false;
+    private Context context;
+
+    public API(@Nullable Context context, boolean forceUpdate) {
+        this.context = context;
+        this.forceUpdate = forceUpdate;
     }
 
-    public ModelResponseSemester semester_get() throws IOException {
-        DBHelper db = new DBHelper(context);
-        String record = db.getAPIRecordTimeLimit(APICONSTANT.BASIC_SEMESTER, 10);
-        ModelResponseSemester semester;
-        Log.i("R_semester", record);
-        if (record.isEmpty() || forceUpdate) {
-            record = base.semester();
-            semester = JSON.parseObject(record, ModelResponseSemester.class);
-            if (semester.getCode() == 0)
-                db.setAPIRecord(APICONSTANT.BASIC_SEMESTER, record);
-            return semester;
-        } else {
-            return JSON.parseObject(record, ModelResponseSemester.class);
-        }
+
+    // new 完了可以设置强制更新。value为true时，不使用缓存
+    public void setForceUpdate(boolean value) {
+        this.forceUpdate = value;
     }
+
+    @NotNull
+    public ModelAuthHash authHash() throws IOException {
+        APIPersistence api = new APIPersistence(context, forceUpdate);
+        String json = api.authHash();
+        return JSON.parseObject(json, ModelAuthHash.class);
+    }
+
     @Nullable
-    public ModelResponseNewsAll news_all_get(String token, Integer from, Integer count) throws IOException {
+    public ModelResponseLogin authLogin(String pubkey, String username, String password, String token, String cookies, String captcha) {
         try {
-            DBHelper db = new DBHelper(context);
-            ModelResponseNewsAll record = db.getNewsRecord();
-            Log.i("R_news_all_get", "Get Record");
-            if (record == null || forceUpdate) {
-                Log.i("R_news_all_get", "Request New Data");
-                String raw = base.newsAll(token, from, count);
-                Log.i("R_news_all_get", raw);
-                ModelResponseNewsAll news = JSON.parseObject(raw, ModelResponseNewsAll.class);
-
-                if (news.getCode() == 0) {
-                    Log.i("R_news_all_get", "Saving data");
-                    db.setAPIRecord(APICONSTANT.NEWS_ALL, raw);
-                }
-                return news;
-            } else {
-                Log.i("R_news_all_get", "Found Old Data");
-                return record;
-            }
-        } catch (JSONException e) {
+            APIPersistence api = new APIPersistence(context, forceUpdate);
+            String json = api.authLogin(pubkey, username, password, token, cookies, captcha);
+            return JSON.parseObject(json, ModelResponseLogin.class);
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public ModelResponseWeek week_get() throws IOException {
+        APIPersistence api = new APIPersistence(context, forceUpdate);
+        String json = api.week();
+        return JSON.parseObject(json, ModelResponseWeek.class);
+    }
+
+    public ModelResponseSemester semester_get() throws IOException {
+        APIPersistence api = new APIPersistence(context, forceUpdate);
+        String json = api.semester();
+        return JSON.parseObject(json, ModelResponseSemester.class);
+    }
+
+    @Nullable
+    public ModelResponseNewsAll news_all_get(String token, Integer from, Integer count) throws IOException {
+        APIPersistence api = new APIPersistence(context, forceUpdate);
+        String json = api.newsAll(token, from, count);
+        return JSON.parseObject(json, ModelResponseNewsAll.class);
     }
 
     @Nullable
     public ModelResponseNewsAll news_documents_get(String token, Integer from, Integer count) throws IOException {
-        try {
-            return JSON.parseObject(base.newsDocuments(token, from, count), ModelResponseNewsAll.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
+        APIPersistence api = new APIPersistence(context, forceUpdate);
+        String json = api.newsDocuments(token, from, count);
+        return JSON.parseObject(json, ModelResponseNewsAll.class);
     }
-
 
 
     @Nullable
     public ModelResponseNewsAll news_announcements_get(String token, Integer from, Integer count) throws IOException {
-        Log.i("R_news_announcement_get", "Get Record");
+        APIPersistence api = new APIPersistence(context, forceUpdate);
+        String json = api.newsAnnouncements(token, from, count);
+        return JSON.parseObject(json, ModelResponseNewsAll.class);
+    }
+
+    @Nullable
+    public ModelResponseCourseComment course_comment_post(String token, Integer course_id, Double rank, String content) throws IOException {
+        APIPersistence api = new APIPersistence(context, forceUpdate);
+        String json = api.courseComment(token, course_id, APIOperation.POST, rank, content, null);
+        return JSON.parseObject(json, ModelResponseCourseComment.class);
+    }
+
+    @Nullable
+    public ModelResponseCourseComment course_comment_delete(String token, Integer course_id, Integer comment_id) throws IOException {
+        APIPersistence api = new APIPersistence(context, forceUpdate);
+        String json = api.courseComment(token, course_id, APIOperation.DELETE, null, null, comment_id);
+        return JSON.parseObject(json, ModelResponseCourseComment.class);
+    }
+
+    @Nullable
+    public ModelResponseCourseComment course_comment_get(String token, Integer course_id) throws IOException {
+        APIPersistence api = new APIPersistence(context, forceUpdate);
+        String json = api.courseComment(token, course_id, APIOperation.GET, null, null, null);
+        return JSON.parseObject(json, ModelResponseCourseComment.class);
+    }
+
+    public ModelTimetable timetable(){
+        return timetable(null,null,null);
+    }
+    @Nullable
+    public ModelTimetable timetable(String token, Integer intake, Integer week) {
         try {
-            Log.i("R_news_announcement_get", "Request New Data");
-            String raw = base.newsAnnouncements(token, from, count);
-            Log.i("R_news_announcement_get", raw);
-            return JSON.parseObject(raw, ModelResponseNewsAll.class);
-        } catch (JSONException e) {
+            APIPersistence api = new APIPersistence(context, forceUpdate);
+            String json = api.timetable(token, intake, week);
+            return JSON.parseObject(json, ModelTimetable.class);
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    @Nullable
-    public ModelResponseCourseComment course_comment_post(String token, Integer course_id, Double rank, String content) throws IOException {
-        Log.i("R_course_comment_post", "Get Record");
-        try {
-            Log.i("R_course_comment_post", "Request New Data");
-            String raw = base.courseComment(token, course_id, APIOperation.POST, rank, content, null);
-            Log.i("R_course_comment_post", raw);
-            return JSON.parseObject(raw, ModelResponseCourseComment.class);
-        } catch (JSONException e) {
-            return null;
-        }
-    }
-
-    @Nullable
-    public ModelResponseCourseComment course_comment_delete(String token, Integer course_id, Integer comment_id) throws IOException {
-        Log.i("R_course_comment_delete", "Get Record");
-        try {
-            Log.i("R_course_comment_delete", "Request New Data");
-            String raw = base.courseComment(token, course_id, APIOperation.DELETE, null, null, comment_id);
-            Log.i("R_course_comment_delete", raw);
-            return JSON.parseObject(raw, ModelResponseCourseComment.class);
-        } catch (JSONException e) {
-            return null;
-        }
-    }
-
-    @Nullable
-    public ModelResponseCourseComment course_comment_get(String token, Integer course_id) throws IOException {
-        try {
-            Log.i("R_course_comment_get", "Get Record");
-            DBHelper db = new DBHelper(context);
-            String record = db.getCourseCommentRecord(course_id, 7);
-            if (record.isEmpty() || forceUpdate) {
-                record = base.courseComment(token, course_id, APIOperation.GET, null, null, null);
-                ModelResponseCourseComment comment = JSON.parseObject(record, ModelResponseCourseComment.class);
-                if (comment.getCode() == 0) {
-                    db.setCourseCommentRecord(course_id, record);
-                }
-            }
-            return JSON.parseObject(record, ModelResponseCourseComment.class);
-        } catch (JSONException e) {
-            return null;
-        }
-    }
     // 获取 ModelCourse 数据
     // 如果获取成功（code==0）持久化到数据库
     // 否则不持久化
     // 调用者应该检测返回值是否为null，且调用 getCode() 方法检查是否有错误
     @Nullable
-    public ModelCourse course(String token, Integer course_id, String course_code, String course_class) throws IOException {
-        DBHelper db = new DBHelper(context);
-        ModelCourse course = db.getCourseRecord(course_code, course_class);
-        Log.i("R_course", "Get Record");
-
-        if (course == null || forceUpdate) {
-            Log.i("R_course", "Request New Data");
-            String raw = base.course(token, course_id);
-            Log.i("R_course", raw);
-            course = JSON.parseObject(raw, ModelCourse.class);
-            if (course.getCode() == 0) {
-                Log.i("R_course", "Saving Data");
-                db.setCourseRecord(course_code, course_class, raw);
-            }
-            return course;
-        } else {
-            Log.i("R_course", "Found Old Data");
-            return course;
-        }
+    public ModelCourse course_get(String token, Integer course_id) throws IOException {
+        APIPersistence api = new APIPersistence(context, forceUpdate);
+        String json = api.course(token, course_id);
+        return JSON.parseObject(json, ModelCourse.class);
     }
+
     // 从数据库中获取登录记录
     // 失败返回 null
     @Nullable
-    public ModelResponseLogin getLoginRecord() {
+    public ModelResponseLogin loginRecord() {
         try {
-            return JSON.parseObject(getAPIRecord(APICONSTANT.AUTH_LOGIN), ModelResponseLogin.class);
-        } catch (JSONException e) {
+            APIPersistence api = new APIPersistence(context, false);
+            String json = api.authLogin(null, null, null, null, null, null);
+            return JSON.parseObject(json, ModelResponseLogin.class);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
-    // 获取 NewsAll 的数据记录
     @Nullable
-    public ModelResponseNewsAll getNewsRecord() {
+    public ModelResponse logout(String token) {
         try {
-            return JSON.parseObject(getAPIRecordTimeLimit(APICONSTANT.NEWS_ALL, 1), ModelResponseNewsAll.class);
-        } catch (JSONException e) {
+            APIPersistence api = new APIPersistence(context, forceUpdate);
+            String json = api.authLogout(token);
+            return JSON.parseObject(json, ModelResponse.class);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
             return null;
         }
     }
-
 }
