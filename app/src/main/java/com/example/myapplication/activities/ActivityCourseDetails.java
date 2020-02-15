@@ -24,7 +24,7 @@ import com.example.myapplication.models.ModelFtp;
 import com.example.myapplication.models.ModelResponseCourseComment;
 import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.models.ModelTeacher;
-import com.example.myapplication.utils.API;
+import com.example.myapplication.utils.API.APIPersistence;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
@@ -105,7 +105,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
     private void refreshCourseComment(boolean forceUpdate) {
         try {
             DBHelper helper = new DBHelper(getApplicationContext());
-            API api = new API(getApplicationContext());
+            APIPersistence api = new APIPersistence(getApplicationContext());
             api.setForceUpdate(forceUpdate);
             final ModelResponseCourseComment responseCourseComment;
             final ModelResponseLogin login = helper.getLoginRecord();
@@ -135,7 +135,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
     private void refreshCourse(final boolean forceUpdate) {
         try {
             DBHelper helper = new DBHelper(getApplicationContext());
-            API api = new API(getApplicationContext());
+            APIPersistence api = new APIPersistence(getApplicationContext());
             api.setForceUpdate(forceUpdate);
             modelCourse = api.course(helper.getLoginRecord().getToken(), courseId, courseCode, courseClass);
 
@@ -191,7 +191,7 @@ public class ActivityCourseDetails extends AppCompatActivity {
 
     public void swipeRefreshLayoutOnRefresh() {
         //检查是否处于刷新状态
-        Log.d("API onRefresh", String.valueOf(swipeRefreshLayout.isRefreshing()) + " " + String.valueOf(isRefreshing));
+        Log.d("APIPersistence onRefresh", String.valueOf(swipeRefreshLayout.isRefreshing()) + " " + String.valueOf(isRefreshing));
         if (!isRefreshing) {
             isRefreshing = true;
             new Thread(new Runnable() {

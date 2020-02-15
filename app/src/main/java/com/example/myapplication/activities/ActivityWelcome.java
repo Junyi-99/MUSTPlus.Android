@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.TooltipCompat;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
@@ -35,8 +34,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.models.ModelAuthHash;
 import com.example.myapplication.models.ModelResponse;
 import com.example.myapplication.models.ModelResponseLogin;
-import com.example.myapplication.utils.API;
-import com.example.myapplication.utils.APIs;
+import com.example.myapplication.utils.API.APIPersistence;
 import com.example.myapplication.utils.Tools;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
@@ -241,7 +239,7 @@ public class ActivityWelcome extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                API api = new API(getApplicationContext());
+                APIPersistence api = new APIPersistence(getApplicationContext());
                 String raw = api.authHash();
 
                 modelAuthHash = JSON.parseObject(raw, ModelAuthHash.class);
@@ -302,7 +300,9 @@ public class ActivityWelcome extends AppCompatActivity {
 
             if (s.isEmpty()) {
                 // 登陆成功并且课表也加载成功
-                context.startActivity(new Intent(context, ActivityMain.class));
+                Intent intent = new Intent(context, ActivityMain.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
                 finish();
             } else {
                 Toast.makeText(getApplicationContext(), "错误：" + s, Toast.LENGTH_SHORT).show();
@@ -331,7 +331,7 @@ public class ActivityWelcome extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
             DBHelper db = new DBHelper(getApplicationContext());
-            API api = new API(getApplicationContext());
+            APIPersistence api = new APIPersistence(getApplicationContext());
             try {// 试一下状态机的写法
                 int status = 0;
                 final int STATUS_BEGIN = 0;
@@ -390,7 +390,7 @@ public class ActivityWelcome extends AppCompatActivity {
                             studentName = modelResponseLogin.getStudent_name();
                             token = modelResponseLogin.getToken();
 
-                            db.setAPIRecord(APIs.AUTH_LOGIN, result);
+                            db.setAPIRecord(APICONSTANT.AUTH_LOGIN, result);
 
                             publishProgress("欢迎您，" + studentName + "！正在为您更新课表，请稍后...");
 
@@ -398,15 +398,15 @@ public class ActivityWelcome extends AppCompatActivity {
                             ModelResponse response = JSON.parseObject(result, ModelResponse.class);
 
                             if (response.getCode() == 0) {
-                                db.setAPIRecord(APIs.TIMETABLE, result);
+                                db.setAPIRecord(APICONSTANT.TIMETABLE, result);
                                 publishProgress("一切准备就绪，欢迎使用MUST+！");
                                 Thread.sleep(1000);
                                 return "";
                             } else {
                                 if (response.getCode() == -7003) { // Cookie 过期
-                                    db.removeRecord(APIs.AUTH_LOGIN);
+                                    db.delAPIRecord(APICONSTANT.AUTH_LOGIN);
                                 }
-                                db.removeRecord(APIs.TIMETABLE);
+                                db.delAPIRecord(APICONSTANT.TIMETABLE);
                                 publishProgress("0");
                                 return response.getMsg();
                             }
@@ -414,7 +414,7 @@ public class ActivityWelcome extends AppCompatActivity {
                 }
 
             } catch (IOException | InterruptedException e) {
-                db.removeRecord(APIs.TIMETABLE);
+                db.delAPIRecord(APICONSTANT.TIMETABLE);
                 publishProgress("0");
                 return e.getMessage();
             }

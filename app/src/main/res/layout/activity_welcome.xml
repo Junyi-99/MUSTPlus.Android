@@ -83,6 +83,7 @@
         android:textColor="@color/colorFontDark"
         android:visibility="visible" />
 
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"

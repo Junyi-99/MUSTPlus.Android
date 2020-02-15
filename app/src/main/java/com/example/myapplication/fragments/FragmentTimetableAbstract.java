@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -32,8 +31,7 @@ import com.example.myapplication.models.ModelResponseSemester;
 import com.example.myapplication.models.ModelResponseWeek;
 import com.example.myapplication.models.ModelTimetable;
 import com.example.myapplication.models.ModelTimetableCell;
-import com.example.myapplication.utils.API;
-import com.example.myapplication.utils.APIs;
+import com.example.myapplication.utils.API.APIPersistence;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
@@ -66,7 +64,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
     };
     private ModelResponseWeek week;
     private ModelResponseSemester semester;
-    private String timetableRaw = "";
+    private String timetableRawJson = "";
     private View root;
     private View timeIndicator;
     private ViewGroup thisContainer;
@@ -87,7 +85,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
     }
 
     private void animate() {
-        if (!animated && !timetableRaw.isEmpty()) {
+        if (!animated && !timetableRawJson.isEmpty()) {
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(this.animators);
             animatorSet.start();
@@ -139,13 +137,14 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         }
     }
 
-    private void calculateLayout(String timetableRaw) throws ParseException {
+    private void calculateLayout() throws ParseException {
+        Log.e("TimetableRawJson",timetableRawJson);
         timetableCellList.clear();
         animators.clear();
         //relativeLayoutInnerContent.removeAllViews();
 
 
-        ModelTimetable modelTimetable = JSON.parseObject(timetableRaw, ModelTimetable.class);
+        ModelTimetable modelTimetable = JSON.parseObject(timetableRawJson, ModelTimetable.class);
         if (modelTimetable == null) {
             return;
         }
@@ -181,9 +180,9 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
             if (dateEndMillis > dateBeginMillis) {
                 if (dateNowMillis < dateBeginMillis || dateNowMillis > dateEndMillis) {
                     // 如果在区间外
-                    continue;
+                    //continue;
                 }
-            } else {
+            } else { // 跨年的情况
                 if (dateNowMillis > dateBeginMillis || dateNowMillis < dateEndMillis) {
                     // 如果在区间外
                     continue;
@@ -221,7 +220,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
             animationDelay += 100;
 
             // These supply parameters to the parent of this view specifying how it should be arranged.
-            // 也就是说，在 Android 5.0 (API 21) 时，所有 Button 重叠在一起是因为
+            // 也就是说，在 Android 5.0 (APIPersistence 21) 时，所有 Button 重叠在一起是因为
             // 之前使用的是 LinearLayout.LayoutParams，所以出现了问题
             // 在 Android 9.0 版本使用 LinearLayout.LayoutParams 就没问题
             // 个人推测是因为高版本的 Android 增加了兼容性
@@ -340,7 +339,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
             @Override
             public void run() {
                 try {
-                    API api = new API(getContext());
+                    APIPersistence api = new APIPersistence(getContext());
                     semester = api.semester_get();
                     week = api.week_get();
                     FragmentActivity activity = getActivity();
@@ -418,11 +417,11 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         onFirstVisible(); // 默认首先加载课表，如果没这句话就懒加载不了了
 
         new TaskUpdateTime().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
+        //TODO: 这里逻辑混乱了啊，耦合度增加了，应该调用API类的方法，不应该绕过API类直接调用这个DBHelper
         DBHelper db = new DBHelper(getContext());
-        timetableRaw = db.getAPIRecord(APIs.TIMETABLE);
+        timetableRawJson = db.getAPIRecord(APICONSTANT.TIMETABLE);
         try {
-            calculateLayout(timetableRaw);
+            calculateLayout();
         } catch (ParseException e) {
             Toast.makeText(getContext(), "错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -438,7 +437,7 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == 1) {
             try {
-                calculateLayout(timetableRaw);
+                calculateLayout();
             } catch (ParseException e) {
                 Toast.makeText(getContext(), "错误：" + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -475,7 +474,6 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("ThreadRT", "finished");
         }
 
         @Override
@@ -487,7 +485,6 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
             // 这里返回的是手机上的时间（北京时间）
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
-            Log.e("Nowtime", "" + hour + " " + minute);
             if (hour <= 22 && hour >= 8) {
                 int marginTop = (hour - 8) * rowHeaderHeight + columnHeaderHeight + (int) (minute / 60.0 * rowHeaderHeight);
                 params.setMargins(0, marginTop, 0, 0);
@@ -502,18 +499,14 @@ public class FragmentTimetableAbstract extends AbstractLazyLoadFragment {
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            Log.e("ThreadRT", "cancelled");
         }
 
 
         @Override
         protected String doInBackground(Void... voids) {
             while (true) {
-
                 publishProgress();
-
                 try {
-                    Log.e("TestRT", "0");
                     Thread.sleep(1000 * 5);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

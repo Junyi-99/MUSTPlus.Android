@@ -18,7 +18,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.adapters.AdapterNewsListSectioned;
 import com.example.myapplication.models.ModelNews;
 import com.example.myapplication.models.ModelResponseNewsAll;
-import com.example.myapplication.utils.API;
+import com.example.myapplication.utils.API.APIPersistence;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class LazyFragmentNewsUniversal extends AbstractLazyLoadFragment {
     public void refreshNews(final boolean force) {
         try {
             DBHelper helper = new DBHelper(getContext());
-            API api = new API(getContext());
+            APIPersistence api = new APIPersistence(getContext());
             api.setForceUpdate(force);
 
             int type = getNewsType();

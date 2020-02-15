@@ -1,4 +1,4 @@
-package com.example.myapplication.utils;
+package com.example.myapplication.utils.API;
 
 // 错误代码列表
 public enum ErrorCodes {

@@ -33,7 +33,7 @@ import com.example.myapplication.models.ModelNews;
 import com.example.myapplication.models.ModelNewsImage;
 import com.example.myapplication.models.ModelResponseLogin;
 import com.example.myapplication.models.ModelResponseNewsAll;
-import com.example.myapplication.utils.API;
+import com.example.myapplication.utils.API.APIPersistence;
 import com.example.myapplication.utils.Tools;
 
 import java.io.IOException;
@@ -407,7 +407,7 @@ public class FragmentNewsAll extends Fragment {
                 ModelResponseLogin login = helper.getLoginRecord();
 
                 if (login != null) {
-                    API api = new API(getContext());
+                    APIPersistence api = new APIPersistence(getContext());
                     api.setForceUpdate(forceUpdate);
                     modelResponseNewsAll = api.news_all_get(login.getToken(), 0, 20);
                     if (modelResponseNewsAll != null && modelResponseNewsAll.getCode() == 0) {

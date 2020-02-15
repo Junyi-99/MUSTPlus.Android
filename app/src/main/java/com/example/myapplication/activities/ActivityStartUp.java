@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.myapplication.DBHelper;
 import com.example.myapplication.models.ModelResponseLogin;
-import com.example.myapplication.utils.APIs;
 
 public class ActivityStartUp extends AppCompatActivity {
     @Override
@@ -16,7 +15,7 @@ public class ActivityStartUp extends AppCompatActivity {
 
         DBHelper db = new DBHelper(getApplicationContext());
         ModelResponseLogin login = db.getLoginRecord();
-        String timetableRaw = db.getAPIRecord(APIs.TIMETABLE);
+        String timetableRaw = db.getAPIRecord(APICONSTANT.TIMETABLE);
         if ((login == null && !ActivityWelcome.active) || timetableRaw.isEmpty()) {
             Intent intent = new Intent(this, ActivityWelcome.class);
             startActivity(intent);

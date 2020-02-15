@@ -14,7 +14,7 @@ import com.example.myapplication.DBHelper;
 import com.example.myapplication.R;
 import com.example.myapplication.models.ModelResponseCourseComment;
 import com.example.myapplication.models.ModelResponseLogin;
-import com.example.myapplication.utils.API;
+import com.example.myapplication.utils.API.APIPersistence;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
@@ -83,7 +83,7 @@ public class ActivityCourseCommentNew extends AppCompatActivity {
             @Override
             public void run() {
                 DBHelper helper = new DBHelper(getApplicationContext());
-                API api = new API(getApplicationContext());
+                APIPersistence api = new APIPersistence(getApplicationContext());
                 ModelResponseCourseComment comment;
                 final ModelResponseLogin login = helper.getLoginRecord();
                 if (login != null) {
